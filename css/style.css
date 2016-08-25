@@ -1,0 +1,64 @@
+html, body {
+    height: 100%;
+    font-size: 20px;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #444;
+    font-family: 'Roboto', sans-serif;
+    background-color: #fafafa;
+    color: #444;
+}
+
+/* PRZYCISKI OD STEROWANIA OKNEM */
+
+.windowbuttons {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 100%;
+  min-height: 36px;
+  background-color: #16a085;
+}
+
+.windowbutton {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 26px;
+  height: 26px;
+  margin-top: 6px;
+  opacity: 0.5;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: all 0.3s;
+  border-radius: 100%;
+}
+.windowbutton:hover {
+  opacity: 1;
+  transition: all 0.3s;
+}
+
+.windowbutton-close {
+  background-image: url(../img/WindowButtons/close.png);
+  margin-right: 12px;
+  background-size: 18px 18px;
+  position: absolute !important;
+}
+
+.windowbutton-maximize {
+  background-image: url(../img/WindowButtons/maximaze.png);
+  margin-right: 44px;
+  background-size: 14px 14px;
+}
+
+.windowbutton-minimize {
+  background-image: url(../img/WindowButtons/minimaze.png);
+  margin-right: 76px;
+  background-size: 12px 12px;
+}
+
+.content {
+
+}
