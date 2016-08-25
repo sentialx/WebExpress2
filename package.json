@@ -1,0 +1,27 @@
+{
+  "name": "WebExpress",
+  "version": "0.0.1",
+  "description": "An advanced Internet browser in Electron",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sential/WebExpress.git"
+  },
+  "keywords": [
+    "electron",
+    "webexpress",
+    "internet",
+    "browser"
+  ],
+  "author": "Sential and Nerhu",
+  "bugs": {
+    "url": "https://github.com/Sential/WebExpress/issues"
+  },
+  "homepage": "https://github.com/Sential/WebExpress#readme",
+  "devDependencies": {
+    "electron-prebuilt": "^1.2.0"
+  }
+}

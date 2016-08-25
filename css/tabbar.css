@@ -1,0 +1,69 @@
+.tabbar {
+  background-color: #E0E0E0;
+  font-family: Roboto;
+  height: 28px;
+  width: 100%;
+  position:relative;
+  white-space: nowrap;
+  overflow:hidden;
+  -webkit-user-select: none;
+  cursor: default;
+}
+.tabTitle {
+  float:left;
+  font-size: 14px;
+  font-family: Roboto;
+  margin-top: 7px;
+  margin-left: 30px;
+  color: #444;
+}
+.tab {
+  width: 170px;
+  height: 28px;
+  background-color: #fff;
+  position:absolute;
+  top: 0;
+}
+.closeBtn {
+  float:right;
+  height: 16px;
+  width: 16px;
+  margin-top: 7px;
+  margin-right: 12px;
+  font-family: Roboto;
+  color: #444;
+}
+.closeBtnImg {
+  opacity: 0.75;
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  margin:1px;
+  background-image: url('../img/close.png');
+  background-size: cover;
+}
+.closeBtnImg:hover {
+  opacity: 1;
+}
+.addTabBtn {
+  opacity: 0.75;
+  position:absolute;
+  top: 6px;
+  margin-left: 10px;
+  height:16px;
+  width: 16px;
+
+}
+.addTabBtn:hover {
+  opacity: 1;
+}
+.addTabImg {
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  margin:2px;
+  background-image: url('../img/add.png');
+  background-size: cover;
+}
+.tabWindow {
+  font-family: Roboto;
+  color: #444;
+}

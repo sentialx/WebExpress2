@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/tabbar.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
+    <style>
+        @font-face { font-family: Roboto; src: url('fonts/Roboto-Medium.ttf'); }
+        @font-face { font-family: Roboto-Medium; src: url('fonts/Roboto-Medium.ttf'); }
+    </style>
+  </head>
+  <body>
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script><script src="js/jquery-3.1.0.min.js"></script><script src="js/jquery-ui.min.js"></script><script>if (window.module) module = window.module;</script>
+    <style>
+    </style>
+
+    <div class="tabbar" id="tabbar">
+      <div class="addTabBtn" onClick="addTab()" id="addTab">
+        <div class="addTabImg"></div>
+      </div>
+    </div>
+    <div class="instances" style="height: calc(100% - 28px); width: 100%;" id="instances">
+
+    </div>
+
+  </body>
+
+  <script src="js/classes.js"></script>
+  <script src="js/tabbar.js"></script>
+  <script src="js/main.js"></script>
+</html>
