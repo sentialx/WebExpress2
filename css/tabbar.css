@@ -1,13 +1,18 @@
 .tabbar {
-  background-color: #E0E0E0;
   font-family: Roboto;
   height: 28px;
-  width: 100%;
+  width: calc(100% - 96px);
   position:relative;
   white-space: nowrap;
   overflow:hidden;
   -webkit-user-select: none;
   cursor: default;
+}
+.titlebar {
+  background-color: #E0E0E0;
+  height: 28px;
+  width: 100%;
+  -webkit-app-region: drag
 }
 .tabTitle {
   float:left;
@@ -23,6 +28,7 @@
   background-color: #fff;
   position:absolute;
   top: 0;
+  -webkit-app-region: no-drag;
 }
 .closeBtn {
   float:right;
@@ -51,7 +57,7 @@
   margin-left: 10px;
   height:16px;
   width: 16px;
-
+  -webkit-app-region: no-drag;
 }
 .addTabBtn:hover {
   opacity: 1;
@@ -65,5 +71,6 @@
 }
 .tabWindow {
   font-family: Roboto;
+  background-color: #F5F5F5;
   color: #444;
 }

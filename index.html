@@ -4,32 +4,28 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/tabbar.css"/>
     <link rel="stylesheet" href="css/main.css"/>
-    <link href="css/style.css" rel="stylesheet" type="text/css" />
     <link href="css/ripple.css" rel="stylesheet" type="text/css" />
-    <script src="js/jquery-1.9.1.min.js" type="text/javascript"></script>
-    <script src="js/ripple.js" type="text/javascript"></script>
-    <script src="js/script.js" type="text/javascript"></script>
+
     <style>
         @font-face { font-family: Roboto; src: url('fonts/Roboto-Medium.ttf'); }
         @font-face { font-family: Roboto-Medium; src: url('fonts/Roboto-Medium.ttf'); }
     </style>
   </head>
   <body>
-     <div class="windowbuttons">
-      <div class="ripple windowbutton windowbutton-close"></div>
-      <div class="windowbutton windowbutton-maximize"></div>
-      <div class="windowbutton windowbutton-minimize"></div>
-    </div>
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script><script src="js/jquery-3.1.0.min.js"></script><script src="js/jquery-ui.min.js"></script><script>if (window.module) module = window.module;</script>
     <style>
     </style>
-
-    <div class="tabbar" id="tabbar">
-      <div class="addTabBtn" onClick="addTab()" id="addTab">
-        <div class="addTabImg"></div>
+    <div class="titlebar">
+      <div class="ripple windowbutton windowbutton-close"></div>
+      <div class="windowbutton windowbutton-maximize"></div>
+      <div class="windowbutton windowbutton-minimize"></div>
+      <div class="tabbar" id="tabbar">
+        <div class="addTabBtn" onClick="addTab()" id="addTab">
+          <div class="addTabImg"></div>
+        </div>
       </div>
     </div>
-    <div class="instances" style="height: calc(100% - 28px); width: 100%;" id="instances">
+    <div class="instances" id="instances">
 
     </div>
 
@@ -37,5 +33,6 @@
 
   <script src="js/classes.js"></script>
   <script src="js/tabbar.js"></script>
+  <script src="js/ripple.js" type="text/javascript"></script>
   <script src="js/main.js"></script>
 </html>

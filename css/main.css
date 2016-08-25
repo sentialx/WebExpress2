@@ -1,5 +1,52 @@
-body {
-  margin: 0;
-  padding: 0;
-  
+
+html, body {
+    font-size: 20px;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #444;
+    font-family: Roboto;
+}
+.instances {
+  background-color: #F5F5F5;
+  height: calc(100vh - 28px);
+  margin-top: -28px;
+}
+.windowbutton {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 26px;
+  height: 26px;
+  margin-top: 2px;
+  opacity: 0.5;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: all 0.3s;
+  border-radius: 100%;
+  -webkit-app-region: no-drag;
+}
+.windowbutton:hover {
+  opacity: 1;
+  transition: all 0.3s;
+}
+
+.windowbutton-close {
+  background-image: url(../img/WindowButtons/close.png);
+  margin-right: 6px;
+  background-size: 12px 12px;
+  position: absolute !important;
+}
+
+.windowbutton-maximize {
+  background-image: url(../img/WindowButtons/maximize.png);
+  margin-right: 32px;
+  background-size: 12px 12px;
+}
+
+.windowbutton-minimize {
+  background-image: url(../img/WindowButtons/minimize.png);
+  margin-right: 58px;
+  background-size: 12px 12px;
 }

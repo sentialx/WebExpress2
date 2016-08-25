@@ -1,6 +1,11 @@
 var tabCollection = [];
 var tabWidth = 170;
+var selectedTabColor = '#F5F5F5';
 function addTab() {
+  for (var i = 0; i < tabCollection.length; i++) {
+    tabCollection[i].Tab.css('z-index', 9999);
+
+  }
   var tab = new Tab();
   tab.Tab = $('<div class="tab" id="#tab"></div>').appendTo('#tabbar');
   tab.closeBtn = $("<div class='closeBtn'><div class='closeBtnImg'></div></div>").appendTo(tab.Tab);
@@ -55,6 +60,8 @@ function addTab() {
       }
   });
   calcSizes(false, true);
+    tab.Tab.css({top: 50});
+    tab.Tab.animate({top: 0}, {duration: 200});
 }
 
 function getTabFromMousePoint(callingTab) {
@@ -92,17 +99,21 @@ function contains(tabToCheck) {
 function calcSizes(animation, addButtonAnimation) {
   var tabCountTemp = 0;
   for (var i = 0; i < tabCollection.length; i++) {
-    if (!($(window).width() / tabCollection.length >= tabWidth)) {
+    var tabWidthTemp = tabWidth;
+      if (!($('#tabbar').width() / tabCollection.length >= tabWidth)) {
+        tabWidthTemp = ($('#tabbar').width() - $('#addTab').width() - 20) / tabCollection.length;
+      } else {
+        tabWidthTemp = 170;
+      }
+      tabCollection[i].Tab.css('width', tabWidthTemp);
 
-        tabCollection[i].Tab.css('width', ($(window).width() - $('#addTab').width() - 20) / tabCollection.length);
-    }
     if (animation == true) {
       tabCollection[i].Tab.animate({left: tabCountTemp * tabCollection[0].Tab.width()}, {duration: 200});
 
     } else {
       tabCollection[i].Tab.animate({left: tabCountTemp * tabCollection[0].Tab.width()}, {duration: 1});
     }
-  tabCountTemp += 1;
+    tabCountTemp += 1;
   }
   if (tabCollection[0] != null) {
     if (addButtonAnimation == true) {
@@ -119,7 +130,7 @@ function selectTab(tab) {
         tabCollection[i].Tab.css('background-color', $('#tabbar').css('background-color'));
         tabCollection[i].instance.tabWindow.css('display', 'none');
     } else {
-        tabCollection[i].Tab.css('background-color', 'white');
+        tabCollection[i].Tab.css('background-color', selectedTabColor);
         tabCollection[i].instance.tabWindow.css('display', 'block');
     }
   }
