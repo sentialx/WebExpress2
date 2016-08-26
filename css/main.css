@@ -1,15 +1,14 @@
 
 html, body {
-    font-size: 20px;
-    margin: 0 !important;
-    padding: 0 !important;
-    color: #444;
-    font-family: Roboto;
+  font-size: 20px;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #444;
+  font-family: Roboto;
+  overflow: hidden;
 }
 .instances {
-  background-color: #F5F5F5;
   height: calc(100vh - 28px);
-  margin-top: -28px;
 }
 .windowbutton {
   position: absolute;

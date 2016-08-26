@@ -1,6 +1,7 @@
 var tabCollection = [];
 var tabWidth = 170;
 var selectedTabColor = '#F5F5F5';
+
 function addTab() {
   for (var i = 0; i < tabCollection.length; i++) {
     tabCollection[i].Tab.css('z-index', 9999);
@@ -10,8 +11,8 @@ function addTab() {
   tab.Tab = $('<div class="tab" id="#tab"></div>').appendTo('#tabbar');
   tab.closeBtn = $("<div class='closeBtn'><div class='closeBtnImg'></div></div>").appendTo(tab.Tab);
   tab.Title = $("<div class='tabTitle'>New tab</div>").appendTo(tab.Tab);
-  tab.instance = new TabWindow();
-  tab.instance.tabWindow = $('<div class="tabWindow"><h1>Hi, this is a basic implementation of tabs</h1><p>WebExpress-pre-alpha 0.0.1</p></div>').appendTo('#instances');
+  tab.instance = new TabWindow(tab);
+
   tab.closeBtn.click(function(e) {
 
     if (tabCollection.indexOf(tab) - 1 != -1) {
@@ -63,6 +64,15 @@ function addTab() {
     tab.Tab.css({top: 50});
     tab.Tab.animate({top: 0}, {duration: 200});
 }
+
+function getSelectedTab() {
+  for (var i = 0; i < tabCollection.length; i++) {
+    if (tabCollection[i].Tab.css('background-color') != $('#tabbar').css('background-color')) {
+      return tabCollection[i];
+    }
+  }
+}
+
 
 function getTabFromMousePoint(callingTab) {
   if (!locked) {
@@ -124,14 +134,17 @@ function calcSizes(animation, addButtonAnimation) {
   }
 }
 
+
 function selectTab(tab) {
   for (var i = 0; i < tabCollection.length; i++) {
     if (tabCollection[i].Tab != tab) {
         tabCollection[i].Tab.css('background-color', $('#tabbar').css('background-color'));
-        tabCollection[i].instance.tabWindow.css('display', 'none');
+        tabCollection[i].tabWindow.css('display', 'none');
     } else {
         tabCollection[i].Tab.css('background-color', selectedTabColor);
-        tabCollection[i].instance.tabWindow.css('display', 'block');
+        tabCollection[i].tabWindow.css('display', 'block');
     }
+
   }
+
 }
