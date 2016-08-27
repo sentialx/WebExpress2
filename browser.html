@@ -1,11 +1,27 @@
 <div class="tabWindow">
 
   <div class="bar" style="z-index: 9999;">
+    <div class="backBtn ripple">
+      <div class="backBtnIcon">
+      </div>
+    </div>
+    <div class="forwardBtn ripple">
+      <div class="forwardBtnIcon">
+      </div>
+    </div>
+    <div class="refreshBtn ripple">
+      <div class="refreshBtnIcon">
+      </div>
+    </div>
     <div class="searchBox">
       <input class="searchInput"></input>
     </div>
+    <div class="menuBtn ripple">
+      <div class="menuBtnIcon">
+      </div>
+    </div>
   </div>
   <div id="webviewcontainer" style="width: 100%; height: calc(100vh - 74px);position: relative;">
-    <webview class="webview" autosize="on" src="https://www.github.com/" style="display:inline-flex;z-index: 0;width: 640px; height:640px;"></webview>
+    <webview class="webview" autosize="on" src="page.html" style="display:inline-flex;z-index: 0;width: 640px; height:640px;"></webview>
   </div>
 </div>

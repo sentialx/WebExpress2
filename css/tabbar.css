@@ -14,13 +14,25 @@
   width: 100%;
   -webkit-app-region: drag
 }
+.favicon {
+  background-size: cover;
+  width:16px;
+  height:16px;
+  margin-top: 7px;
+  margin-left: 7px;
+}
 .tabTitle {
   float:left;
   font-size: 14px;
-  font-family: Roboto;
+  font-family: Roboto-Light;
+  font-weight: 300;
   margin-top: 7px;
   margin-left: 30px;
   color: #444;
+  max-width: 60%;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow: ellipsis;
 }
 .tab {
   width: 170px;
@@ -29,6 +41,11 @@
   position:absolute;
   top: 0;
   -webkit-app-region: no-drag;
+  -webkit-transition: background-color 0.2s;
+}
+.tab:hover {
+  background-color: #fff;
+  -webkit-transition: background-color 0.2s;
 }
 .closeBtn {
   float:right;
@@ -53,23 +70,28 @@
 .addTabBtn {
   opacity: 0.75;
   position:absolute;
-  top: 6px;
-  margin-left: 10px;
-  height:16px;
-  width: 16px;
+  margin-left: 2px;
+  height:28px;
+  width: 28px;
   -webkit-app-region: no-drag;
 }
 .addTabBtn:hover {
   opacity: 1;
 }
 .addTabImg {
-  width: calc(100% - 4px);
-  height: calc(100% - 4px);
-  margin:2px;
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
+  margin:8px;
   background-image: url('../img/add.png');
   background-size: cover;
 }
 .tabWindow {
   font-family: Roboto;
   color: #444;
+}
+.light {
+  color: #444;
+}
+.dark {
+  color: #fff;
 }

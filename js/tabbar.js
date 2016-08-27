@@ -11,6 +11,9 @@ function addTab() {
   tab.Tab = $('<div class="tab" id="#tab"></div>').appendTo('#tabbar');
   tab.closeBtn = $("<div class='closeBtn'><div class='closeBtnImg'></div></div>").appendTo(tab.Tab);
   tab.Title = $("<div class='tabTitle'>New tab</div>").appendTo(tab.Tab);
+  tab.Favicon = $("<div></div>").appendTo(tab.Tab);
+  tab.Foreground = 'black';
+  tab.Color = selectedTabColor;
   tab.instance = new TabWindow(tab);
 
   tab.closeBtn.click(function(e) {
@@ -140,9 +143,18 @@ function selectTab(tab) {
     if (tabCollection[i].Tab != tab) {
         tabCollection[i].Tab.css('background-color', $('#tabbar').css('background-color'));
         tabCollection[i].tabWindow.css('display', 'none');
+        tabCollection[i].Title.removeClass('dark').addClass('light');
+        tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
     } else {
-        tabCollection[i].Tab.css('background-color', selectedTabColor);
+        tabCollection[i].Tab.css('background-color', tabCollection[i].Color);
         tabCollection[i].tabWindow.css('display', 'block');
+        if (tabCollection[i].Foreground == 'black') {
+          tabCollection[i].Title.removeClass('dark').addClass('light');
+          tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
+        } else if(tabCollection[i].Foreground == 'white') {
+          tabCollection[i].Title.removeClass('light').addClass('dark');
+          tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close-white.png")');
+        }
     }
 
   }

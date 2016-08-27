@@ -4,7 +4,8 @@
   "description": "An advanced Internet browser in Electron",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-packager . --all"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
   },
   "homepage": "https://github.com/Sential/WebExpress#readme",
   "devDependencies": {
+    "electron-packager": "^7.7.0",
     "electron-prebuilt": "^1.2.0"
   }
 }

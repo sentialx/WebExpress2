@@ -3,6 +3,7 @@
   width: 100%;
   height: 40px;
   padding-top: 8px;
+  -webkit-transition: background-color 0.2s;
 }
 
 .searchBox {
@@ -10,8 +11,10 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   background-color: white;
   height: 32px;
-  width: calc(100% - 128px);
-  margin-left: 64px;
+  width: calc(100% - 186px);
+  margin-left: 16px;
+  -webkit-transition: background-color 0.2s;
+  float:left;
 }
 .webview {
   position: absolute;
@@ -22,10 +25,87 @@
 }
 
 .searchInput {
+  background-color: transparent;
   border: none;
   color: #444;
   margin-left: 8px;
   width: calc(100% - 16px);
-  height: calc(100% - 16px);
+  height: calc(100% - 10px);
   outline: none;
+}
+
+.backBtn {
+  opacity: 0.6;
+  height: 32px;
+  width: 32px;
+  margin-left: 8px;
+  float:left;
+}
+
+.backBtnIcon {
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  margin:5px;
+  background-image: url('../img/back.png');
+  background-size: cover;
+}
+.backBtn:hover {
+  opacity: 1;
+}
+
+.forwardBtn {
+  opacity: 0.6;
+  height: 32px;
+  width: 32px;
+  margin-left: 8px;
+  float:left;
+}
+
+.forwardBtnIcon {
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  margin:5px;
+  background-image: url('../img/forward.png');
+  background-size: cover;
+}
+.forwardBtn:hover {
+  opacity: 1;
+}
+
+.refreshBtn {
+  opacity: 0.6;
+  height: 32px;
+  width: 32px;
+  margin-left: 8px;
+  float:left;
+}
+
+.refreshBtnIcon {
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  margin:5px;
+  background-image: url('../img/refresh.png');
+  background-size: cover;
+}
+.refreshBtn:hover {
+  opacity: 1;
+}
+
+.menuBtn {
+  opacity: 0.6;
+  height: 32px;
+  width: 32px;
+  margin-right: 8px;
+  float:right;
+}
+
+.menuBtnIcon {
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  margin:5px;
+  background-image: url('../img/menu.png');
+  background-size: cover;
+}
+.menuBtn:hover {
+  opacity: 1;
 }
