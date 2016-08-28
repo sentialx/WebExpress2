@@ -1,6 +1,6 @@
 .tabbar {
   font-family: Roboto;
-  height: 28px;
+  height: 32px;
   width: calc(100% - 96px);
   position:relative;
   white-space: nowrap;
@@ -10,7 +10,7 @@
 }
 .titlebar {
   background-color: #E0E0E0;
-  height: 28px;
+  height: 32px;
   width: 100%;
   -webkit-app-region: drag
 }
@@ -26,7 +26,7 @@
   font-size: 14px;
   font-family: Roboto-Light;
   font-weight: 300;
-  margin-top: 7px;
+  margin-top: 8px;
   margin-left: 30px;
   color: #444;
   max-width: 60%;
@@ -36,7 +36,7 @@
 }
 .tab {
   width: 170px;
-  height: 28px;
+  height: 32px;
   background-color: #fff;
   position:absolute;
   top: 0;
@@ -51,7 +51,7 @@
   float:right;
   height: 16px;
   width: 16px;
-  margin-top: 7px;
+  margin-top: 9px;
   margin-right: 12px;
   font-family: Roboto;
   color: #444;
@@ -71,6 +71,7 @@
   opacity: 0.75;
   position:absolute;
   margin-left: 2px;
+  margin-top: 2px;
   height:28px;
   width: 28px;
   -webkit-app-region: no-drag;

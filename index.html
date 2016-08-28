@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/tabbar.css"/>
     <link rel="stylesheet" href="css/main.css"/>
+    <link rel="stylesheet" href="css/menu.css"/>
     <link rel="stylesheet" href="css/browser.css"/>
     <link href="css/ripple.css" rel="stylesheet" type="text/css" />
 
@@ -17,16 +18,18 @@
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script><script src="js/jquery-3.1.0.min.js"></script><script src="js/jquery-ui.min.js"></script><script>if (window.module) module = window.module;</script>
     <style>
     </style>
-    <div class="titlebar">
+    <div class="titlebar" id="titlebar">
       <div class="ripple windowbutton windowbutton-close"></div>
       <div class="windowbutton windowbutton-maximize"></div>
       <div class="windowbutton windowbutton-minimize"></div>
       <div class="tabbar" id="tabbar">
-        <div class="addTabBtn" onClick="addTab()" id="addTab">
+        <div class="addTabBtn" id="addTab">
           <div class="addTabImg"></div>
         </div>
       </div>
     </div>
+
+    </script>
     <div class="instances" id="instances">
 
     </div>
@@ -34,8 +37,9 @@
   </body>
   <script src="js/colorBrightness.js"></script>
   <script src="js/classes.js"></script>
+  <script src="js/tabwindow.js"></script>
   <script src="js/tabbar.js"></script>
-  <script src="js/ripple.js" type="text/javascript"></script>
+  <script src="js/ripple.js"></script>
   <script src="js/main.js"></script>
 
 </html>

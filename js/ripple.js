@@ -20,7 +20,7 @@ var Ripple = class Ripple {
         width: animateSize,
         height: animateSize,
         opacity: fadeoutopacity
-      }, time, function() {
+      }, time, 'linear', function() {
         $(this).remove();
       });
   }

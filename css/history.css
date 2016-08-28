@@ -1,0 +1,65 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #F5F5F5;
+  font-family: Roboto;
+}
+
+.toolbar {
+  position:fixed;
+  width: 100%;
+  padding-left: 32px;
+  height: 58px;
+  background-color: #3F51B5;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.toolbar > h3 {
+  color: #fff;
+  font-family: Roboto-Light;
+  margin-top: (50% - auto);
+}
+.card {
+  background-color: white;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  width: 70%;
+  padding: 32px;
+  padding-bottom: 8px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.content {
+  position: relative;
+  top: 72px;
+  padding: 16px;
+  color: #444;
+}
+.card-header {
+  margin-top: -8px;
+  padding-bottom: 8px;
+  font-size: 26px;
+}
+hr {
+  display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #E0E0E0;
+    padding: 0;
+}
+a {
+  text-decoration: none;
+  color: #BDBDBD;
+}
+.searchBox {
+  position: relative;
+  top: 0px;
+  width: 50%;
+  max-width: 1024px;
+  margin-top: 12px;
+  color: #fff;
+  padding: 8px;
+  padding-left: 16px;
+  height: auto;
+  border-radius: 2px;
+  background-color: rgba(255,255,255,0.3);
+}

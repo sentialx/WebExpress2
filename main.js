@@ -11,6 +11,7 @@ function createWindow () {
     mainWindow = null
   })
   mainWindow.setMenu(null)
+
 }
 app.on('ready', createWindow)
 app.on('window-all-closed', function () {

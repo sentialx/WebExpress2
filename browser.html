@@ -1,27 +1,48 @@
 <div class="tabWindow">
 
   <div class="bar" style="z-index: 9999;">
-    <div class="backBtn ripple">
+    <div class="ripple backBtn">
       <div class="backBtnIcon">
       </div>
     </div>
-    <div class="forwardBtn ripple">
+    <div class="ripple forwardBtn">
       <div class="forwardBtnIcon">
       </div>
     </div>
-    <div class="refreshBtn ripple">
+    <div class="ripple refreshBtn">
       <div class="refreshBtnIcon">
       </div>
     </div>
     <div class="searchBox">
       <input class="searchInput"></input>
     </div>
-    <div class="menuBtn ripple">
+    <div class="ripple menuBtn">
       <div class="menuBtnIcon">
       </div>
     </div>
   </div>
-  <div id="webviewcontainer" style="width: 100%; height: calc(100vh - 74px);position: relative;">
-    <webview class="webview" autosize="on" src="page.html" style="display:inline-flex;z-index: 0;width: 640px; height:640px;"></webview>
+
+  <div id="webviewcontainer" style="width: 100%; height: calc(100vh - 74px);margin-top: -20px; position: relative;">
+
+    <webview class="webview" autosize="on" src="about:blank" style="display:flex;">
+
+    </webview>
+    <div class="menu" style="z-index: 9999;">
+      <ul class="menu-items" style="z-index: 9999;background-color: #fff;">
+        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/back.png');" class="menu-icon"></div><p style="display: inline;">Settings</p></li>
+        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/back.png');"  class="menu-icon"></div><p style="display: inline;">History</p></li>
+        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/back.png');"  class="menu-icon"></div><p style="display: inline;">Bookmarks</p></li>
+        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/back.png');"  class="menu-icon"></div><p style="display: inline;">Downloads</p></li>
+        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/back.png');"  class="menu-icon"></div><p style="display: inline;">Extensions</p></li>
+        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/back.png');"  class="menu-icon"></div><p style="display: inline;">New window</p></li>
+        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/back.png');"  class="menu-icon"></div><p style="display: inline;">Fullscreen</p></li>
+        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/back.png');"  class="menu-icon"></div><p style="display: inline;">Developer tools</p></li>
+        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/back.png');"  class="menu-icon"></div><p style="display: inline;">Take screenshot</p></li>
+        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/back.png');"  class="menu-icon"></div><p style="display: inline;">Private mode</p></li>
+      </ul>
+    </div>
+
   </div>
+
+
 </div>
