@@ -1,5 +1,7 @@
 const electron = require('electron')
+const protocol = electron.protocol
 const app = electron.app
+const path = require('path')
 const BrowserWindow = electron.BrowserWindow
 let mainWindow
 
@@ -12,10 +14,31 @@ function createWindow () {
   })
   mainWindow.setMenu(null)
   mainWindow.webContents.session.on('will-download', (event, item, webContents) => {
-    item.setSavePath('path') //TODO set path to downloads folder
+    item.setSavePath(item.getFilename()) //TODO set path to downloads folder
   })
 }
-app.on('ready', createWindow)
+  protocol.registerStandardSchemes(['webexpress'])
+app.on('ready', function() {
+  protocol.registerFileProtocol('webexpress', (request, callback) => {
+    var url = request.url.substr(13)
+    console.log(request);
+    var lastChar = url.substr(url.length - 1)
+    var s = url.split("/");
+    if (lastChar != "/") {
+      url = url.replace(s[0], "")
+    }
+    if (lastChar == "/") {
+      url = url.substring(0, url.length - 1)
+      url += ".html"
+    }
+
+
+    callback({path: path.normalize(`${__dirname}/${url}`)})
+    }, (error) => {
+      if (error) console.error('Failed to register protocol')
+    })
+  createWindow();
+});
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     app.quit()

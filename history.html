@@ -3,16 +3,18 @@
   <head>
     <meta charset="utf-8">
     <title>History</title>
-    <link rel="stylesheet" href="css/history.css"/>
+    <link rel="stylesheet" href="../css/history.css"/>
     <style>
         @font-face { font-family: "Roboto"; src: url('fonts/Roboto.ttf'); }
         @font-face { font-family: Roboto-Medium; src: url('fonts/Roboto-Medium.ttf'); }
         @font-face { font-family: Roboto-Light; src: url('fonts/Roboto-Light.ttf'); }
     </style>
-    <script src="js/jquery-3.1.0.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
+    <script src="../js/jquery-3.1.0.min.js"></script>
+    <script src="../js/jquery-ui.min.js"></script>
+
   </head>
   <body>
+
 
     <div class="toolbar">
       <h3 style="float: left;">History</h3>
@@ -26,12 +28,6 @@
           Today
         </div>
         <hr style="margin-left: -32px;margin-right:-32px;"/>
-        <div class="item" style="padding: 8px;">
-          <div style="display: inline; height:14px; padding-left:18px; border-radius: 2px; border: 2px solid #9E9E9E;"></div>
-          <p style="display: inline;margin-left: 16px; color: #9E9E9E;">21:37</p>
-          <p style="display: inline; margin-left: 48px;">Google</p>
-          <a href="https://google.com" style="margin-left: 8px;">https://google.com</a>
-        </div>
 
 
       </div>
@@ -41,5 +37,6 @@
         $('.searchBox').css('margin-left', (($(window).width() - $('.searchBox').width()) / 2) - 105);
       }, 1);
     </script>
+    <script src="js/history.js"></script>
   </body>
 </html>
