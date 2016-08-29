@@ -138,9 +138,13 @@ function selectTab(tab) {
       tabCollection[i].tabWindow.css('display', 'none');
       tabCollection[i].Title.removeClass('dark').addClass('light');
       tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
+
     } else {
       tabCollection[i].Tab.css('background-color', tabCollection[i].Color);
       tabCollection[i].tabWindow.css('display', 'block');
+      if (tabCollection[i].instance.searchInput != null && (tabCollection[i].instance.searchInput.val() == "" || tabCollection[i].instance.searchInput.val() == null)) {
+        tabCollection[i].instance.searchInput.focus();
+      }
       if (tabCollection[i].Foreground == 'black') {
         tabCollection[i].Title.removeClass('dark').addClass('light');
         tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');

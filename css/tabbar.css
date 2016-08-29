@@ -39,7 +39,7 @@
   height: 32px;
   background-color: #fff;
   position:absolute;
-  top: 0;
+  top: -32px;
   -webkit-app-region: no-drag;
   -webkit-transition: background-color 0.2s;
 }
@@ -72,6 +72,7 @@
   position:absolute;
   margin-left: 2px;
   margin-top: 2px;
+  top:0;
   height:28px;
   width: 28px;
   -webkit-app-region: no-drag;

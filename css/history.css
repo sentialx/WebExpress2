@@ -2,7 +2,8 @@ body {
   margin: 0;
   padding: 0;
   background-color: #F5F5F5;
-  font-family: Roboto;
+  font-family:'Roboto', sans-serif;
+  font-weight: 300;
 }
 
 .toolbar {
@@ -16,7 +17,6 @@ body {
 
 .toolbar > h3 {
   color: #fff;
-  font-family: Roboto-Light;
   margin-top: (50% - auto);
 }
 .card {
@@ -28,6 +28,12 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+.card p {
+  font-size: 14px;
+}
+.card a {
+  font-size: 14px;
+}
 .content {
   position: relative;
   top: 72px;
@@ -37,7 +43,7 @@ body {
 .card-header {
   margin-top: -8px;
   padding-bottom: 8px;
-  font-size: 26px;
+  font-size: 22px;
 }
 hr {
   display: block;

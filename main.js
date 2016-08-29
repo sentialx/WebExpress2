@@ -11,7 +11,9 @@ function createWindow () {
     mainWindow = null
   })
   mainWindow.setMenu(null)
-
+  mainWindow.webContents.session.on('will-download', (event, item, webContents) => {
+    item.setSavePath('path') //TODO set path to downloads folder
+  })
 }
 app.on('ready', createWindow)
 app.on('window-all-closed', function () {

@@ -1,7 +1,10 @@
 function TabWindow(tab, url) {
+  this.input = null;
+  var s = this;
+  this.searchInput = null;
   tab.tabWindow = $("<div>").load("browser.html", function() {
     var webview = tab.tabWindow.find('.webview')[0];
-    var searchInput = $(tab.tabWindow.find('.searchInput')[0]);
+    searchInput = $(tab.tabWindow.find('.searchInput')[0]);
     var bar = $(tab.tabWindow.find('.bar')[0]);
     var searchBox = $(tab.tabWindow.find('.searchBox')[0]);
     var refreshBtn = $(tab.tabWindow.find('.refreshBtn')[0]);
@@ -28,10 +31,14 @@ function TabWindow(tab, url) {
     var iconRippleTime = 300;
     var rippleTime = 400;
     var firstUrl = url;
+    s.searchInput = searchInput;
 
     $(webview).ready(function() {
       var ses = webview.getWebContents().session;
-
+      searchInput.focus();
+      ses.on('will-download', (event, item, webContents) => {
+        console.log("handled download"); //TODO make download
+      });
       if (url == `file://${__dirname}/history.html`) {
         searchInput.val("webexpress://history");
       }
@@ -45,6 +52,7 @@ function TabWindow(tab, url) {
     menu.css('visibility', 'hidden');
     menu.css('opacity',1);
     setInterval(function(){
+      $('#webviewcontainer').css('height',$(window).height() - 74);
       $(webview).css('width', $(window).width());
       $(webview).css('height', $(window).height() - 74);
       menu.css('margin-left', $(window).width() - menu.width() - 16);
@@ -131,19 +139,21 @@ function TabWindow(tab, url) {
       if (firstUrl == "webexpress://newtab") {
         searchInput.val("");
       }
+      setTimeout(function(){
+        webview.executeJavaScript("function s() {var markup = document.documentElement.innerHTML; return markup} s();", false, function(result) {
+          var regexp = /<meta name='?.theme-color'?.*>/;
+          if (regexp.test(result)) {
+            var regex = result.match(regexp).toString();
+            tab.Color = regex.match(/content="(.*?)"/)[1];
+            tab.Tab.css('background-color',tab.Color);
+            bar.css('background-color', tab.Color);
+            changeContrast();
+          } else {
+            getColor();
+          }
+        });
+      }, 200);
 
-      webview.executeJavaScript("function s() {var markup = document.documentElement.innerHTML; return markup} s();", false, function(result) {
-        var regexp = /<meta name='?.theme-color'?.*>/;
-        if (regexp.test(result)) {
-          var regex = result.match(regexp).toString();
-          tab.Color = regex.match(/content="(.*?)"/)[1];
-          tab.Tab.css('background-color',tab.Color);
-          bar.css('background-color', tab.Color);
-          changeContrast();
-        } else {
-          getColor();
-        }
-      });
     });
     webview.addEventListener('page-favicon-updated', function(favicon) {
       console.log(favicon.favicons[0]);
@@ -226,7 +236,7 @@ function TabWindow(tab, url) {
           context.drawImage(img, 0, 0);
           var myData = context.getImageData(2, 2, img.width, img.height);
           if (myData != null) {
-            tab.Color = shadeColor(rgbToHex(myData.data[0], myData.data[1], myData.data[2]), -10);
+            tab.Color = rgbToHex(myData.data[0], myData.data[1], myData.data[2]);
             tab.Tab.css('background-color',tab.Color);
             bar.css('background-color', tab.Color);
             changeContrast();
