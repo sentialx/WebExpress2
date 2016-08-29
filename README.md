@@ -27,3 +27,6 @@ npm install && npm start
 
 #Screenshots
 `TODO`
+
+#See bug or missing feature?
+You can write on Issues page or create new pull request
