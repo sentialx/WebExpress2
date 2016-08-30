@@ -1,6 +1,6 @@
 # WebExpress
 (readme work in progress)
-* version: pre-alpha-0.0.1
+* version: pre-alpha-0.0.2
 * authors: Eryk Rakowski and Mikołaj Palkiewicz
 
 #Features
@@ -28,5 +28,16 @@ npm install && npm start
 #Screenshots
 `TODO`
 
+#`TODO`
+* History storage
+* Fix navigation by arrow keys in suggestions box
+* Bookmarks
+* Extensions
+* New tab page
+* Context menus, keyboard shortcuts etc.
+* Other features like screenshots etc.
+
 #See bug or missing feature?
 You can write on Issues page or create new pull request
+
+
