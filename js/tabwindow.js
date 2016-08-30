@@ -280,7 +280,7 @@ class TabWindow {
           tab.tabWindow.find('#webviewcontainer').css('visibility', 'visible');
           if (!searchInput.val().startsWith("webexpress:/")) {
             if (isURL(searchInput.val())) {
-              if (searchInput.val().startsWith("http://") || searchInput.val().startsWith("https://") || searchInput.val().startsWith("www.") || searchInput.val().startsWith("file://")) {
+              if (searchInput.val().startsWith("http://") || searchInput.val().startsWith("https://") || searchInput.val().startsWith("file://")) {
                 webview.loadURL(searchInput.val());
               } else {
                 webview.loadURL("http://" + searchInput.val());
