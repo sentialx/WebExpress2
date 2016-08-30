@@ -1,6 +1,6 @@
 .tabbar {
   font-family: Roboto;
-  height: 32px;
+  height: 30px;
   width: calc(100% - 96px);
   position:relative;
   white-space: nowrap;
@@ -9,8 +9,8 @@
   cursor: default;
 }
 .titlebar {
-  background-color: #E0E0E0;
-  height: 32px;
+  background-color: #EEEEEE;
+  height: 30px;
   width: 100%;
   -webkit-app-region: drag
 }
@@ -39,7 +39,7 @@
   height: 32px;
   background-color: #fff;
   position:absolute;
-  top: -32px;
+  top: -30px;
   -webkit-app-region: no-drag;
   -webkit-transition: background-color 0.2s;
 }
