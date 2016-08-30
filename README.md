@@ -7,6 +7,7 @@
 * Colored tabs
 * Settings `TODO`
 * History
+* Suggestions
 * Bookmarks `TODO`
 * Downloads `TODO`
 * Developer tools
