@@ -46,15 +46,21 @@
   top: 0;
   position: absolute;
   width: 100%;
-  height: auto;
+  height: 185px;
   background-color: #fff;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-    transition: all 0.3s;
+  transition: all 0.3s;
+
+  overflow: hidden;
 }
 
 .suggestions-ul {
   font-size: 16px;
   padding-left: 0;
+  overflow: hidden;
+  position: relative;
+  bottom: 16px;
+  height: inherit;
 }
 
 .suggestions-ul > li {
