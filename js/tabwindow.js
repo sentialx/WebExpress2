@@ -35,6 +35,17 @@ class TabWindow {
             var json = '';
             var lastUrl = '';
             s.searchInput = searchInput;
+            var fs = require('fs');
+            fs.stat('foo.txt', function(err, stat) {
+                if(err.code == 'ENOENT') {
+                    var blob = new Blob(['{"history":[]}'], {
+                        type: "text/plain;charset=utf-8"
+                    });
+                    saveAs(blob, "history.json");
+                }
+            });
+
+
 
             $(webview).ready(function() {
                 $.ajax({
