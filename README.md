@@ -7,6 +7,7 @@
 * Colored tabs
 * Settings `TODO`
 * History
+* Suggestions
 * Bookmarks `TODO`
 * Downloads `TODO`
 * Developer tools
@@ -36,6 +37,9 @@ npm install && npm start
 * New tab page
 * Context menus, keyboard shortcuts etc.
 * Other features like screenshots etc.
+* Screenshots
+* Downloads
+* Tutorial for extensions
 
 #See bug or missing feature?
 You can write on Issues page or create new pull request
