@@ -16,6 +16,7 @@ class TabWindow {
             var forwardBtnIcon = $(tab.tabWindow.find('.forwardBtnIcon')[0]);
             var menuBtnIcon = $(tab.tabWindow.find('.menuBtnIcon')[0]);
             var suggestions_ul = $(tab.tabWindow.find('.suggestions-ul')[0]);
+            var suggestions = $(tab.tabWindow.find('.suggestions')[0]);
             var menu = $(tab.tabWindow.find('.menu')[0]);
             var menuToggled = false;
             var menuItems = $(tab.tabWindow.find('.menu-items')[0]);
@@ -35,9 +36,11 @@ class TabWindow {
             var json = '';
             var lastUrl = '';
             s.searchInput = searchInput;
-            var fs = require('fs');
-            fs.stat('foo.txt', function(err, stat) {
-                if(err.code == 'ENOENT') {
+
+            $.ajax({
+                url: 'history.json',
+                type: 'HEAD',
+                error: function() {
                     var blob = new Blob(['{"history":[]}'], {
                         type: "text/plain;charset=utf-8"
                     });
@@ -151,8 +154,7 @@ class TabWindow {
                     });
                     menuToggled = false;
                 }
-                suggestions_ul.css('display', 'none');
-                suggestions_ul.css('height', 185);
+                suggestions.css('display', 'none');
             });
 
             webview.addEventListener('did-finish-load', function() {
@@ -220,10 +222,10 @@ class TabWindow {
             });
             webview.addEventListener('did-start-loading', function() {
                 setTimeout(function() {
+                    suggestions.css('display', 'none');
                     searchInput.val(webview.getURL());
-                    suggestions_ul.css('display', 'none');
-                    suggestions_ul.css('height', 185);
                 }, 200);
+
 
             });
             webview.addEventListener('page-favicon-updated', function(favicon) {
@@ -348,19 +350,18 @@ class TabWindow {
 
             setInterval(function() {
                 if (searchInput.val() == "" || searchInput.val() == null) {
-                    suggestions_ul.css('display', 'none');
-                    suggestions_ul.css('height', 185);
+                    suggestions.css('display', 'none');
                 }
             }, 1);
 
             function autocomplete(input, text, strings) {
                 if (!(strings.length < 1)) {
-                  strings = strings.reverse();
-                  if (strings[0].toLowerCase().startsWith(text.toLowerCase())) {
-                    console.log(strings[0]);
-                    input.val(strings[0]);
-                    input[0].setSelectionRange(text.length, strings[0].length);
-                  }
+                    strings = strings.reverse();
+                    if (strings[0].toLowerCase().startsWith(text.toLowerCase())) {
+                        console.log(strings[0]);
+                        input.val(strings[0]);
+                        input[0].setSelectionRange(text.length, strings[0].length);
+                    }
                 }
             }
             var allLinks = [];
@@ -405,11 +406,9 @@ class TabWindow {
                                     }
                                     var s = $('<li data-ripple-color="#444" class="suggestions-li ripple" text="' + str + '">' + str + '</li>');
                                     suggestions_ul.prepend(s);
-                                    suggestions_ul.css('display', 'block');
-                                    suggestions_ul.css('height', 185);
+
+                                    suggestions.css('display', 'block');
                                     s.click(function(e) {
-                                        suggestions_ul.css('display', 'none');
-                                        suggestions_ul.css('height', 185);
                                         var curr = $(e.currentTarget);
                                         webview.loadURL(curr.attr('text'));
                                     });
@@ -432,6 +431,7 @@ class TabWindow {
                                 autocomplete(searchInput, searchInput.val(), allLinks);
                             }
                         },
+
                         complete: function() {
                             if (searchInput.val().replace(getSelectionText(), "") != "" || searchInput.val().replace(getSelectionText(), "") != null) {
                                 $.ajax({
@@ -454,14 +454,10 @@ class TabWindow {
                                         for (var i = 0; i < uniqueLinks.length; i++) {
                                             if (items != 3) {
                                                 var s = $('<li data-ripple-color="#444" class="suggestions-li ripple" text="' + uniqueLinks[i] + '">' + uniqueLinks[i] + '</li>').appendTo(suggestions_ul);
-                                                suggestions_ul.css('display', 'block');
-                                                suggestions_ul.css('height', 185);
+                                                suggestions.css('display', 'block');
                                                 s.click(function(e) {
-                                                    suggestions_ul.css('display', 'none');
-                                                    suggestions_ul.css('height', 185);
                                                     var curr = $(e.currentTarget);
                                                     webview.loadURL("http://www.google.com/search?q=" + curr.attr('text'));
-
                                                 });
                                                 s.mousedown(function(e) {
                                                     var relX = e.pageX - $(this).offset().left;
