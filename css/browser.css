@@ -1,147 +1,151 @@
 .bar {
-  background-color: #F5F5F5;
-  width: 100%;
-  height: 40px;
-  padding-top: 8px;
-  -webkit-transition: background-color 0.2s;
+    background-color: #F5F5F5;
+    width: 100%;
+    height: 40px;
+    padding-top: 8px;
+    -webkit-transition: background-color 0.2s;
 }
 
 .searchBox {
-  border-radius: 3px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  background-color: white;
-  height: 32px;
-  width: calc(100% - 186px);
-  margin-left: 16px;
-  -webkit-transition: background-color 0.2s;
-  float:left;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    background-color: white;
+    height: 32px;
+    width: calc(100% - 186px);
+    margin-left: 16px;
+    -webkit-transition: background-color 0.2s;
+    float: left;
 }
+
 .webview {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .searchInput {
-  background-color: transparent;
-  border: none;
-  color: #444;
-  margin-left: 8px;
-  width: calc(100% - 16px);
-  height: calc(100% - 10px);
-  outline: none;
+    background-color: transparent;
+    border: none;
+    color: #444;
+    margin-left: 8px;
+    width: calc(100% - 16px);
+    height: calc(100% - 10px);
+    outline: none;
 }
 
 .backBtn {
-  opacity: 0.6;
-  height: 32px;
-  width: 32px;
-  margin-left: 8px;
-  float:left;
+    opacity: 0.6;
+    height: 32px;
+    width: 32px;
+    margin-left: 8px;
+    float: left;
 }
 
 .suggestions {
-  top: 0;
-  position: absolute;
-  width: 100%;
-  height: 185px;
-  background-color: #fff;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-  transition: all 0.3s;
-
-  overflow: hidden;
+    top: 0;
+    position: absolute;
+    width: 100%;
+    height: 185px;
+    background-color: #fff;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    transition: all 0.3s;
+    overflow: hidden;
 }
 
 .suggestions-ul {
-  font-size: 16px;
-  padding-left: 0;
-  overflow: hidden;
-  position: relative;
-  bottom: 16px;
-  height: inherit;
+    font-size: 16px;
+    padding-left: 0;
+    overflow: hidden;
+    position: relative;
+    bottom: 16px;
+    height: inherit;
 }
 
-.suggestions-ul > li {
-  padding-top: 10px;
-  padding-bottom: 8px;
-  padding-left: 64px;
-  transition: all 0.3s;
+.suggestions-ul> li {
+    padding-top: 10px;
+    padding-bottom: 8px;
+    padding-left: 64px;
+    transition: all 0.3s;
 }
 
-.suggestions-ul > li:hover {
-  transition: all 0.3s;
+.suggestions-ul> li:hover {
+    transition: all 0.3s;
 }
 
 .selected {
-  background-color: #BDBDBD;
+    background-color: #BDBDBD;
 }
 
 .backBtnIcon {
-  width: calc(100% - 10px);
-  height: calc(100% - 10px);
-  margin:5px;
-  background-image: url('../img/back.png');
-  background-size: cover;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    margin: 5px;
+    background-image: url('../img/back.png');
+    background-size: cover;
 }
+
 .backBtn:hover {
-  opacity: 1;
+    opacity: 1;
 }
 
 .forwardBtn {
-  opacity: 0.6;
-  height: 32px;
-  width: 32px;
-  margin-left: 8px;
-  float:left;
+    opacity: 0.6;
+    height: 32px;
+    width: 32px;
+    margin-left: 8px;
+    float: left;
 }
 
 .forwardBtnIcon {
-  width: calc(100% - 10px);
-  height: calc(100% - 10px);
-  margin:5px;
-  background-image: url('../img/forward.png');
-  background-size: cover;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    margin: 5px;
+    background-image: url('../img/forward.png');
+    background-size: cover;
 }
+
 .forwardBtn:hover {
-  opacity: 1;
+    opacity: 1;
 }
 
 .refreshBtn {
-  opacity: 0.6;
-  height: 32px;
-  width: 32px;
-  margin-left: 8px;
-  float:left;
+    opacity: 0.6;
+    height: 32px;
+    width: 32px;
+    margin-left: 8px;
+    float: left;
 }
 
 .refreshBtnIcon {
-  width: calc(100% - 10px);
-  height: calc(100% - 10px);
-  margin:5px;
-  background-image: url('../img/refresh.png');
-  background-size: cover;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    margin: 5px;
+    background-image: url('../img/refresh.png');
+    background-size: cover;
 }
+
 .refreshBtn:hover {
-  opacity: 1;
+    opacity: 1;
 }
 
 .menuBtn {
-  opacity: 0.6;
-  height: 32px;
-  width: 32px;
-  margin-right: 8px;
-  float:right;
+    opacity: 0.6;
+    height: 32px;
+    width: 32px;
+    margin-right: 8px;
+    float: right;
 }
 
 .menuBtnIcon {
-  width: calc(100% - 10px);
-  height: calc(100% - 10px);
-  margin:5px;
-  background-image: url('../img/menu.png');
-  background-size: cover;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    margin: 5px;
+    background-image: url('../img/menu.png');
+    background-size: cover;
 }
+
 .menuBtn:hover {
-  opacity: 1;
+    opacity: 1;
 }

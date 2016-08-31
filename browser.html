@@ -1,54 +1,84 @@
 <div class="tabWindow">
 
-  <div class="bar" style="z-index: 9999;">
-    <div class="ripple backBtn">
-      <div class="backBtnIcon">
-      </div>
-    </div>
-    <div class="ripple forwardBtn">
-      <div class="forwardBtnIcon">
-      </div>
-    </div>
-    <div class="ripple refreshBtn">
-      <div class="refreshBtnIcon">
-      </div>
-    </div>
-    <div class="searchBox">
-      <input class="searchInput"></input>
-    </div>
-    <div class="ripple menuBtn">
-      <div class="menuBtnIcon">
-      </div>
-    </div>
-  </div>
-
-  <div id="webviewcontainer" style="width: 100%; height: calc(100vh - 74px);margin-top: -20px; position: relative;">
-
-    <webview class="webview" autosize="on" src="about:blank" style="display:flex;">
-
-    </webview>
-
-    <div class="menu" style="z-index: 9999;">
-      <ul class="menu-items" style="z-index: 9999;background-color: #fff;">
-        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/settings.png');" class="menu-icon"></div><p style="display: inline;">Settings</p></li>
-        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/history.png');"  class="menu-icon"></div><p style="display: inline;">History</p></li>
-        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/bookmarks.png');"  class="menu-icon"></div><p style="display: inline;">Bookmarks</p></li>
-        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/downloads.png');"  class="menu-icon"></div><p style="display: inline;">Downloads</p></li>
-        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/extensions.png');"  class="menu-icon"></div><p style="display: inline;">Extensions</p></li>
-        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/window.png');"  class="menu-icon"></div><p style="display: inline;">New window</p></li>
-        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/fullscreen.png');"  class="menu-icon"></div><p style="display: inline;">Fullscreen</p></li>
-        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/dev.png');"  class="menu-icon"></div><p style="display: inline;">Developer tools</p></li>
-        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/screenshot.png');"  class="menu-icon"></div><p style="display: inline;">Take screenshot</p></li>
-        <li data-ripple-color="#444" class="menu-item ripple"><div style="background-image: url('img/privacy.png');"  class="menu-icon"></div><p style="display: inline;">Private mode</p></li>
-      </ul>
-    </div>
-    <div class="suggestions">
-      <ul class="suggestions-ul">
-
-      </ul>
+    <div class="bar" style="z-index: 9999;">
+        <div class="ripple backBtn">
+            <div class="backBtnIcon">
+            </div>
+        </div>
+        <div class="ripple forwardBtn">
+            <div class="forwardBtnIcon">
+            </div>
+        </div>
+        <div class="ripple refreshBtn">
+            <div class="refreshBtnIcon">
+            </div>
+        </div>
+        <div class="searchBox">
+            <input class="searchInput"></input>
+        </div>
+        <div class="ripple menuBtn">
+            <div class="menuBtnIcon">
+            </div>
+        </div>
     </div>
 
-  </div>
+    <div id="webviewcontainer" style="width: 100%; height: calc(100vh - 74px);margin-top: -20px; position: relative;">
+
+        <webview class="webview" autosize="on" src="about:blank" style="display:flex;">
+
+        </webview>
+
+        <div class="menu" style="z-index: 9999;">
+            <ul class="menu-items" style="z-index: 9999;background-color: #fff;">
+                <li data-ripple-color="#444" class="menu-item ripple">
+                    <div style="background-image: url('img/settings.png');" class="menu-icon"></div>
+                    <p style="display: inline;">Settings</p>
+                </li>
+                <li data-ripple-color="#444" class="menu-item ripple">
+                    <div style="background-image: url('img/history.png');" class="menu-icon"></div>
+                    <p style="display: inline;">History</p>
+                </li>
+                <li data-ripple-color="#444" class="menu-item ripple">
+                    <div style="background-image: url('img/bookmarks.png');" class="menu-icon"></div>
+                    <p style="display: inline;">Bookmarks</p>
+                </li>
+                <li data-ripple-color="#444" class="menu-item ripple">
+                    <div style="background-image: url('img/downloads.png');" class="menu-icon"></div>
+                    <p style="display: inline;">Downloads</p>
+                </li>
+                <li data-ripple-color="#444" class="menu-item ripple">
+                    <div style="background-image: url('img/extensions.png');" class="menu-icon"></div>
+                    <p style="display: inline;">Extensions</p>
+                </li>
+                <li data-ripple-color="#444" class="menu-item ripple">
+                    <div style="background-image: url('img/window.png');" class="menu-icon"></div>
+                    <p style="display: inline;">New window</p>
+                </li>
+                <li data-ripple-color="#444" class="menu-item ripple">
+                    <div style="background-image: url('img/fullscreen.png');" class="menu-icon"></div>
+                    <p style="display: inline;">Fullscreen</p>
+                </li>
+                <li data-ripple-color="#444" class="menu-item ripple">
+                    <div style="background-image: url('img/dev.png');" class="menu-icon"></div>
+                    <p style="display: inline;">Developer tools</p>
+                </li>
+                <li data-ripple-color="#444" class="menu-item ripple">
+                    <div style="background-image: url('img/screenshot.png');" class="menu-icon"></div>
+                    <p style="display: inline;">Take screenshot</p>
+                </li>
+                <li data-ripple-color="#444" class="menu-item ripple">
+                    <div style="background-image: url('img/privacy.png');" class="menu-icon"></div>
+                    <p style="display: inline;">Private mode</p>
+                </li>
+            </ul>
+        </div>
+        <div class="suggestions">
+            <ul class="suggestions-ul">
+
+            </ul>
+        </div>
+
+    </div>
 
 
 

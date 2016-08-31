@@ -1,24 +1,19 @@
-
 var json;
 
-  readTextFile("./history.json");
+readTextFile("../userdata/history.json");
 
-  function readTextFile(file)
-  {
-      var rawFile = new XMLHttpRequest();
-      rawFile.open("GET", file, false);
-      rawFile.onreadystatechange = function ()
-      {
-          if(rawFile.readyState === 4)
-          {
-              if(rawFile.status === 200 || rawFile.status == 0)
-              {
-                  var allText = rawFile.responseText;
-                  json = allText;
+function readTextFile(file) {
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    rawFile.onreadystatechange = function() {
+        if (rawFile.readyState === 4) {
+            if (rawFile.status === 200 || rawFile.status == 0) {
+                var allText = rawFile.responseText;
+                json = allText;
 
-                  json = json.replace("\ufeff", "");
-                  var obj = JSON.parse(json);
-                  for (var i = 0; i < obj.history.length; i++) {
+                json = json.replace("\ufeff", "");
+                var obj = JSON.parse(json);
+                for (var i = 0; i < obj.history.length; i++) {
 
                     var jsonItem = obj.history[i];
                     var item = $('<div class="item" style="padding: 8px;">').appendTo('.card');
@@ -27,10 +22,10 @@ var json;
                     var title = $('<p style="display: inline; margin-left: 48px;overflow: hidden;white-space: nowrap;">' + jsonItem.title + '</p>').appendTo(item);
                     var link = $('<a href="' + jsonItem.link + '" style="margin-left: 8px; display: inline; margin-right: 32px; overflow: hidden;white-space: nowrap;">' + jsonItem.link + '</a>').appendTo(item);
 
-                  }
+                }
 
-              }
-          }
-      }
-      rawFile.send(null);
-  }
+            }
+        }
+    }
+    rawFile.send(null);
+}

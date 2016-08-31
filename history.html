@@ -1,42 +1,49 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <title>History</title>
-    <link rel="stylesheet" href="../css/history.css"/>
+    <link rel="stylesheet" href="../css/history.css" />
     <style>
-        @font-face { font-family: "Roboto"; src: url('fonts/Roboto.ttf'); }
-        @font-face { font-family: Roboto-Medium; src: url('fonts/Roboto-Medium.ttf'); }
-        @font-face { font-family: Roboto-Light; src: url('fonts/Roboto-Light.ttf'); }
+        @font-face {
+            font-family: "Roboto";
+            src: url('fonts/Roboto.ttf');
+        }
+
+        @font-face {
+            font-family: Roboto-Medium;
+            src: url('fonts/Roboto-Medium.ttf');
+        }
+
+        @font-face {
+            font-family: Roboto-Light;
+            src: url('fonts/Roboto-Light.ttf');
+        }
     </style>
     <script src="../js/jquery-3.1.0.min.js"></script>
     <script src="../js/jquery-ui.min.js"></script>
-
-  </head>
-  <body>
-
-
+</head>
+<body>
     <div class="toolbar">
-      <h3 style="float: left;">History</h3>
-      <div style="float:left;" class="searchBox">
-        <div style="margin-top: 0px;">Search</div>
-      </div>
+        <h3 style="float: left;">History</h3>
+        <div style="float:left;" class="searchBox">
+            <div style="margin-top: 0px;">Search</div>
+        </div>
     </div>
     <div class="content">
-      <div class="card">
-        <div class="card-header">
-          Today
+        <div class="card">
+            <div class="card-header">
+                Today
+            </div>
+            <hr style="margin-left: -32px;margin-right:-32px;" />
         </div>
-        <hr style="margin-left: -32px;margin-right:-32px;"/>
-
-
-      </div>
     </div>
     <script>
-      setInterval(function() {
-        $('.searchBox').css('margin-left', (($(window).width() - $('.searchBox').width()) / 2) - 105);
-      }, 1);
+        setInterval(function() {
+            $('.searchBox').css('margin-left', (($(window).width() - $('.searchBox').width()) / 2) - 105);
+        }, 1);
     </script>
     <script src="js/history.js"></script>
-  </body>
+</body>
 </html>

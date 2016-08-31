@@ -1,47 +1,47 @@
 .menu {
-  background-color: #fff;
-  width: 216px;
-  z-index: 9999;
-  -webkit-user-select: none;
-  cursor: default;
-  position:relative;
-  visibility: hidden;
+    background-color: #fff;
+    width: 216px;
+    z-index: 9999;
+    -webkit-user-select: none;
+    cursor: default;
+    position: relative;
+    visibility: hidden;
 }
 
 .menu-items {
-  position: relative;
-  padding-top:0px;
-  padding-left: 0px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-  left: 0;
-  margin-left: 0;
-  list-style-type: none;
+    position: relative;
+    padding-top: 0px;
+    padding-left: 0px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    left: 0;
+    margin-left: 0;
+    list-style-type: none;
 }
 
 .menu-item {
-  background-color: transparent;
-  position: relative;
-  margin-left: 0;
-  padding-left: 16px;
-  padding-top: 16px;
-  padding-bottom: 12px;
-  color: #444;
-  -webkit-transition: all 0.2s;
-  font-family: Roboto;
-  font-size: 13px;
+    background-color: transparent;
+    position: relative;
+    margin-left: 0;
+    padding-left: 16px;
+    padding-top: 16px;
+    padding-bottom: 12px;
+    color: #444;
+    -webkit-transition: all 0.2s;
+    font-family: Roboto;
+    font-size: 13px;
 }
 
 .menu-item:hover {
-  background-color: #E0E0E0;
+    background-color: #E0E0E0;
 }
 
 .menu-icon {
-  opacity: 0.6;
-  height:22px;
-  width: 22px;
-  float:left;
-  margin-top: -4px;
-  margin-right: 12px;
-  background-size: cover;
-  -webkit-transition: all 0.2s;
+    opacity: 0.6;
+    height: 22px;
+    width: 22px;
+    float: left;
+    margin-top: -4px;
+    margin-right: 12px;
+    background-size: cover;
+    -webkit-transition: all 0.2s;
 }

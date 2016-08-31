@@ -1,3 +1,1 @@
-
-function Tab() {
-}
+function Tab() {}
