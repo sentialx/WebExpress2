@@ -13,7 +13,7 @@
 * Developer tools
 * Screenshot `TODO`
 * Private mode `TODO`
-* Extensions `TODO`
+* Extensions (work in progress)
 * Beautiful UI (material design)
 
 #Getting source code
