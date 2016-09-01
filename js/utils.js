@@ -48,3 +48,6 @@ function isInArray(value, array) {
 function decode_utf8(s) {
     return unescape(encodeURIComponent(s));
 }
+function endsWith(str, suffix) {
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}

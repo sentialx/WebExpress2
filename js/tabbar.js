@@ -17,22 +17,7 @@ function addTab(instance, tab) {
 
     //close button click event
     tab.closeBtn.click(function(e) {
-        if (tabCollection.indexOf(tab) - 1 != -1) {
-            console.log(tabCollection.indexOf(tab) - 1);
-            selectTab(tabCollection[tabCollection.indexOf(tab) - 1].Tab);
-        } else {
-            if (tabCollection[1] != null)
-                selectTab(tabCollection[1].Tab);
-        }
-
-        tabCollection.splice(tabCollection.indexOf(tab), 1);
-        tab.Tab.remove();
-        if (tabCollection.length == 0) {
-            const remote = require('electron').remote;
-            var window = remote.getCurrentWindow();
-            window.close();
-        }
-        calcSizes(true, true);
+        removeTab(tab);
     });
     //tab drag event
     tab.Tab.draggable({
@@ -73,6 +58,25 @@ function addTab(instance, tab) {
     });
 }
 
+function removeTab(tab) {
+  if (tabCollection.indexOf(tab) - 1 != -1) {
+      console.log(tabCollection.indexOf(tab) - 1);
+      selectTab(tabCollection[tabCollection.indexOf(tab) - 1].Tab);
+  } else {
+      if (tabCollection[1] != null)
+          selectTab(tabCollection[1].Tab);
+  }
+
+  tabCollection.splice(tabCollection.indexOf(tab), 1);
+  tab.Tab.remove();
+  if (tabCollection.length == 0) {
+      const remote = require('electron').remote;
+      var window = remote.getCurrentWindow();
+      window.close();
+  }
+  calcSizes(true, true);
+}
+
 function getTabFromMousePoint(callingTab) {
     if (!locked) {
         for (var i = 0; i < tabCollection.length; i++) {
@@ -101,7 +105,6 @@ document.onmousemove = function(e) {
     cursorX = e.pageX;
     cursorY = e.pageY;
 }
-
 //check if bounds of another tab contains mouse point
 function contains(tabToCheck) {
     var rect = tabToCheck.getBoundingClientRect();

@@ -1,7 +1,9 @@
 class TabWindow {
+
     constructor(tab, url) {
         var s = this;
         this.searchInput = null;
+        this.webView = null;
         tab.tabWindow = $("<div>").load("browser.html", function() {
             //main section
             var webview = tab.tabWindow.find('.webview')[0];
@@ -41,19 +43,96 @@ class TabWindow {
             var firstUrl = url;
             var json = '';
             var lastUrl = '';
-            var historyPath = __dirname + '/../userdata/history.json';
-            var userdataPath = __dirname + '/../userdata';
+            var historyPath = '/userdata/history.json';
+            var extensionsPath = '/userdata/extensions';
+            var userdataPath = '/userdata';
             s.searchInput = searchInput;
+            s.webView = webview;
+            //requires
+            var fs = require('fs');
+            var IsThere = require("is-there");
+            var dir = require('node-dir');
+
+            //check if directory called userdata exists
+            if (!IsThere(userdataPath)) {
+                fs.mkdir(userdataPath);
+            }
+            //check if directory called extensions exists
+            if (!IsThere(extensionsPath)) {
+                fs.mkdir(extensionsPath);
+            }
+            //check if file called history.json exists
+            if (!IsThere(historyPath)) {
+                fs.writeFile(historyPath, '{"history":[]}');
+            }
 
             //global functions
             function makeRippleMenuItem(menuItem, e) {
-              var relX = e.pageX - $(menuItem).offset().left;
-              var relY = e.pageY - $(menuItem).offset().top;
-              Ripple.makeRipple($(menuItem), relX, relY, $(menuItem).width(), $(menuItem).height(), rippleTime, 0);
+                var relX = e.pageX - $(menuItem).offset().left;
+                var relY = e.pageY - $(menuItem).offset().top;
+                Ripple.makeRipple($(menuItem), relX, relY, $(menuItem).width(), $(menuItem).height(), rippleTime, 0);
             }
+
             function makeRippleIconButton(item) {
-              Ripple.makeRipple(item, item.width() / 2, item.height() / 2, (item.width() - 8) / 2, (item.height() - 8) / 2, iconRippleTime, 0);
+                Ripple.makeRipple(item, item.width() / 2, item.height() / 2, (item.width() - 8) / 2, (item.height() - 8) / 2, iconRippleTime, 0);
             }
+            //Extensions system
+            function loadExtensions() {
+                //get all .JSON files in folder to an array
+                var listOfExtensions = [];
+                var listOfExtensionsDirs = [];
+                dir.subdirs(extensionsPath, function(err, subdirs) {
+                    if (err) throw err;
+                    for (var i = 0; i < subdirs.length; i++) {
+                        dir.files(subdirs[i], function(err, files) {
+                            if (err) throw err;
+                            for (var i = 0; i < files.length; i++) {
+                                if (endsWith(files[i], ".json")) {
+                                    listOfExtensions.push(files[i]);
+                                    console.log(files[i]);
+                                }
+                            }
+                            //read json from all files
+                            for (var i = 0; i < listOfExtensions.length; i++) {
+                                $.ajax({
+                                    type: "GET",
+                                    url: listOfExtensions[i],
+                                    success: function(data) {
+                                        var jsonObject = JSON.parse(data);
+                                        //Deserialize JSON string
+                                        var jName = jsonObject.name;
+                                        var jVersion = jsonObject.version;
+                                        var jDesc = jsonObject.description;
+                                        var jIcon = jsonObject.icon;
+                                        var jPopupPage = jsonObject.popuppage;
+                                        var jSettingsPage = jsonObject.settingspage;
+                                        var jScripts = jsonObject.scripts;
+                                        console.log(jName);
+
+                                        for (var i = 0; i < jsonObject.scripts.length; i++) {
+                                            var jFileUrl = subdirs[i] + "/" + jsonObject.scripts[i]["url"];
+                                            $.ajax({
+                                                type: "GET",
+                                                url: jFileUrl,
+                                                success: function(data) {
+                                                    $('head').append('<script>' + `function a(index) {var currentTab = tabCollection[index]; var currentInstance = currentTab.instance;` + data + `} a(` + tabCollection.indexOf(tab) + `); </script>`);
+                                                }
+                                            });
+
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+
+            /*function loadThemes() {
+                if (jFileType == "stylesheet" || jFileType == "css") {
+                    $('head').append('<link rel="stylesheet" type="text/css" href="' + jFileUrl + '">')
+                }
+            } TODO */
 
             //check if background color of bar is dark or light and then set icons foreground to black or white
             function changeContrast() {
@@ -145,18 +224,6 @@ class TabWindow {
                 }
             }, 1);
 
-            //requires
-            var fs = require('fs');
-            var IsThere = require("is-there");
-
-            //check if directory called userdata exists
-            if (!IsThere(userdataPath)) {
-                fs.mkdir(userdataPath);
-            }
-            //check if file called history.json exists
-            if (!IsThere(historyPath)) {
-                fs.writeFile(historyPath, '{"history":[]}');
-            }
 
             //webview section
             //webview ready event
@@ -260,6 +327,7 @@ class TabWindow {
                             //getting color from top of a website
                             getColor();
                         }
+                        loadExtensions();
                     });
                 }, 200);
 
@@ -270,7 +338,7 @@ class TabWindow {
 
             //menu events
             settings.click(function(e) {
-              makeRippleMenuItem(this, e);
+                makeRippleMenuItem(this, e);
             });
             history.click(function(e) {
                 makeRippleMenuItem(this, e);
