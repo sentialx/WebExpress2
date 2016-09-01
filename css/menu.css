@@ -4,7 +4,9 @@
     z-index: 9999;
     -webkit-user-select: none;
     cursor: default;
-    position: relative;
+    margin-left: 16px;
+    opacity: 0;
+    position:relative;
     visibility: hidden;
 }
 
@@ -44,4 +46,80 @@
     margin-right: 12px;
     background-size: cover;
     -webkit-transition: all 0.2s;
+}
+
+
+.ex-menu {
+  background-color: #fff;
+  width: 154px;
+  min-height: 174px;
+  overflow: none;
+  z-index: 9999;
+  -webkit-user-select: none;
+  cursor: default;
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  visibility: hidden;
+  opacity: 0;
+  border-radius: 2px;
+  padding-bottom: 10px;
+}
+
+.ex-menu .ex-cards .ex-list {
+  width: 154px;
+  position: relative;
+  max-height: 174px;
+  list-style-type: none;
+  padding: 0;
+  padding-bottom: 32px;
+  margin: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ex-menu .ex-cards .ex-list li {
+  height: 38px;
+  width: 38px;
+  float: left;
+  margin-top: 10px;
+  margin-left: 10px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 26px 26px;
+}
+
+.ex-menu .ex-move {
+  width: 48px;
+  min-height: 18px;
+  max-width: 100%;
+  padding: 0;
+  list-style: none;
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+  position: absolute;
+  bottom: 12px;
+}
+
+.ex-menu .ex-move li {
+  width: 18px;
+  height: 18px;
+  background-color: #444;
+  opacity: 0.1;
+  border-radius: 100%;
+  transition: all 0.3s;
+  cursor: pointer;
+  margin-left: 6px;
+  float: left;
+}
+
+.ex-menu .ex-move li:hover {
+  opacity: 0.3;
+  transition: all 0.3s;
+}
+
+.ex-menu .ex-elements {
+  display:none;
 }
