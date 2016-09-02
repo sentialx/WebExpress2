@@ -49,77 +49,76 @@
 }
 
 
-.ex-menu {
-  background-color: #fff;
+.extBtnIcon {
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  margin: 5px;
+  background-image: url('../img/more-vert.png');
+  background-size: cover;
+}
+
+.ext-menu {
+  height: 194px;
   width: 154px;
-  min-height: 174px;
-  overflow: none;
-  z-index: 9999;
-  -webkit-user-select: none;
-  cursor: default;
   position: absolute;
   top: 8px;
   right: 16px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   visibility: hidden;
   opacity: 0;
-  border-radius: 2px;
-  padding-bottom: 10px;
+  overflow: hidden;
 }
 
-.ex-menu .ex-cards .ex-list {
-  width: 154px;
+.ext-indicator {
   position: relative;
-  max-height: 174px;
-  list-style-type: none;
-  padding: 0;
-  padding-bottom: 32px;
-  margin: 0;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.ex-menu .ex-cards .ex-list li {
-  height: 38px;
-  width: 38px;
-  float: left;
+  height: 8px;
+  width: 8px;
+  margin-left: 4px;
   margin-top: 10px;
-  margin-left: 10px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 26px 26px;
-}
-
-.ex-menu .ex-move {
-  width: 48px;
-  min-height: 18px;
-  max-width: 100%;
-  padding: 0;
-  list-style: none;
-  right: 0;
-  left: 0;
-  margin: 0 auto;
-  position: absolute;
-  bottom: 12px;
-}
-
-.ex-menu .ex-move li {
-  width: 18px;
-  height: 18px;
   background-color: #444;
-  opacity: 0.1;
   border-radius: 100%;
-  transition: all 0.3s;
-  cursor: pointer;
-  margin-left: 6px;
+  opacity: 0.5;
   float: left;
+  transition: all 0.2s;
+  cursor: default;
 }
 
-.ex-menu .ex-move li:hover {
-  opacity: 0.3;
-  transition: all 0.3s;
+.ext-indicator:hover {
+  opacity: 0.7;
+  transition: all 0.2s;
+  cursor: pointer;
 }
 
-.ex-menu .ex-elements {
-  display:none;
+.ext-indicators {
+  list-style-type: none;
+  position: absolute;
+  bottom: -8px;
+  padding: 0;
+  width: auto;
+}
+
+.ext-item {
+  position: relative;
+  float:left;
+  margin-left: 3px;
+  height: 42px;
+  width: 42px;
+  list-style-type: none;
+}
+
+.ext-item-icon {
+  width: calc(100% - 14px);
+  height: calc(100% - 14px);
+  margin: 7px;
+  background-size: cover;
+}
+
+.ext-page {
+  position: relative;
+  top: 0;
+  padding: 0;
+  padding-left: 8px;
+  display: inline-block;
 }
