@@ -88,49 +88,48 @@ class TabWindow {
                 dir.subdirs(extensionsPath, function(err, subdirs) {
                     if (err) throw err;
                     for (var i = 0; i < subdirs.length; i++) {
-                        var subdir = subdirs[i];
+
                         dir.files(subdirs[i], function(err, files) {
                             if (err) throw err;
 
                             for (var i2 = 0; i2 < files.length; i2++) {
                                 if (endsWith(files[i2], ".json")) {
                                     listOfExtensions.push(files[i2]);
-                                    console.log(files[i2]);
+                                    //read json from all files
+                                    $.ajax({
+                                        type: "GET",
+                                        url: files[i2],
+                                        success: function(data) {
+                                            var jsonObject = JSON.parse(data);
+                                            //Deserialize JSON string
+                                            var jName = jsonObject.name;
+                                            var jFolder = jsonObject.folder;
+                                            var jVersion = jsonObject.version;
+                                            var jDesc = jsonObject.description;
+                                            var jIcon = jsonObject.icon;
+                                            var jPopupPage = jsonObject.popuppage;
+                                            var jSettingsPage = jsonObject.settingspage;
+                                            var jScripts = jsonObject.scripts;
+                                            console.log(extensionsPath + "/" + jFolder + "/" + jIcon);
+                                            addExtension(extensionsPath + "/" + jFolder + "/" + jIcon, function() {
+
+                                            });
+                                            for (var i3 = 0; i3 < jsonObject.scripts.length; i3++) {
+                                                var jFileUrl = extensionsPath + "/" + jFolder + "/" + jsonObject.scripts[i3]["url"];
+                                                $.ajax({
+                                                    type: "GET",
+                                                    url: jFileUrl,
+                                                    success: function(data) {
+                                                        $('head').append('<script>' + `function a(index) {var currentTab = tabCollection[index]; var currentInstance = currentTab.instance;` + data + `} a(` + tabCollection.indexOf(tab) + `); </script>`);
+                                                    }
+                                                });
+
+                                            }
+                                        }
+                                    });
+
                                 }
                             }
-                            //read json from all files
-                            for (var i2 = 0; i2 < listOfExtensions.length; i2++) {
-                                $.ajax({
-                                    type: "GET",
-                                    url: listOfExtensions[i2],
-                                    success: function(data) {
-                                        var jsonObject = JSON.parse(data);
-                                        //Deserialize JSON string
-                                        var jName = jsonObject.name;
-                                        var jVersion = jsonObject.version;
-                                        var jDesc = jsonObject.description;
-                                        var jIcon = jsonObject.icon;
-                                        var jPopupPage = jsonObject.popuppage;
-                                        var jSettingsPage = jsonObject.settingspage;
-                                        var jScripts = jsonObject.scripts;
-                                        addExtension(subdir.replace(/\\/g, "/") + "/" + jIcon, function() {
-
-                                        });
-                                        for (var i3 = 0; i3 < jsonObject.scripts.length; i3++) {
-                                            var jFileUrl = subdir.replace(/\\/g, "/") + "/" + jsonObject.scripts[i3]["url"];
-                                            $.ajax({
-                                                type: "GET",
-                                                url: jFileUrl,
-                                                success: function(data) {
-                                                    $('head').append('<script>' + `function a(index) {var currentTab = tabCollection[index]; var currentInstance = currentTab.instance;` + data + `} a(` + tabCollection.indexOf(tab) + `); </script>`);
-                                                }
-                                            });
-
-                                        }
-                                    }
-                                });
-                            }
-
                         });
                     }
                 });
@@ -235,11 +234,12 @@ class TabWindow {
                 }
             }, 1);
 
+            loadExtensions();
 
             //webview section
             //webview ready event
             $(webview).ready(function() {
-                loadExtensions();
+
                 $.ajax({
                     type: "GET",
                     url: "http://google.com/complete/search?client=firefox&q=webexpress",
@@ -399,87 +399,117 @@ class TabWindow {
             var currentPage = tab.tabWindow.find('.ext-page');
             var selectedPage = 0;
             pageCollection.push(currentPage);
-            
             function addExtension(image, clickEvent) {
-              if (extCount != 9) {
+                if (extCount != 9) {
 
-                var ext = $('<li class="ext-item ripple" data-ripple-color="#444"><div class="ext-item-icon" style="background-image: url(\'' + image + '\')"></div></li>').appendTo(currentPage);
-                ext.click(function() {
-                  clickEvent();
-                });
-                ext.mousedown(function() {
-                  makeRippleIconButton($(this));
-                });
-                extCollection.push(ext);
-                extCount += 1;
-              } else {
-                extCount = 0;
-                currentPage = $('<ul class="ext-page"></ul>').appendTo(tab.tabWindow.find('.ext-menu'));
+                    var ext = $('<li class="ext-item ripple" data-ripple-color="#444"><div class="ext-item-icon" style="background-image: url(\'' + image + '\')"></div></li>').appendTo(currentPage);
+                    ext.click(function() {
+                        clickEvent();
+                    });
+                    ext.mousedown(function() {
+                        makeRippleIconButton($(this));
+                    });
+                    extCollection.push(ext);
+                    extCount += 1;
+                } else {
+                    extCount = 0;
+                    currentPage = $('<ul class="ext-page"></ul>').appendTo(tab.tabWindow.find('.ext-menu'));
 
-                var ext = $('<li class="ext-item ripple" data-ripple-color="#444"><div class="ext-item-icon" style="background-image: url(\'' + image + '\')"></div></li>').appendTo(currentPage);
-                ext.click(function() {
-                  clickEvent();
-                });
-                ext.mousedown(function() {
-                  Ripple.makeRippleIconButton($(this));
-                });
-                pageCollection.push(currentPage);
-                extCollection.push(ext);
-                pagesCount += 1;
-                extCount += 1;
-              }
-              resetIndicators();
-              for (var i = 0; i < pageCollection.length; i++) {
-                if (i != 0) {
-                  pageCollection[i].css({top: -i * 194 - i * -25, left: -200});
-
+                    var ext = $('<li class="ext-item ripple" data-ripple-color="#444"><div class="ext-item-icon" style="background-image: url(\'' + image + '\')"></div></li>').appendTo(currentPage);
+                    ext.click(function() {
+                        clickEvent();
+                    });
+                    ext.mousedown(function() {
+                        makeRippleIconButton($(this));
+                    });
+                    pageCollection.push(currentPage);
+                    extCollection.push(ext);
+                    pagesCount += 1;
+                    extCount += 1;
                 }
-              }
-              pageCollection[0].css({left: 0});
+                resetIndicators();
+                for (var i = 0; i < pageCollection.length; i++) {
+                    pageCollection[i].css({
+                        top: (-1 * i) * (pageCollection[i].height() + 31),
+                        left: -200
+                    });
+                }
+                pageCollection[0].css({
+                    left: 0
+                });
             }
+
             function createIndicator(index) {
-              var indicator = $('<li class="ext-indicator"></li>').appendTo(tab.tabWindow.find('.ext-indicators'));
+                var indicator = $('<li class="ext-indicator"></li>').appendTo(tab.tabWindow.find('.ext-indicators'));
 
-              indicator.click(function() {
-                console.log("previous Index: " + selectedPage);
-                if (selectedPage > index) {
-                  //from left to right
-                  pageCollection[selectedPage].css({left: 0}).animate({left: 200});
-                  pageCollection[index].css({left: -200}).animate({left: 0});
-                } else if (selectedPage < index) {
-                  //from right to left
-                  pageCollection[selectedPage].css({left: 0}).animate({left: -200});
-                  pageCollection[index].css({left: 200}).animate({left: 0});
-                }
+                indicator.click(function() {
+                    console.log("previous Index: " + selectedPage);
+                    if (selectedPage > index) {
+                        //from left to right
+                        pageCollection[selectedPage].css({
+                            left: 0
+                        }).animate({
+                            left: 200
+                        });
+                        pageCollection[index].css({
+                            left: -200
+                        }).animate({
+                            left: 0
+                        });
+                    } else if (selectedPage < index) {
+                        //from right to left
+                        pageCollection[selectedPage].css({
+                            left: 0
+                        }).animate({
+                            left: -200
+                        });
+                        pageCollection[index].css({
+                            left: 200
+                        }).animate({
+                            left: 0
+                        });
+                    }
 
-                for (var i = 0; i < indicatorsCollection.length; i++) {
-                  indicatorsCollection[i].css({height: 8, width: 8, top:2});
-                }
-                $(this).css({height: 12, width: 12, top:0});
+                    for (var i = 0; i < indicatorsCollection.length; i++) {
+                        indicatorsCollection[i].css({
+                            height: 8,
+                            width: 8,
+                            top: 2
+                        });
+                    }
+                    $(this).css({
+                        height: 12,
+                        width: 12,
+                        top: 0
+                    });
 
-                selectedPage = index;
-                console.log("current Index: " + index);
-              });
-              indicatorsCollection.push(indicator);
+                    selectedPage = index;
+                    console.log("current Index: " + index);
+                });
+                indicatorsCollection.push(indicator);
             }
+
             function resetIndicators() {
-              indicatorsCollection = [];
-              tab.tabWindow.find('.ext-indicators').empty();
-              indicatorsCount = 0;
-              while (indicatorsCount != pagesCount) {
-                createIndicator(indicatorsCount);
-                indicatorsCount += 1;
-              }
-              var indicatorsWidth = indicatorsCount * 14;
-              tab.tabWindow.find('.ext-indicators').css({width: indicatorsWidth, left: (tab.tabWindow.find('.ext-menu').width() / 2) - (indicatorsWidth / 2) - 4});
+                indicatorsCollection = [];
+                tab.tabWindow.find('.ext-indicators').empty();
+                indicatorsCount = 0;
+                while (indicatorsCount != pagesCount) {
+                    createIndicator(indicatorsCount);
+                    indicatorsCount += 1;
+                }
+                var indicatorsWidth = indicatorsCount * 14;
+                tab.tabWindow.find('.ext-indicators').css({
+                    width: indicatorsWidth,
+                    left: (tab.tabWindow.find('.ext-menu').width() / 2) - (indicatorsWidth / 2) - 4
+                });
             }
 
             function addExtensionDev(count) {
-              var items = 0;
-              while (items != count) {
-                addExtension("logo.png", function() {});
-                items += 1;
-              }
+                var items = 0;
+                while (items != count) {
+                    addExtension("logo.png", function() {});
+                    items += 1;
+                }
             }
 
             //bar buttons events

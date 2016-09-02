@@ -61,7 +61,7 @@
   height: 194px;
   width: 154px;
   position: absolute;
-  top: 8px;
+  top: 32px;
   right: 16px;
   background-color: #fff;
   border-radius: 2px;
@@ -69,6 +69,7 @@
   visibility: hidden;
   opacity: 0;
   overflow: hidden;
+  padding: 0;
 }
 
 .ext-indicator {
@@ -102,23 +103,26 @@
 .ext-item {
   position: relative;
   float:left;
-  margin-left: 3px;
-  height: 42px;
-  width: 42px;
+  margin-left: 0px;
+  height: 48px;
+  width: 48px;
   list-style-type: none;
 }
 
 .ext-item-icon {
-  width: calc(100% - 14px);
-  height: calc(100% - 14px);
-  margin: 7px;
+  width: calc(100% - 12px);
+  height: calc(100% - 12px);
+  margin: 6px;
   background-size: cover;
 }
 
+
 .ext-page {
+  margin-top: 6px;
   position: relative;
   top: 0;
   padding: 0;
-  padding-left: 8px;
+  padding-left: 6px;
+  padding-top: 0;
   display: inline-block;
 }
