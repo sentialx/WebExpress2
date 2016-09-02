@@ -392,6 +392,8 @@ class TabWindow {
 
       var menuCard = 0;
       var menuCardC = new Array();
+      var lastcard = "0";
+      var gCard;
 
       function createCard() {
         if (menuCardC[menuCard] == null) {
@@ -431,28 +433,32 @@ class TabWindow {
 
       addNewCard();
 
-      var exMenuCardsList = $(tab.tabWindow.find('.ex-menu .ex-cards .ex-list'));
+      function refreshCards() {
+        gCard = null;
+        lastcard = "0";
+        var exMenuCards = $(tab.tabWindow.find('.ex-menu .ex-cards'))
+        exMenuCards.html("");
+        exMenuMove.html("");
 
-      for(var i = 0; i < exMenuCardsList.length; i++) {
-        exMenuMove.append('<li class="ex-menuChangeCardBtn" data-page-num="' + i + '"></li>');
-      }
+        var exMenuCardsList = $(tab.tabWindow.find('.ex-menu .ex-cards .ex-list'));
 
-      exMenuMoveItem = $(tab.tabWindow.find('.ex-menu .ex-move li'));
-      exMenuMoveItem.each(function(index) {
-        if (exMenuCardsList.length < 2) {
-          if (index == 0) {
-            $(this).css('margin-left', '0px');
-          }
+        for(var i = 0; i < exMenuCardsList.length; i++) {
+          exMenuMove.append('<li class="ex-menuChangeCardBtn" data-page-num="' + i + '"></li>');
         }
-        $(this).attr('data-page-num', index);
-      });
-      var result = exMenuCardsList.length * parseInt(exMenuMoveItem.css('width')) + exMenuCardsList.length * parseInt(exMenuMoveItem.css('margin-left'));
 
-      exMenuMove.css('width', result);
+        exMenuMoveItem = $(tab.tabWindow.find('.ex-menu .ex-move li'));
+        exMenuMoveItem.each(function(index) {
+          if (exMenuCardsList.length < 2) {
+            if (index == 0) {
+              $(this).css('margin-left', '0px');
+            }
+          }
+          $(this).attr('data-page-num', index);
+        });
+        var result = exMenuCardsList.length * parseInt(exMenuMoveItem.css('width')) + exMenuCardsList.length * parseInt(exMenuMoveItem.css('margin-left'));
 
-      var lastcard = "0";
-
-      var gCard;
+        exMenuMove.css('width', result);
+      }
 
       function getCard(n) {
         exMenuCardsList.each(function(index) {
@@ -525,6 +531,7 @@ class TabWindow {
           webview.goBack();
         }
       });
+
       backBtn.mousedown(function() {
         makeRippleIconButton($(this));
       });
