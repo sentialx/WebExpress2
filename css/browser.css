@@ -150,19 +150,10 @@
     opacity: 1;
 }
 
-
-.exBtn {
+.extBtn {
   opacity: 0.6;
   height: 32px;
   width: 32px;
   margin-right: 8px;
   float: right;
-}
-
-.exBtnIcon {
-  width: calc(100% - 10px);
-  height: calc(100% - 10px);
-  margin: 5px;
-  background-image: url('../img/more-vert.png');
-  background-size: cover;
 }
