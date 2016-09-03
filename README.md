@@ -12,7 +12,7 @@
 * Downloads `TODO`
 * Developer tools
 * Screenshot `TODO`
-* Private mode `TODO`
+* Private mode `TODO` d o b r e p o m a r a ń c z o w e
 * Extensions (work in progress)
 * Beautiful UI (material design)
 
