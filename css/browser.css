@@ -11,7 +11,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     background-color: white;
     height: 32px;
-    width: calc(100% - 222px);
+    width: calc(100% - 224px);
     margin-left: 16px;
     -webkit-transition: background-color 0.2s;
     float: left;
@@ -33,14 +33,6 @@
     width: calc(100% - 16px);
     height: calc(100% - 10px);
     outline: none;
-}
-
-.backBtn {
-    opacity: 0.6;
-    height: 32px;
-    width: 32px;
-    margin-left: 8px;
-    float: left;
 }
 
 .suggestions {
@@ -78,10 +70,18 @@
     background-color: #BDBDBD;
 }
 
+.backBtn {
+    opacity: 0.6;
+    height: 38px;
+    width: 38px;
+    margin-left: 4px;
+    float: left;
+}
+
 .backBtnIcon {
-    width: calc(100% - 10px);
-    height: calc(100% - 10px);
-    margin: 5px;
+    width: calc(100% - 16px);
+    height: calc(100% - 16px);
+    margin: 8px;
     background-image: url('../img/back.png');
     background-size: cover;
 }
@@ -92,16 +92,16 @@
 
 .forwardBtn {
     opacity: 0.6;
-    height: 32px;
-    width: 32px;
-    margin-left: 8px;
+    height: 38px;
+    width: 38px;
+    margin-left: 4px;
     float: left;
 }
 
 .forwardBtnIcon {
-    width: calc(100% - 10px);
-    height: calc(100% - 10px);
-    margin: 5px;
+    width: calc(100% - 16px);
+    height: calc(100% - 16px);
+    margin: 8px;
     background-image: url('../img/forward.png');
     background-size: cover;
 }
@@ -112,16 +112,16 @@
 
 .refreshBtn {
     opacity: 0.6;
-    height: 32px;
-    width: 32px;
-    margin-left: 8px;
+    height: 38px;
+    width: 38px;
+    margin-left: 4px;
     float: left;
 }
 
 .refreshBtnIcon {
-    width: calc(100% - 10px);
-    height: calc(100% - 10px);
-    margin: 5px;
+    width: calc(100% - 16px);
+    height: calc(100% - 16px);
+    margin: 8px;
     background-image: url('../img/refresh.png');
     background-size: cover;
 }
@@ -131,17 +131,17 @@
 }
 
 .menuBtn {
-  opacity: 0.6;
-  height: 32px;
-  width: 32px;
-  margin-left: 8px;
-  float: left;
+    opacity: 0.6;
+    height: 38px;
+    width: 38px;
+    margin-left: 4px;
+    float: left;
 }
 
 .menuBtnIcon {
-    width: calc(100% - 10px);
-    height: calc(100% - 10px);
-    margin: 5px;
+    width: calc(100% - 16px);
+    height: calc(100% - 16px);
+    margin: 8px;
     background-image: url('../img/menu.png');
     background-size: cover;
 }
@@ -151,9 +151,18 @@
 }
 
 .extBtn {
-  opacity: 0.6;
-  height: 32px;
-  width: 32px;
-  margin-right: 8px;
-  float: right;
+    opacity: 0.6;
+    height: 38px;
+    width: 38px;
+    margin-top: -2px;
+    margin-left: 2px;
+    float: right;
+}
+
+.extBtnIcon {
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
+  margin: 8px;
+    background-image: url('../img/more-vert.png');
+    background-size: cover;
 }

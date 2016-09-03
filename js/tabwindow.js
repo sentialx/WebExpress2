@@ -399,6 +399,7 @@ class TabWindow {
             var currentPage = tab.tabWindow.find('.ext-page');
             var selectedPage = 0;
             pageCollection.push(currentPage);
+            addExtensionDev(25);
             function addExtension(image, clickEvent) {
                 if (extCount != 9) {
 
