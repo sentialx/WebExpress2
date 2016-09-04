@@ -1,11 +1,11 @@
-.mdc-switch {
+.md-switch {
     width: 40px;
     min-height: 14px;
 }
-.s-container {
+.switch-container {
     position: relative;
 }
-.mdc-switch .lever {
+.lever {
     width: 40px;
     height: 18px;
     border-radius: 20px;
@@ -13,17 +13,18 @@
     margin-right: auto;
     background-color: #818181;
 }
-.mdc-switch .ellipse-ripple {
+.ellipse-ripple {
     height: 48px;
     width: 48px;
     position: absolute;
+    opacity: 0;
     top: -15px;
     left: -17.5px;
     background-color: #818181;
-    opacity: 0;
     border-radius: 100%;
 }
-.mdc-switch .ellipse {
+
+.ellipse {
     height: 22px;
     width: 22px;
     position: absolute;
