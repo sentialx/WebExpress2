@@ -1,3 +1,4 @@
+const fs = require('fs');
 function getHTML(webview, callback) {
     webview.executeJavaScript('f(); function f() { return document.body.innerHTML;}', function(result) {
         callback(result);
@@ -12,7 +13,7 @@ function setHTML(webview, code) {
     webview.executeJavaScript(`document.body.innerHTML = '${code}'`);
 }
 
-/*
+
 class HistoryManager {
     constructor() {
 
@@ -27,10 +28,10 @@ class HistoryManager {
 
     }
     static getAllHistory() {
-      return historyArray;
+      return fs.readFileSync('/userdata/history.json');
     }
 }
-TODO
+
 
 class BookmarksManager {
     constructor() {
@@ -49,7 +50,7 @@ class BookmarksManager {
       return bookmarksArray;
     }
 }
-TODO
+
 
 class DownloadsManager {
     constructor() {
@@ -68,7 +69,7 @@ class DownloadsManager {
       return downloadsArray;
     }
 }
-TODO
+
 
 class ExtensionsManager {
     constructor() {
@@ -84,7 +85,7 @@ class ExtensionsManager {
       return extensionsArray;
     }
 }
-TODO
+
 
 class LayoutManager {
     constructor() {
@@ -109,4 +110,3 @@ class LayoutManager {
       return instance.tabWindow.css('background-color');
     }
 }
-*/
