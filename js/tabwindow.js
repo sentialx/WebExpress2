@@ -291,11 +291,16 @@ class TabWindow {
                         //replace weird characters in utf-8
                         json = json.replace("\ufeff", "");
                         var obj = JSON.parse(json);
-                        if (!webview.getURL().startsWith("webexpress://")) {
+                        if (!webview.getURL().startsWith("webexpress://") && !webview.getURL().startsWith("about:blank")) {
+                            var date = new Date();
+                            var current_hour = date.getHours();
+                            var current_minute = date.getMinutes();
+                            var time = `${current_hour}:${current_minute}`;
                             obj['history'].push({
                                 "link": webview.getURL(),
                                 "title": webview.getTitle(),
-                                "date": today
+                                "date": today,
+                                "time": time
                             });
                             var jsonStr = JSON.stringify(obj);
                             json = jsonStr;
@@ -400,6 +405,7 @@ class TabWindow {
             var selectedPage = 0;
             pageCollection.push(currentPage);
             addExtensionDev(25);
+
             function addExtension(image, clickEvent) {
                 if (extCount != 9) {
 
@@ -716,21 +722,30 @@ class TabWindow {
                                 if (items == 3) {
                                     return;
                                 }
-                                if (obj.history[i].link.indexOf(searchInput.val()) !== -1 && items != 3 && !isInArray(obj.history[i].link, links)) {
-                                    var str = obj.history[i].link;
-                                    //remove http://, https:// etc. from item for better suggestions
-                                    if (obj.history[i].link.startsWith("http://")) {
-                                        str = str.split("http://")[1];
-                                        if (str.startsWith("www.")) {
-                                            str = str.split("www.")[1];
-                                        }
+                                var str = obj.history[i].link;
+
+                                //remove http://, https:// etc. from item for better suggestions
+                                if (obj.history[i].link.startsWith("http://")) {
+                                    str = str.split("http://")[1];
+                                    if (str.startsWith("www.")) {
+                                        str = str.split("www.")[1];
                                     }
-                                    if (obj.history[i].link.startsWith("https://")) {
-                                        str = str.split("https://")[1];
-                                        if (str.startsWith("www.")) {
-                                            str = str.split("www.")[1];
-                                        }
+                                }
+                                if (obj.history[i].link.startsWith("https://")) {
+                                    str = str.split("https://")[1];
+                                    if (str.startsWith("www.")) {
+                                        str = str.split("www.")[1];
                                     }
+                                }
+                                //google search engine
+                                if (str.indexOf("google") !== -1 &&
+                                    str.indexOf("search?q=") !== -1) {
+                                    str = str.match(/google\.[a-zA-Z]{2,4}\/search\?q=(.*)\&/)[1].toString();
+                                    str = str.replace(str.split('&')[1], "");
+                                    str = str.replace("&", "");
+                                    str = str.replace("+", " ");
+                                }
+                                if (str.indexOf(searchInput.val()) !== -1 && items != 3 && !isInArray(str, links)) {
 
                                     var item = $('<li data-ripple-color="#444" class="suggestions-li ripple" text="' + str + '">' + str + '</li>');
                                     suggestions_ul.prepend(item);

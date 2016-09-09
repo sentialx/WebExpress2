@@ -9,6 +9,7 @@ body {
 .toolbar {
     position: fixed;
     width: 100%;
+    z-index: 999;
     padding-left: 32px;
     height: 58px;
     background-color: #3F51B5;
@@ -25,7 +26,7 @@ body {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     width: 70%;
     padding: 32px;
-    padding-bottom: 8px;
+    padding-bottom: 32px;
     margin-left: auto;
     margin-right: auto;
     overflow: hidden;
@@ -34,6 +35,7 @@ body {
 
 .card p {
     font-size: 14px;
+
 }
 
 .card a {
