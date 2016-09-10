@@ -21,6 +21,10 @@ body {
     margin-top: (50% - auto);
 }
 
+.item {
+  margin-top: -32px;
+}
+
 .card {
     background-color: white;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
@@ -50,13 +54,21 @@ body {
 }
 
 .card-header {
-    margin-top: -8px;
-    padding-bottom: 8px;
+  position: relative;
     font-size: 22px;
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-top: 16px;
+    background-color:#F5F5F5;
+    margin-left: -32px;
+    margin-right: -32px;
+    margin-top: -32px;
 }
 
 hr {
     display: block;
+    margin-left: -32px;
+    margin-right: -32px;
     height: 1px;
     border: 0;
     border-top: 1px solid #E0E0E0;
