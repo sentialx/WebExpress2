@@ -226,9 +226,7 @@ class TabWindow {
 
             //global timer
             setInterval(function() {
-                $('#webviewcontainer').css('height', $(window).height() - 74);
-                $(webview).css('width', $(window).width());
-                $(webview).css('height', $(window).height() - 74);
+                
                 if (searchInput.val() == "" || searchInput.val() == null) {
                     suggestions.css('display', 'none');
                 }
@@ -256,8 +254,7 @@ class TabWindow {
             });
             //webview page load end event
             webview.addEventListener('did-finish-load', function() {
-                tab.Title.empty();
-                tab.Title.append("<p style='display: inline; width:50%;'>" + webview.getTitle() + "</p>");
+
                 searchInput.val(webview.getURL());
 
                 //TODO don't change searchInput text when webview url is webexpress://newtab
@@ -321,6 +318,15 @@ class TabWindow {
                         suggestions.css('display', 'none');
                         searchInput.val(webview.getURL());
                     }, 200);
+                });
+                //webview link mouse over
+                webview.addEventListener('update-target-url', function() {
+                    //TODO
+                });
+                //webview page title changed event
+                webview.addEventListener('page-title-updated', function() {
+                    tab.Title.empty();
+                    tab.Title.append("<p style='display: inline; width:50%;'>" + webview.getTitle() + "</p>");
                 });
                 //webview page favicon updated event
                 webview.addEventListener('page-favicon-updated', function(favicon) {

@@ -3,6 +3,7 @@
     height: 30px;
     width: calc(100% - 96px);
     position: relative;
+    z-index: 9999;
     white-space: nowrap;
     overflow: hidden;
     -webkit-user-select: none;
