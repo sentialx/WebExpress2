@@ -226,7 +226,7 @@ class TabWindow {
 
             //global timer
             setInterval(function() {
-                
+
                 if (searchInput.val() == "" || searchInput.val() == null) {
                     suggestions.css('display', 'none');
                 }
@@ -252,6 +252,15 @@ class TabWindow {
                 });
                 webview.loadURL(url);
             });
+            //webview newwindow event
+            webview.addEventListener('new-window', (e) => {
+              const protocol = require('url').parse(e.url).protocol
+              if (protocol === 'http:' || protocol === 'https:') {
+                  var tab = new Tab();
+                  addTab(new TabWindow(tab, e.url), tab);
+              }
+            })
+
             //webview page load end event
             webview.addEventListener('did-finish-load', function() {
 
@@ -410,8 +419,6 @@ class TabWindow {
             var currentPage = tab.tabWindow.find('.ext-page');
             var selectedPage = 0;
             pageCollection.push(currentPage);
-            addExtensionDev(25);
-
             function addExtension(image, clickEvent) {
                 if (extCount != 9) {
 
@@ -715,7 +722,7 @@ class TabWindow {
                         type: "GET",
                         url: historyPath,
                         success: function(data) {
-                            suggestions_ul.empty();
+
                             json = data.toString();
                             //replace weird characters utf-8
                             json = json.replace("\ufeff", "");
@@ -724,6 +731,7 @@ class TabWindow {
                             var links = [];
                             //max limit for items is 3
                             var items = 0;
+
                             for (var i = 0; i < obj.history.length; i++) {
                                 if (items == 3) {
                                     return;
@@ -752,31 +760,62 @@ class TabWindow {
                                     str = str.replace("+", " ");
                                 }
                                 if (str.indexOf(searchInput.val()) !== -1 && items != 3 && !isInArray(str, links)) {
-
-                                    var item = $('<li data-ripple-color="#444" class="suggestions-li ripple" text="' + str + '">' + str + '</li>');
-                                    suggestions_ul.prepend(item);
-
-                                    suggestions.css('display', 'block');
-                                    item.click(function(e) {
-                                        var curr = $(e.currentTarget);
-                                        webview.loadURL(curr.attr('text'));
-                                    });
-                                    item.mousedown(function(e) {
-                                        var relX = e.pageX - $(this).offset().left;
-                                        var relY = e.pageY - $(this).offset().top;
-                                        Ripple.makeRipple($(this), relX, relY, $(this).width(), $(this).height(), 600, 0);
-                                    });
-                                    item.mouseover(function() {
-                                        tab.tabWindow.find('.suggestions-li').removeClass("selected");
-                                        $(this).addClass("selected");
-                                        searchInput.val($(this).attr('text'));
-                                    });
                                     links.push(str);
+                                    //first array's sort by length
+                                    links.sort(function(a, b){
+                                      // ASC  -> a.length - b.length
+                                      // DESC -> b.length - a.length
+                                      return b.length - a.length;
+                                    });
+                                    var oldLink = links[0];
+                                    oldLink = oldLink.substring(0, oldLink.indexOf('/'));
+                                    oldLink = oldLink.replace("/", "");
+                                    links.push(oldLink);
+                                    for (var i = 0; i < links.length; i++) {
+                                        if (links[i].charAt(links[i].length - 1) == "/") {
+                                            console.log(links[i]);
+                                            links.splice(i, 1);
+                                        }
+                                    }
+                                    var uniqueLinks = [];
+                                    $.each(links, function(i, el) {
+                                        if ($.inArray(el, uniqueLinks) === -1) uniqueLinks.push(el);
+                                    });
 
-                                    allLinks = links;
+                                    //final array's sort length
+                                    uniqueLinks.sort(function(a, b){
+                                      return b.length - a.length;
+                                    });
+                                    allLinks = uniqueLinks;
+                                    //add items to searchbox
+                                    suggestions_ul.empty();
+                                    for (var i = 0; i < uniqueLinks.length; i++) {
+
+                                        var item = $('<li data-ripple-color="#444" class="suggestions-li ripple" text="' + uniqueLinks[i] + '">' + uniqueLinks[i] + '</li>');
+                                        suggestions_ul.prepend(item);
+
+                                        suggestions.css('display', 'block');
+                                        item.click(function(e) {
+                                            var curr = $(e.currentTarget);
+                                            webview.loadURL(curr.attr('text'));
+                                        });
+                                        item.mousedown(function(e) {
+                                            var relX = e.pageX - $(this).offset().left;
+                                            var relY = e.pageY - $(this).offset().top;
+                                            Ripple.makeRipple($(this), relX, relY, $(this).width(), $(this).height(), 600, 0);
+                                        });
+                                        item.mouseover(function() {
+                                            tab.tabWindow.find('.suggestions-li').removeClass("selected");
+                                            $(this).addClass("selected");
+                                            searchInput.val($(this).attr('text'));
+                                        });
+                                    }
                                     items += 1;
                                 }
+
                             }
+
+
                         },
                         complete: function() {
                             //load suggestions from Google
@@ -794,6 +833,7 @@ class TabWindow {
                                         for (var i = 0; i < arr.length; i++) {
                                             if (!isInArray(arr[i], links)) {
                                                 links.push(arr[i]);
+
                                             }
                                         }
                                         var uniqueLinks = [];
@@ -801,8 +841,14 @@ class TabWindow {
                                             if ($.inArray(el, uniqueLinks) === -1) uniqueLinks.push(el);
                                         });
 
+                                        //final array's sort length
+                                        uniqueLinks.sort(function(a, b){
+                                          return a.length - b.length;
+                                        });
+
                                         for (var i = 0; i < uniqueLinks.length; i++) {
                                             if (items != 3) {
+
                                                 var s = $('<li data-ripple-color="#444" class="suggestions-li ripple" text="' + uniqueLinks[i] + '">' + uniqueLinks[i] + '</li>').appendTo(suggestions_ul);
                                                 suggestions.css('display', 'block');
                                                 s.click(function(e) {
@@ -823,17 +869,6 @@ class TabWindow {
                                             }
                                         }
 
-                                    },
-                                    complete: function() {
-                                        //remove duplicates from ul list
-                                        var seen = {};
-                                        tab.tabWindow.find(".suggestions-li").each(function() {
-                                            var txt = $(this).text();
-                                            if (seen[txt])
-                                                $(this).remove();
-                                            else
-                                                seen[txt] = true;
-                                        });
                                     }
                                 });
                             }
