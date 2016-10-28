@@ -1,6 +1,7 @@
 function isInArray(value, array) {
     return array.indexOf(value) > -1;
 }
+console.log(fs);
 var obj = getHistoryData();
 var groups = [];
 var today = new Date();
@@ -21,11 +22,11 @@ for (var i = 0; i < obj.history.length; i++) {
     var jsonItem = obj.history[i];
 
     function additem() {
-        var item = $('<div class="item" style="margin-bottom: -16px;">').appendTo('.card');
-        var border = $('<div style="display: inline-block; height:14px; padding-left:18px; border-radius: 2px; border: 2px solid #9E9E9E;"></div>').appendTo(item);
-        var hour = $('<p style="display: inline-block;margin-left: 16px; width: 50px;color: #9E9E9E;">' + jsonItem.time + '</p>').appendTo(item);
-        var title = $('<p style="margin-left: 52px;display: inline-block;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;max-width: 40%;max-height: 16px; position: relative; top: 14px;">' + jsonItem.title + '</p>').appendTo(item);
-        var link = $('<a href="' + jsonItem.link + '" style="margin-left: 16px; display: inline-block;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;max-width: 30%; max-height: 16px;">' + jsonItem.link + '</a>').appendTo(item);
+        var item = $('<div class="item" style="margin-bottom: -8px;">').appendTo('.card');
+        var border = $('<div class="checkbox" style="display: inline-block; height: 20px; width: 20px;"></div>').appendTo(item);
+        var hour = $('<p style="display: inline-block;margin-left: 16px; width: 50px;color: #9E9E9E;position: relative; top: -4px;">' + jsonItem.time + '</p>').appendTo(item);
+        var title = $('<p style="margin-left: 52px;display: inline-block;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;max-width: 40%;max-height: 16px; position: relative; top: 14px; margin-top: -4px;">' + jsonItem.title + '</p>').appendTo(item);
+        var link = $('<a href="' + jsonItem.link + '" style="margin-left: 16px; display: inline-block;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;max-width: 30%; max-height: 16px; margin-top: -4px;">' + jsonItem.link + '</a>').appendTo(item);
     }
 
     if (!isInArray(jsonItem.date, groups)) {
