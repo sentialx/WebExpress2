@@ -30,14 +30,12 @@ npm install && npm start
 `TODO`
 
 #`TODO`
-* History storage
 * Fix navigation by arrow keys in suggestions box
 * Bookmarks
 * Extensions
 * New tab page
 * Context menus, keyboard shortcuts etc.
 * Other features like screenshots etc.
-* Screenshots
 * Downloads
 * Tutorial for extensions
 
