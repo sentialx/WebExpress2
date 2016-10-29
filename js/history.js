@@ -18,12 +18,31 @@ if (mm < 10) {
 today = mm + '-' + dd + '-' + yyyy;
 
 obj.history = obj.history.reverse();
+var checkedCount = 0;
 for (var i = 0; i < obj.history.length; i++) {
     var jsonItem = obj.history[i];
 
     function additem() {
         var item = $('<div class="item" style="margin-bottom: -8px;">').appendTo('.card');
-        var border = $('<div class="checkbox" style="display: inline-block; height: 20px; width: 20px;"></div>').appendTo(item);
+        var checkbox = $('<div class="checkbox" style="display: inline-block; height: 20px; width: 20px;"></div>').appendTo(item);
+        checkbox.click(function(e) {
+            if (this.checked) {
+                checkedCount += 1;
+            } else {
+                checkedCount -= 1;
+            }
+
+            if (checkedCount >= 1) {
+                $(".toolbar").animate({backgroundColor: '#00BCD4'}, {duration: 200, queue: false});
+                $('.default-toolbar').css('visibility', 'hidden');
+                $('.selecteditems-toolbar').css('visibility', 'visible');
+            } else {
+                $(".toolbar").animate({backgroundColor: '#3F51B5'}, {duration: 200, queue: false});
+                $('.default-toolbar').css('visibility', 'visible');
+                $('.selecteditems-toolbar').css('visibility', 'hidden');
+            }
+
+        });
         var hour = $('<p style="display: inline-block;margin-left: 16px; width: 50px;color: #9E9E9E;position: relative; top: -4px;">' + jsonItem.time + '</p>').appendTo(item);
         var title = $('<p style="margin-left: 52px;display: inline-block;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;max-width: 40%;max-height: 16px; position: relative; top: 14px; margin-top: -4px;">' + jsonItem.title + '</p>').appendTo(item);
         var link = $('<a href="' + jsonItem.link + '" style="margin-left: 16px; display: inline-block;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;max-width: 30%; max-height: 16px; margin-top: -4px;">' + jsonItem.link + '</a>').appendTo(item);

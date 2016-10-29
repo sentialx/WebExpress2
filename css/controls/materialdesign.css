@@ -13,6 +13,11 @@
     margin-right: auto;
     background-color: #818181;
 }
+
+.flat-button {
+    padding-left: 24px;
+    padding-right: 24px;
+}
 .ellipse-ripple {
     height: 48px;
     width: 48px;
