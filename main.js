@@ -34,7 +34,6 @@ app.on('ready', function() {
             url = url.substring(0, url.length - 1)
             url += ".html"
         }
-        console.log(request);
         callback({
             path: path.normalize(`${__dirname}/${url}`)
         })

@@ -150,7 +150,7 @@ function calcSizes(animation, addButtonAnimation) {
             $('#addTab').animate({
                 left: tabCollection.length * tabCollection[0].Tab.width()
             }, {
-                duration: 1, queue: false
+                duration: 200, queue: false
             });
         } else {
             $('#addTab').css({
