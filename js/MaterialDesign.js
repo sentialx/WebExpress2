@@ -146,6 +146,9 @@ $(document).ready(function() {
 
         }
     }
+
+
+
     function initializeComponent() {
         $('.switch').each(function(index) {
             var s = new Switch(this);
@@ -153,9 +156,7 @@ $(document).ready(function() {
         $('.checkbox').each(function(index) {
             var s = new Checkbox(this);
         });
-        $('.switch').click(function() {
-            console.log(this.switched);
-        })
+
     }
     initializeComponent();
 

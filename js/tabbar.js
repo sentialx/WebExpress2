@@ -14,6 +14,7 @@ function addTab(instance, tab) {
     tab.Foreground = 'black';
     tab.Color = selectedTabColor;
     tab.instance = instance;
+    tab.selected = false;
 
     //close button click event
     tab.closeBtn.click(function(e) {
@@ -44,8 +45,10 @@ function addTab(instance, tab) {
     $('#addTab').insertAfter(tab.Tab);
     tabCollection.push(tab);
     selectTab(tab.Tab);
+    tab.selected = true;
     tab.Tab.mousedown(function(e) {
         selectTab(tab.Tab);
+
     });
     calcSizes(false, true);
     tab.Tab.css({
@@ -97,7 +100,7 @@ function changePos(callingTab) {
         duration: 200,
         complete: function() {
             locked = false
-        }
+        }, queue: false
     });
 }
 
@@ -130,14 +133,14 @@ function calcSizes(animation, addButtonAnimation) {
             tabCollection[i].Tab.animate({
                 left: tabCountTemp * tabCollection[0].Tab.width()
             }, {
-                duration: 200
+                duration: 200, queue: false
             });
 
         } else {
             tabCollection[i].Tab.animate({
                 left: tabCountTemp * tabCollection[0].Tab.width()
             }, {
-                duration: 1
+                duration: 1, queue: false
             });
         }
         tabCountTemp += 1;
@@ -147,7 +150,7 @@ function calcSizes(animation, addButtonAnimation) {
             $('#addTab').animate({
                 left: tabCollection.length * tabCollection[0].Tab.width()
             }, {
-                duration: 200
+                duration: 1, queue: false
             });
         } else {
             $('#addTab').css({
@@ -169,10 +172,11 @@ function selectTab(tab) {
             tabCollection[i].tabWindow.css('display', 'none');
             tabCollection[i].Title.removeClass('dark').addClass('light');
             tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
-
+            tabCollection[i].selected = false;
         } else {
             tabCollection[i].Tab.css('background-color', tabCollection[i].Color);
             tabCollection[i].tabWindow.css('display', 'block');
+
             if (tabCollection[i].instance.searchInput != null && (tabCollection[i].instance.searchInput.val() == "" || tabCollection[i].instance.searchInput.val() == null)) {
                 tabCollection[i].instance.searchInput.focus();
             }
@@ -183,6 +187,7 @@ function selectTab(tab) {
                 tabCollection[i].Title.removeClass('light').addClass('dark');
                 tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close-white.png")');
             }
+            tabCollection[i].selected = true;
         }
     }
 }

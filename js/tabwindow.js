@@ -193,7 +193,9 @@ class TabWindow {
                         var myData = context.getImageData(2, 2, img.width, img.height);
                         if (myData != null) {
                             tab.Color = rgbToHex(myData.data[0], myData.data[1], myData.data[2]);
+                            if (tab.selected)
                             tab.Tab.css('background-color', tab.Color);
+
                             bar.css('background-color', tab.Color);
                             changeContrast();
                         }
@@ -264,13 +266,13 @@ class TabWindow {
             //webview page load end event
             webview.addEventListener('did-finish-load', function() {
 
-                searchInput.val(webview.getURL());
+
 
                 //TODO don't change searchInput text when webview url is webexpress://newtab
                 if (webview.getURL().startsWith("webexpress://newtab")) {
-
+                    searchInput.val("");
                 } else {
-
+                    searchInput.val(webview.getURL());
                 }
 
                 //prevent duplicates in history
@@ -352,9 +354,12 @@ class TabWindow {
                             //getting color from <meta name="theme-color" content="...">
                             var regex = result.match(regexp).toString();
                             tab.Color = regex.match(/content="(.*?)"/)[1];
-                            tab.Tab.css('background-color', tab.Color);
+                            if (tab.selected) {
+                                tab.Tab.css('background-color', tab.Color);
+                            }
                             bar.css('background-color', tab.Color);
                             changeContrast();
+
                         } else {
                             //getting color from top of a website
                             getColor();
@@ -845,7 +850,6 @@ class TabWindow {
                                         uniqueLinks.sort(function(a, b){
                                           return a.length - b.length;
                                         });
-
                                         for (var i = 0; i < uniqueLinks.length; i++) {
                                             if (items != 3) {
 
