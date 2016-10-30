@@ -116,7 +116,7 @@ $(document).ready(function() {
                     if (!where.checked) {
                         ellipseRipple.css('opacity', 0.4).hide().show("scale", {
                             procent: 100
-                        }, 200, function() {
+                        }, {duration: 200, queue: false}, function() {
                             ellipseRipple.animate({
                                 opacity: 0
                             });
@@ -129,7 +129,7 @@ $(document).ready(function() {
                     } else {
                         ellipseRipple.css('opacity', 0.4).hide().show("scale", {
                             procent: 100
-                        }, 200, function() {
+                        }, {duration: 200, queue: false}, function() {
                             ellipseRipple.animate({
                                 opacity: 0
                             });
