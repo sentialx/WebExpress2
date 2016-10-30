@@ -194,7 +194,7 @@ class TabWindow {
                         if (myData != null) {
                             tab.Color = rgbToHex(myData.data[0], myData.data[1], myData.data[2]);
                             if (tab.selected)
-                            tab.Tab.css('background-color', tab.Color);
+                                tab.Tab.css('background-color', tab.Color);
 
                             bar.css('background-color', tab.Color);
                             changeContrast();
@@ -256,11 +256,11 @@ class TabWindow {
             });
             //webview newwindow event
             webview.addEventListener('new-window', (e) => {
-              const protocol = require('url').parse(e.url).protocol
-              if (protocol === 'http:' || protocol === 'https:') {
-                  var tab = new Tab();
-                  addTab(new TabWindow(tab, e.url), tab);
-              }
+                const protocol = require('url').parse(e.url).protocol
+                if (protocol === 'http:' || protocol === 'https:') {
+                    var tab = new Tab();
+                    addTab(new TabWindow(tab, e.url), tab);
+                }
             })
 
             //webview page load end event
@@ -304,12 +304,23 @@ class TabWindow {
                             var current_hour = date.getHours();
                             var current_minute = date.getMinutes();
                             var time = `${current_hour}:${current_minute}`;
-                            obj['history'].push({
-                                "link": webview.getURL(),
-                                "title": webview.getTitle(),
-                                "date": today,
-                                "time": time
-                            });
+                            if (obj['history'][obj['history'].length - 1] == null) {
+                                obj['history'].push({
+                                    "link": webview.getURL(),
+                                    "title": webview.getTitle(),
+                                    "date": today,
+                                    "time": time,
+                                    "id": 0
+                                });
+                            } else {
+                                obj['history'].push({
+                                    "link": webview.getURL(),
+                                    "title": webview.getTitle(),
+                                    "date": today,
+                                    "time": time,
+                                    "id": obj['history'][obj['history'].length - 1].id + 1
+                                });
+                            }
                             var jsonStr = JSON.stringify(obj);
                             json = jsonStr;
                             //append new history item to history.json
@@ -424,6 +435,7 @@ class TabWindow {
             var currentPage = tab.tabWindow.find('.ext-page');
             var selectedPage = 0;
             pageCollection.push(currentPage);
+
             function addExtension(image, clickEvent) {
                 if (extCount != 9) {
 
@@ -639,7 +651,7 @@ class TabWindow {
             searchInput.on("input", function(e) {
                 var key = event.keyCode || event.charCode;
                 if (canSuggest) {
-                    autocomplete(searchInput, searchInput.val(), allLinks);
+                    autocomplete(searchInput, searchInput.val());
                     canSuggest = false;
                 }
             });
@@ -648,44 +660,41 @@ class TabWindow {
             searchInput.keydown(function(e) {
                 //arrow key up
                 if (e.keyCode == 38) {
+                    searchInput.select();
                     var selected = tab.tabWindow.find(".selected");
-                    console.log("sth");
-                    if (selected == null) {
-                        tab.tabWindow.find('li').first().addClass("selected");
-                        selected = tab.tabWindow.find(".selected");
-                    }
-                    if (typeof selected.prev().attr("text") !== "undefined")
+                    if (typeof selected.prev().attr("text") !== "undefined") {
                         searchInput.val(selected.prev().attr('text'));
+                    }
 
                     tab.tabWindow.find('.suggestions-li').removeClass("selected");
                     if (selected.prev().length == 0) {
-                        selected.siblings().last().addClass("selected");
-                        searchInput.val(selected.siblings().last().attr('text'));
+                        selected.first().addClass("selected");
+                        searchInput.val(selected.first().attr('text'));
                     } else {
                         selected.prev().addClass("selected");
                     }
-
+                    searchInput.select();
                 }
                 //arrow key down
                 if (e.keyCode == 40) {
+                    searchInput.select();
                     var selected = tab.tabWindow.find(".selected");
-                    if (selected == null) {
-                        tab.tabWindow.find('li').first().addClass("selected");
-                        selected = tab.tabWindow.find(".selected");
-                    }
-                    if (typeof selected.next().attr("text") !== "undefined")
-                        searchInput.val(selected.next().attr('text'));
 
-                    suggestions_ul.focus();
+                    if (typeof selected.next().attr("text") !== "undefined") {
+                        searchInput.val(selected.next().attr('text'));
+                    }
 
                     tab.tabWindow.find('.suggestions-li').removeClass("selected");
                     if (selected.next().length == 0) {
-                        selected.siblings().first().addClass("selected");
-                        searchInput.val(selected.siblings().first().attr('text'));
+                        selected.last().addClass("selected");
+                        searchInput.val(selected.last().attr('text'));
                     } else {
                         selected.next().addClass("selected");
                     }
+                    searchInput.select();
+
                 }
+
             });
 
             searchInput.keypress(function(e) {
@@ -721,7 +730,6 @@ class TabWindow {
                 if (key != 40 && key != 38) {
                     //get suggestions from history
                     if (searchInput.val() == "") return;
-                    suggestions_ul.empty();
                     var items = 0;
                     $.ajax({
                         type: "GET",
@@ -738,84 +746,93 @@ class TabWindow {
                             var items = 0;
 
                             for (var i = 0; i < obj.history.length; i++) {
-                                if (items == 3) {
-                                    return;
-                                }
-                                var str = obj.history[i].link;
+                                if (items != 3) {
 
-                                //remove http://, https:// etc. from item for better suggestions
-                                if (obj.history[i].link.startsWith("http://")) {
-                                    str = str.split("http://")[1];
-                                    if (str.startsWith("www.")) {
-                                        str = str.split("www.")[1];
-                                    }
-                                }
-                                if (obj.history[i].link.startsWith("https://")) {
-                                    str = str.split("https://")[1];
-                                    if (str.startsWith("www.")) {
-                                        str = str.split("www.")[1];
-                                    }
-                                }
-                                //google search engine
-                                if (str.indexOf("google") !== -1 &&
-                                    str.indexOf("search?q=") !== -1) {
-                                    str = str.match(/google\.[a-zA-Z]{2,4}\/search\?q=(.*)\&/)[1].toString();
-                                    str = str.replace(str.split('&')[1], "");
-                                    str = str.replace("&", "");
-                                    str = str.replace("+", " ");
-                                }
-                                if (str.indexOf(searchInput.val()) !== -1 && items != 3 && !isInArray(str, links)) {
-                                    links.push(str);
-                                    //first array's sort by length
-                                    links.sort(function(a, b){
-                                      // ASC  -> a.length - b.length
-                                      // DESC -> b.length - a.length
-                                      return b.length - a.length;
-                                    });
-                                    var oldLink = links[0];
-                                    oldLink = oldLink.substring(0, oldLink.indexOf('/'));
-                                    oldLink = oldLink.replace("/", "");
-                                    links.push(oldLink);
-                                    for (var i = 0; i < links.length; i++) {
-                                        if (links[i].charAt(links[i].length - 1) == "/") {
-                                            console.log(links[i]);
-                                            links.splice(i, 1);
+                                    var str = obj.history[i].link;
+
+                                    //remove http://, https:// etc. from item for better suggestions
+                                    if (obj.history[i].link.startsWith("http://")) {
+                                        str = str.split("http://")[1];
+                                        if (str.startsWith("www.")) {
+                                            str = str.split("www.")[1];
                                         }
                                     }
-                                    var uniqueLinks = [];
-                                    $.each(links, function(i, el) {
-                                        if ($.inArray(el, uniqueLinks) === -1) uniqueLinks.push(el);
-                                    });
-
-                                    //final array's sort length
-                                    uniqueLinks.sort(function(a, b){
-                                      return b.length - a.length;
-                                    });
-                                    allLinks = uniqueLinks;
-                                    //add items to searchbox
-                                    suggestions_ul.empty();
-                                    for (var i = 0; i < uniqueLinks.length; i++) {
-
-                                        var item = $('<li data-ripple-color="#444" class="suggestions-li ripple" text="' + uniqueLinks[i] + '">' + uniqueLinks[i] + '</li>');
-                                        suggestions_ul.prepend(item);
-
-                                        suggestions.css('display', 'block');
-                                        item.click(function(e) {
-                                            var curr = $(e.currentTarget);
-                                            webview.loadURL(curr.attr('text'));
-                                        });
-                                        item.mousedown(function(e) {
-                                            var relX = e.pageX - $(this).offset().left;
-                                            var relY = e.pageY - $(this).offset().top;
-                                            Ripple.makeRipple($(this), relX, relY, $(this).width(), $(this).height(), 600, 0);
-                                        });
-                                        item.mouseover(function() {
-                                            tab.tabWindow.find('.suggestions-li').removeClass("selected");
-                                            $(this).addClass("selected");
-                                            searchInput.val($(this).attr('text'));
-                                        });
+                                    if (obj.history[i].link.startsWith("https://")) {
+                                        str = str.split("https://")[1];
+                                        if (str.startsWith("www.")) {
+                                            str = str.split("www.")[1];
+                                        }
                                     }
-                                    items += 1;
+                                    //google search engine
+                                    if (str.indexOf("google") !== -1 &&
+                                        str.indexOf("search?q=") !== -1) {
+                                        str = str.match(/google\.[a-zA-Z]{2,4}\/search\?q=(.*)\&/)[1].toString();
+                                        str = str.replace(str.split('&')[1], "");
+                                        str = str.replace("&", "");
+                                        str = str.replace("+", " ");
+                                    }
+                                    if (str.indexOf(searchInput.val()) !== -1 && items != 3 && !isInArray(str, links)) {
+                                        links.push(str);
+                                        //first array's sort by length
+                                        links.sort(function(a, b) {
+                                            // ASC  -> a.length - b.length
+                                            // DESC -> b.length - a.length
+                                            return b.length - a.length;
+                                        });
+                                        var oldLink = links[0];
+                                        oldLink = oldLink.substring(0, oldLink.indexOf('/'));
+                                        oldLink = oldLink.replace("/", "");
+                                        links.push(oldLink);
+                                        for (var i = 0; i < links.length; i++) {
+                                            if (links[i].charAt(links[i].length - 1) == "/") {
+                                                console.log(links[i]);
+                                                links.splice(i, 1);
+                                            }
+                                        }
+                                        var uniqueLinks = [];
+                                        $.each(links, function(i, el) {
+                                            if ($.inArray(el, uniqueLinks) === -1) uniqueLinks.push(el);
+                                        });
+
+                                        //final array's sort length
+                                        uniqueLinks.sort(function(a, b) {
+                                            return b.length - a.length;
+                                        });
+                                        var a = uniqueLinks.length;
+                                        if (a > 3) {
+                                            a = 0;
+                                        }
+                                        allLinks = uniqueLinks;
+                                        //add items to searchbox
+                                        tab.tabWindow.find('.history').each(function(i) {
+                                            var t = this;
+                                            $(t).remove();
+                                        });
+                                        for (var i = 0; i < a; i++) {
+
+                                            var item = $('<li data-ripple-color="#444" class="suggestions-li ripple history" text="' + uniqueLinks[i] + '">' + uniqueLinks[i] + '</li>');
+                                            suggestions_ul.prepend(item);
+
+                                            suggestions.css('display', 'block');
+                                            item.click(function(e) {
+                                                var curr = $(e.currentTarget);
+                                                webview.loadURL(curr.attr('text'));
+                                            });
+                                            item.mousedown(function(e) {
+                                                var relX = e.pageX - $(this).offset().left;
+                                                var relY = e.pageY - $(this).offset().top;
+                                                Ripple.makeRipple($(this), relX, relY, $(this).width(), $(this).height(), 600, 0);
+                                            });
+                                            item.mouseover(function() {
+                                                tab.tabWindow.find('.suggestions-li').removeClass("selected");
+                                                $(this).addClass("selected");
+                                                searchInput.val($(this).attr('text'));
+                                            });
+                                        }
+
+
+                                        items += 1;
+                                    }
                                 }
 
                             }
@@ -823,6 +840,7 @@ class TabWindow {
 
                         },
                         complete: function() {
+                            suggestions.css('display', 'block');
                             //load suggestions from Google
                             var s = searchInput.val().replace(getSelectionText(), "");
                             if (s != "" || s != null || typeof s !== "undefined") {
@@ -845,33 +863,55 @@ class TabWindow {
                                         $.each(links, function(i, el) {
                                             if ($.inArray(el, uniqueLinks) === -1) uniqueLinks.push(el);
                                         });
-
                                         //final array's sort length
-                                        uniqueLinks.sort(function(a, b){
-                                          return a.length - b.length;
+                                        uniqueLinks.sort(function(a, b) {
+                                            return a.length - b.length;
                                         });
-                                        for (var i = 0; i < uniqueLinks.length; i++) {
-                                            if (items != 3) {
+                                        if (tab.tabWindow.find('.internet').length < 3) {
+                                            for (var i = 0; i < 3; i++) {
+                                                if (items != 3) {
 
-                                                var s = $('<li data-ripple-color="#444" class="suggestions-li ripple" text="' + uniqueLinks[i] + '">' + uniqueLinks[i] + '</li>').appendTo(suggestions_ul);
-                                                suggestions.css('display', 'block');
-                                                s.click(function(e) {
-                                                    var curr = $(e.currentTarget);
-                                                    webview.loadURL("http://www.google.com/search?q=" + curr.attr('text'));
-                                                });
-                                                s.mousedown(function(e) {
-                                                    var relX = e.pageX - $(this).offset().left;
-                                                    var relY = e.pageY - $(this).offset().top;
-                                                    Ripple.makeRipple($(this), relX, relY, $(this).width(), $(this).height(), 600, 0);
-                                                });
-                                                s.mouseover(function() {
-                                                    tab.tabWindow.find('.suggestions-li').removeClass("selected");
-                                                    $(this).addClass("selected");
-                                                    searchInput.val($(this).attr('text'));
-                                                });
-                                                items += 1;
+                                                    var s = $('<li data-ripple-color="#444" class="suggestions-li ripple internet" text="' + uniqueLinks[i] + '">' + uniqueLinks[i] + '</li>').appendTo(suggestions_ul);
+                                                    suggestions.css('display', 'block');
+                                                    s.click(function(e) {
+                                                        var curr = $(e.currentTarget);
+                                                        webview.loadURL("http://www.google.com/search?q=" + curr.attr('text'));
+                                                    });
+                                                    s.mousedown(function(e) {
+                                                        var relX = e.pageX - $(this).offset().left;
+                                                        var relY = e.pageY - $(this).offset().top;
+                                                        Ripple.makeRipple($(this), relX, relY, $(this).width(), $(this).height(), 600, 0);
+                                                    });
+                                                    s.mouseover(function() {
+                                                        tab.tabWindow.find('.suggestions-li').removeClass("selected");
+                                                        $(this).addClass("selected");
+                                                        searchInput.val($(this).attr('text'));
+                                                    });
+                                                    items += 1;
+                                                    if (uniqueLinks[i] == null || uniqueLinks[i] == "" || typeof(uniqueLinks[i]) === "undefined") {
+                                                        $(s).remove();
+                                                    }
+                                                }
                                             }
+                                        } else {
+
+                                            tab.tabWindow.find('.internet').each(function(i) {
+                                                var t = this;
+                                                $(t).html(uniqueLinks[i]);
+                                                $(t).attr('text', uniqueLinks[i]);
+                                                if (uniqueLinks[i] == null || uniqueLinks[i] == "" || typeof(uniqueLinks[i]) === "undefined") {
+                                                    $(t).remove();
+                                                }
+                                            });
+
                                         }
+                                        var t = $(tab.tabWindow.find('.suggestions-li'));
+                                        var s = $(tab.tabWindow.find('.selected'));
+                                        if (s.length == 0) {
+                                            t.first().addClass("selected");
+                                        }
+
+
 
                                     }
                                 });
@@ -883,14 +923,12 @@ class TabWindow {
 
             //searchInput functions
 
-            function autocomplete(input, text, strings) {
-                if (!(strings.length < 1)) {
-                    strings = strings.reverse();
-                    if (strings[0].toLowerCase().startsWith(text.toLowerCase())) {
-                        input.val(strings[0]);
-                        input[0].setSelectionRange(text.length, strings[0].length);
+            function autocomplete(input, text) {
+                    if (tab.tabWindow.find('.selected').html().toLowerCase().startsWith(text.toLowerCase())) {
+                        input.val(tab.tabWindow.find('.selected').html());
+                        input[0].setSelectionRange(text.length, tab.tabWindow.find('.selected').html().length);
                     }
-                }
+
             }
             var allLinks = [];
 

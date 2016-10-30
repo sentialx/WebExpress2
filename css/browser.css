@@ -44,7 +44,6 @@
     max-height: 245px;
     background-color: #fff;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    transition: all 0.3s;
     overflow: hidden;
 }
 
@@ -57,18 +56,18 @@
 }
 
 .suggestions-ul> li {
-          max-width: 80%;
+          max-width: 100%;
     white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     padding-top: 10px;
     padding-bottom: 8px;
     padding-left: 64px;
-    transition: all 0.3s;
+    padding-right: 64px;
 }
 
 .suggestions-ul> li:hover {
-    transition: all 0.3s;
+
 }
 
 .selected {
