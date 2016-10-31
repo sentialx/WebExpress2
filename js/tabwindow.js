@@ -725,30 +725,26 @@ class TabWindow {
             searchInput[0].onkeydown = function() {
 
                 var key = event.keyCode || event.charCode;
+                //blacklist: backspace, enter, ctrl, alt, shift, tab, caps lock, delete, space
                 if (key != 8 && key != 13 && key != 17 && key != 18 && key != 16 && key != 9 && key != 20 && key != 46 && key != 32) {
                     canSuggest = true;
                 }
                 if (key != 40 && key != 38) {
                     //get suggestions from history
-                    if (searchInput.val() == "") return;
-                    var items = 0;
-                    $.ajax({
-                        type: "GET",
-                        url: historyPath,
-                        success: function(data) {
+                    if (searchInput.val() != "") {
+                        $.ajax({
+                            type: "GET",
+                            url: historyPath,
+                            success: function(data) {
 
-                            json = data.toString();
-                            //replace weird characters utf-8
-                            json = json.replace("\ufeff", "");
-                            var obj = JSON.parse(json);
-                            var prevLink;
-                            var links = [];
-                            //max limit for items is 3
-                            var items = 0;
+                                json = data.toString();
+                                //replace weird characters utf-8
+                                json = json.replace("\ufeff", "");
+                                var obj = JSON.parse(json);
+                                var prevLink;
+                                var links = [];
 
-                            for (var i = 0; i < obj.history.length; i++) {
-                                if (items != 3) {
-
+                                for (var i = 0; i < obj.history.length; i++) {
                                     var str = obj.history[i].link;
 
                                     //remove http://, https:// etc. from item for better suggestions
@@ -772,44 +768,40 @@ class TabWindow {
                                         str = str.replace("&", "");
                                         str = str.replace("+", " ");
                                     }
-                                    if (str.indexOf(searchInput.val()) !== -1 && items != 3 && !isInArray(str, links)) {
+                                    if (str.indexOf(searchInput.val()) !== -1) {
                                         links.push(str);
-                                        //first array's sort by length
-                                        links.sort(function(a, b) {
-                                            // ASC  -> a.length - b.length
-                                            // DESC -> b.length - a.length
-                                            return b.length - a.length;
-                                        });
-                                        var oldLink = links[0];
-                                        oldLink = oldLink.substring(0, oldLink.indexOf('/'));
-                                        oldLink = oldLink.replace("/", "");
-                                        links.push(oldLink);
-                                        for (var i = 0; i < links.length; i++) {
-                                            if (links[i].charAt(links[i].length - 1) == "/") {
-                                                console.log(links[i]);
-                                                links.splice(i, 1);
-                                            }
-                                        }
-                                        var uniqueLinks = [];
-                                        $.each(links, function(i, el) {
-                                            if ($.inArray(el, uniqueLinks) === -1) uniqueLinks.push(el);
-                                        });
+                                    }
+                                }
+                                if (links.length > 0) {
+                                    //get shortest url
+                                    var oldLink = links[0];
+                                    oldLink = oldLink.substring(0, oldLink.indexOf('/'));
+                                    oldLink = oldLink.replace("/", "");
+                                    links.push(oldLink);
+                                    //remove duplicates from array
+                                    var uniqueLinks = [];
+                                    $.each(links, function(i, el) {
+                                        if ($.inArray(el, uniqueLinks) === -1) uniqueLinks.push(el);
+                                    });
+                                    //array sorting by length
+                                    uniqueLinks.sort(function(a, b) {
+                                        return a.length - b.length;
+                                    });
+                                    //limit array length to 3
+                                    if (uniqueLinks.length > 3) {
+                                        uniqueLinks.length = 3;
+                                    }
+                                    var a = uniqueLinks.length;
+                                    //disable setting length to < 0
+                                    if (a < 0) {
+                                        a = 0;
+                                    }
+                                    allLinks = uniqueLinks;
 
-                                        //final array's sort length
-                                        uniqueLinks.sort(function(a, b) {
-                                            return a.length - b.length;
-                                        });
-                                        var a = uniqueLinks.length;
-                                        if (a > 3) {
-                                            a = 0;
-
-                                        }
-
-                                        allLinks = uniqueLinks;
-                                        //add items to searchbox
-                                        if (tab.tabWindow.find('.history').length < a) {
-                                            for (var i = 0; i <= a; i++) {
-
+                                    //if items length is smaller than array length, add missing items
+                                    if (tab.tabWindow.find('.history').length < a) {
+                                        for (var i = 0; i < a; i++) {
+                                            if (uniqueLinks[i] != null || uniqueLinks[i] != "" || uniqueLinks[i] != "undefined" || typeof(uniqueLinks[i]) !== "undefined") {
                                                 var item = $('<li data-ripple-color="#444" class="suggestions-li ripple history" text="' + uniqueLinks[i] + '">' + uniqueLinks[i] + '</li>');
                                                 suggestions_ul.prepend(item);
                                                 suggestions.css('display', 'block');
@@ -827,68 +819,61 @@ class TabWindow {
                                                     $(this).addClass("selected");
                                                     searchInput.val($(this).attr('text'));
                                                 });
-
-                                                if (typeof(tab.tabWindow.find('.history').get(3)) !== "undefined")
-                                                tab.tabWindow.find('.history').get(3).remove();
                                             }
-                                        } else {
-                                            tab.tabWindow.find('.history').each(function(i) {
-                                                var t = this;
-                                                $(t).html(uniqueLinks[i]);
-                                                $(t).attr('text', uniqueLinks[i]);
-                                                if (uniqueLinks[i] == null || uniqueLinks[i] == "" || typeof(uniqueLinks[i]) === "undefined") {
-                                                    $(t).remove();
-                                                }
-                                                if (typeof(tab.tabWindow.find('.history').get(3)) !== "undefined")
-                                                tab.tabWindow.find('.history').get(3).remove();
-                                            });
                                         }
-
-                                        var t = $(tab.tabWindow.find('.suggestions-li'));
-                                        var s = $(tab.tabWindow.find('.selected'));
-                                        if (s.length == 0) {
-                                            t.first().addClass("selected");
-                                        }
-                                        items += 1;
                                     } else {
-
-                                    }
-                                }
-
-                            }
-
-
-                        },
-                        complete: function() {
-                            suggestions.css('display', 'block');
-                            //load suggestions from Google
-                            var s = searchInput.val().replace(getSelectionText(), "");
-                            if (s != "" || s != null || typeof s !== "undefined") {
-                                $.ajax({
-                                    type: "GET",
-                                    url: "http://google.com/complete/search?client=firefox&q=" + searchInput.val().replace(getSelectionText(), ""),
-                                    success: function(data) {
-                                        var obj = JSON.parse(data);
-                                        var arr = obj[1].toString().split(",");
-                                        var links = [];
-                                        //remove duplicates from array
-                                        for (var i = 0; i < arr.length; i++) {
-                                            if (!isInArray(arr[i], links)) {
-                                                links.push(arr[i]);
-
+                                        //otherwise edit existing items to new suggestions
+                                        tab.tabWindow.find('.history').each(function(i) {
+                                            var t = this;
+                                            $(t).html(uniqueLinks[i]);
+                                            $(t).attr('text', uniqueLinks[i]);
+                                            if ($(t).html() == null || $(t).html() == "" || $(t).html() === "undefined") {
+                                                $(t).remove();
                                             }
-                                        }
-                                        var uniqueLinks = [];
-                                        $.each(links, function(i, el) {
-                                            if ($.inArray(el, uniqueLinks) === -1) uniqueLinks.push(el);
                                         });
-                                        //final array's sort length
-                                        uniqueLinks.sort(function(a, b) {
-                                            return a.length - b.length;
-                                        });
-                                        if (tab.tabWindow.find('.internet').length < 3) {
-                                            for (var i = 0; i < 3; i++) {
-                                                if (items != 3) {
+                                    }
+
+                                } else {
+                                    //remove all items from suggestions box when array links's length is 0
+                                    tab.tabWindow.find('.history').each(function(i) {
+                                        $(this).remove();
+                                    });
+                                }
+                            },
+                            complete: function() {
+                                suggestions.css('display', 'block');
+                                //load suggestions from Google
+                                var s = searchInput.val().replace(getSelectionText(), "");
+                                if (s != "" || s != null || typeof s !== "undefined") {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "http://google.com/complete/search?client=firefox&q=" + searchInput.val().replace(getSelectionText(), ""),
+                                        success: function(data) {
+                                            var obj = JSON.parse(data);
+                                            var arr = obj[1].toString().split(",");
+                                            var links = [];
+                                            //filter links
+                                            for (var i = 0; i < arr.length; i++) {
+                                                if (!isInArray(arr[i], links)) {
+                                                    links.push(arr[i]);
+                                                }
+                                            }
+                                            //remove duplicates from array
+                                            var uniqueLinks = [];
+                                            $.each(links, function(i, el) {
+                                                if ($.inArray(el, uniqueLinks) === -1) uniqueLinks.push(el);
+                                            });
+                                            //sort array by length
+                                            uniqueLinks.sort(function(a, b) {
+                                                return a.length - b.length;
+                                            });
+                                            //limit array length to 3
+                                            if (uniqueLinks.length > 3) {
+                                                uniqueLinks.length = 3;
+                                            }
+                                            //if items length is smaller than array length, add missing items
+                                            if (tab.tabWindow.find('.internet').length < 3) {
+                                                for (var i = 0; i < 3; i++) {
                                                     var s = $('<li data-ripple-color="#444" class="suggestions-li ripple internet" text="' + uniqueLinks[i] + '">' + uniqueLinks[i] + '</li>').appendTo(suggestions_ul);
                                                     suggestions.css('display', 'block');
                                                     s.click(function(e) {
@@ -906,32 +891,33 @@ class TabWindow {
                                                         searchInput.val($(this).attr('text'));
                                                     });
 
-                                                    items += 1;
                                                     if (uniqueLinks[i] == null || uniqueLinks[i] == "" || typeof(uniqueLinks[i]) === "undefined") {
                                                         $(s).remove();
                                                     }
                                                 }
+                                            } else {
+                                                //otherwise edit existing items to new suggestions
+                                                tab.tabWindow.find('.internet').each(function(i) {
+                                                    var t = this;
+                                                    $(t).html(uniqueLinks[i]);
+                                                    $(t).attr('text', uniqueLinks[i]);
+                                                    if (uniqueLinks[i] == null || uniqueLinks[i] == "" || typeof(uniqueLinks[i]) === "undefined") {
+                                                        $(t).remove();
+                                                    }
+                                                });
                                             }
-                                        } else {
-                                            tab.tabWindow.find('.internet').each(function(i) {
-                                                var t = this;
-                                                $(t).html(uniqueLinks[i]);
-                                                $(t).attr('text', uniqueLinks[i]);
-                                                if (uniqueLinks[i] == null || uniqueLinks[i] == "" || typeof(uniqueLinks[i]) === "undefined") {
-                                                    $(t).remove();
-                                                }
-                                            });
+                                            //select first item from suggestions box
+                                            var t = $(tab.tabWindow.find('.suggestions-li'));
+                                            var s = $(tab.tabWindow.find('.selected'));
+                                            if (s.length == 0) {
+                                                t.first().addClass("selected");
+                                            }
                                         }
-                                        var t = $(tab.tabWindow.find('.suggestions-li'));
-                                        var s = $(tab.tabWindow.find('.selected'));
-                                        if (s.length == 0) {
-                                            t.first().addClass("selected");
-                                        }
-                                    }
-                                });
+                                    });
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
                 var t = $(tab.tabWindow.find('.suggestions-li'));
                 var s = $(tab.tabWindow.find('.selected'));
@@ -943,10 +929,10 @@ class TabWindow {
             //searchInput functions
 
             function autocomplete(input, text) {
-                    if (tab.tabWindow.find('.selected').html().toLowerCase().startsWith(text.toLowerCase())) {
-                        input.val(tab.tabWindow.find('.selected').html());
-                        input[0].setSelectionRange(text.length, tab.tabWindow.find('.selected').html().length);
-                    }
+                if (tab.tabWindow.find('.selected').html().toLowerCase().startsWith(text.toLowerCase())) {
+                    input.val(tab.tabWindow.find('.selected').html());
+                    input[0].setSelectionRange(text.length, tab.tabWindow.find('.selected').html().length);
+                }
 
             }
             var allLinks = [];
