@@ -723,6 +723,7 @@ class TabWindow {
             //suggestions system
             var canSuggest = false;
             searchInput[0].onkeydown = function() {
+
                 var key = event.keyCode || event.charCode;
                 if (key != 8 && key != 13 && key != 17 && key != 18 && key != 16 && key != 9 && key != 20 && key != 46 && key != 32) {
                     canSuggest = true;
@@ -796,42 +797,61 @@ class TabWindow {
 
                                         //final array's sort length
                                         uniqueLinks.sort(function(a, b) {
-                                            return b.length - a.length;
+                                            return a.length - b.length;
                                         });
                                         var a = uniqueLinks.length;
                                         if (a > 3) {
                                             a = 0;
+
                                         }
+
                                         allLinks = uniqueLinks;
                                         //add items to searchbox
-                                        tab.tabWindow.find('.history').each(function(i) {
-                                            var t = this;
-                                            $(t).remove();
-                                        });
-                                        for (var i = 0; i < a; i++) {
+                                        if (tab.tabWindow.find('.history').length < a) {
+                                            for (var i = 0; i <= a; i++) {
 
-                                            var item = $('<li data-ripple-color="#444" class="suggestions-li ripple history" text="' + uniqueLinks[i] + '">' + uniqueLinks[i] + '</li>');
-                                            suggestions_ul.prepend(item);
+                                                var item = $('<li data-ripple-color="#444" class="suggestions-li ripple history" text="' + uniqueLinks[i] + '">' + uniqueLinks[i] + '</li>');
+                                                suggestions_ul.prepend(item);
+                                                suggestions.css('display', 'block');
+                                                item.click(function(e) {
+                                                    var curr = $(e.currentTarget);
+                                                    webview.loadURL(curr.attr('text'));
+                                                });
+                                                item.mousedown(function(e) {
+                                                    var relX = e.pageX - $(this).offset().left;
+                                                    var relY = e.pageY - $(this).offset().top;
+                                                    Ripple.makeRipple($(this), relX, relY, $(this).width(), $(this).height(), 600, 0);
+                                                });
+                                                item.mouseover(function() {
+                                                    tab.tabWindow.find('.suggestions-li').removeClass("selected");
+                                                    $(this).addClass("selected");
+                                                    searchInput.val($(this).attr('text'));
+                                                });
 
-                                            suggestions.css('display', 'block');
-                                            item.click(function(e) {
-                                                var curr = $(e.currentTarget);
-                                                webview.loadURL(curr.attr('text'));
-                                            });
-                                            item.mousedown(function(e) {
-                                                var relX = e.pageX - $(this).offset().left;
-                                                var relY = e.pageY - $(this).offset().top;
-                                                Ripple.makeRipple($(this), relX, relY, $(this).width(), $(this).height(), 600, 0);
-                                            });
-                                            item.mouseover(function() {
-                                                tab.tabWindow.find('.suggestions-li').removeClass("selected");
-                                                $(this).addClass("selected");
-                                                searchInput.val($(this).attr('text'));
+                                                if (typeof(tab.tabWindow.find('.history').get(3)) !== "undefined")
+                                                tab.tabWindow.find('.history').get(3).remove();
+                                            }
+                                        } else {
+                                            tab.tabWindow.find('.history').each(function(i) {
+                                                var t = this;
+                                                $(t).html(uniqueLinks[i]);
+                                                $(t).attr('text', uniqueLinks[i]);
+                                                if (uniqueLinks[i] == null || uniqueLinks[i] == "" || typeof(uniqueLinks[i]) === "undefined") {
+                                                    $(t).remove();
+                                                }
+                                                if (typeof(tab.tabWindow.find('.history').get(3)) !== "undefined")
+                                                tab.tabWindow.find('.history').get(3).remove();
                                             });
                                         }
 
-
+                                        var t = $(tab.tabWindow.find('.suggestions-li'));
+                                        var s = $(tab.tabWindow.find('.selected'));
+                                        if (s.length == 0) {
+                                            t.first().addClass("selected");
+                                        }
                                         items += 1;
+                                    } else {
+
                                     }
                                 }
 
@@ -848,7 +868,6 @@ class TabWindow {
                                     type: "GET",
                                     url: "http://google.com/complete/search?client=firefox&q=" + searchInput.val().replace(getSelectionText(), ""),
                                     success: function(data) {
-
                                         var obj = JSON.parse(data);
                                         var arr = obj[1].toString().split(",");
                                         var links = [];
@@ -870,7 +889,6 @@ class TabWindow {
                                         if (tab.tabWindow.find('.internet').length < 3) {
                                             for (var i = 0; i < 3; i++) {
                                                 if (items != 3) {
-
                                                     var s = $('<li data-ripple-color="#444" class="suggestions-li ripple internet" text="' + uniqueLinks[i] + '">' + uniqueLinks[i] + '</li>').appendTo(suggestions_ul);
                                                     suggestions.css('display', 'block');
                                                     s.click(function(e) {
@@ -887,6 +905,7 @@ class TabWindow {
                                                         $(this).addClass("selected");
                                                         searchInput.val($(this).attr('text'));
                                                     });
+
                                                     items += 1;
                                                     if (uniqueLinks[i] == null || uniqueLinks[i] == "" || typeof(uniqueLinks[i]) === "undefined") {
                                                         $(s).remove();
@@ -894,7 +913,6 @@ class TabWindow {
                                                 }
                                             }
                                         } else {
-
                                             tab.tabWindow.find('.internet').each(function(i) {
                                                 var t = this;
                                                 $(t).html(uniqueLinks[i]);
@@ -903,21 +921,22 @@ class TabWindow {
                                                     $(t).remove();
                                                 }
                                             });
-
                                         }
                                         var t = $(tab.tabWindow.find('.suggestions-li'));
                                         var s = $(tab.tabWindow.find('.selected'));
                                         if (s.length == 0) {
                                             t.first().addClass("selected");
                                         }
-
-
-
                                     }
                                 });
                             }
                         }
                     });
+                }
+                var t = $(tab.tabWindow.find('.suggestions-li'));
+                var s = $(tab.tabWindow.find('.selected'));
+                if (s.length == 0) {
+                    t.first().addClass("selected");
                 }
             }
 
