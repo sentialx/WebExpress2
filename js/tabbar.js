@@ -1,9 +1,10 @@
 var tabCollection = [];
 var tabWidth = 170;
-var selectedTabColor = '#F5F5F5';
+var selectedTabColor = '#fff';
 var locked = false;
 var cursorX;
 var cursorY;
+var normalColor = '#eee';
 
 function addTab(instance, tab) {
     //declarations in Tab class
@@ -169,7 +170,7 @@ $('#addTab').click(function() {
 function selectTab(tab) {
     for (var i = 0; i < tabCollection.length; i++) {
         if (tabCollection[i].Tab != tab) {
-            tabCollection[i].Tab.css('background-color', $('#tabbar').css('background-color'));
+            tabCollection[i].Tab.css('background-color', normalColor);
             tabCollection[i].tabWindow.css('display', 'none');
             tabCollection[i].Title.removeClass('dark').addClass('light');
             tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
