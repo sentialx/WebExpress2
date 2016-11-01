@@ -14,6 +14,7 @@ function addTab(instance, tab) {
     tab.Foreground = 'black';
     tab.Color = selectedTabColor;
     tab.instance = instance;
+    tab.Preloader = $('<div class="md-preloader" style="position: absolute; left: 6px; top: 8px;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="16" width="16" viewbox="0 0 75 75"><circle class="preloader-circle" cx="37.5" cy="37.5" r="33.5" stroke-width="8"/></svg></div>').appendTo(tab.Tab);
     tab.selected = false;
 
     //close button click event

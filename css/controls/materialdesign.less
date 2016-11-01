@@ -57,8 +57,8 @@
     overflow: hidden;
 }
 .border {
-    width: calc(100% - 4px);
-    height: calc(100% - 4px);
+    width: ~"calc(100% - 4px)";
+    height: ~"calc(100% - 4px)";
     border-radius: 4px;
     border: 2px solid #757575;
 }
@@ -95,4 +95,63 @@
     background-position:center;
 
     background-image: url('../../img/check.png');
+}
+
+@color:       #3F51B5;
+.md-preloader {
+  @easing:      cubic-bezier(.8,.0,.4,.8);
+
+  @speed:       1320ms;
+  @linecap:     square;
+  @partitions:  5;
+  @arc:         0.72;
+  @perimeter:   67px * pi();
+
+  font-size: 0;
+  display: inline-block;
+  animation: outer @speed * @partitions linear infinite;
+
+  svg {
+    animation: inner @speed linear infinite;
+
+    circle {
+      fill: none;
+      stroke: @color;
+      stroke-linecap: @linecap;
+      animation: arc @speed @easing infinite;
+    }
+  }
+
+  @keyframes outer {
+    0% {
+      transform: rotate(0);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes inner {
+    0% {
+      transform: rotate(-360deg * (1 - @arc));
+    }
+    100% {
+      transform: rotate(0);
+    }
+  }
+
+  @keyframes arc {
+    0% {
+      stroke-dasharray: 1 @perimeter;
+      stroke-dashoffset: 0;
+    }
+    40% {
+      stroke-dasharray: @arc * @perimeter, @perimeter;
+      stroke-dashoffset: 0;
+    }
+    100% {
+      stroke-dasharray: 1 @perimeter;
+      stroke-dashoffset: -@arc * @perimeter;
+    }
+  }
 }

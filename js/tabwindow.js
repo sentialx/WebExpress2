@@ -161,6 +161,9 @@ class TabWindow {
                     menuBtn.attr('data-ripple-color', '#fff');
                     extBtn.attr('data-ripple-color', '#fff');
                     extBtnIcon.css('background-image', 'url("img/more-vert-white.png")');
+                    less.modifyVars({
+                      '@color': '#fff'
+                    });
                 } else {
                     //black icons and text
                     tab.Title.removeClass('dark').addClass('light');
@@ -178,6 +181,9 @@ class TabWindow {
                     menuBtn.attr('data-ripple-color', '#444');
                     extBtn.attr('data-ripple-color', '#444');
                     extBtnIcon.css('background-image', 'url("img/more-vert.png")');
+                    less.modifyVars({
+                      '@color': '#3F51B5'
+                    });
                 }
             }
 
@@ -225,12 +231,14 @@ class TabWindow {
                 suggestions.css('display', 'none');
             });
 
-
+            var canRemoveAll = false;
             //global timer
             setInterval(function() {
-
                 if (searchInput.val() == "" || searchInput.val() == null) {
                     suggestions.css('display', 'none');
+                    tab.tabWindow.find('.suggestions-li').each(function(i) {
+                        $(this).remove();
+                    });
                 }
             }, 1);
 
@@ -252,6 +260,8 @@ class TabWindow {
                 ses.on('will-download', (event, item, webContents) => {
                     console.log("handled download"); //TODO make download
                 });
+                tab.Favicon.css('opacity', "0");
+                tab.Preloader.css('opacity', "0");
                 webview.loadURL(url);
             });
             //webview newwindow event
@@ -267,7 +277,8 @@ class TabWindow {
             webview.addEventListener('did-finish-load', function() {
 
 
-
+                tab.Favicon.css('opacity', "1");
+                tab.Preloader.css('opacity', "0");
                 //TODO don't change searchInput text when webview url is webexpress://newtab
                 if (webview.getURL().startsWith("webexpress://newtab")) {
                     searchInput.val("");
@@ -340,6 +351,8 @@ class TabWindow {
                         suggestions.css('display', 'none');
                         searchInput.val(webview.getURL());
                     }, 200);
+                    tab.Favicon.css('opacity', "0");
+                    tab.Preloader.css('opacity', "1");
                 });
                 //webview link mouse over
                 webview.addEventListener('update-target-url', function() {
@@ -355,6 +368,8 @@ class TabWindow {
                     console.log(favicon.favicons[0]);
                     tab.Favicon.empty();
                     tab.Favicon.append("<div class='favicon' style='background-image: url(\"" + favicon.favicons[0] + "\");'></div>");
+                    tab.Favicon.css('opacity', "1");
+                    tab.Preloader.css('opacity', "0");
                 });
                 //wait for 200 milliseconds
                 setTimeout(function() {
@@ -650,9 +665,248 @@ class TabWindow {
 
             searchInput.on("input", function(e) {
                 var key = event.keyCode || event.charCode;
-                if (canSuggest) {
-                    autocomplete(searchInput, searchInput.val());
-                    canSuggest = false;
+
+                if (key != 40 && key != 38) {
+                    var t = $(tab.tabWindow.find('.suggestions-li'));
+                    var s = $(tab.tabWindow.find('.selected'));
+                    if (s.length == 0) {
+                        t.first().addClass("selected");
+                    }
+                    //get suggestions from history
+                    var inputText = searchInput.val().toLowerCase().replace(getSelectionText(), "");
+                    if (inputText != "") {
+                        $.ajax({
+                            type: "GET",
+                            url: historyPath,
+                            success: function(data) {
+                                json = data.toString();
+                                //replace weird characters utf-8
+                                json = json.replace("\ufeff", "");
+                                var obj = JSON.parse(json);
+                                var prevLink;
+                                var links = [];
+
+                                for (var i = 0; i < obj.history.length; i++) {
+                                    var str = obj.history[i].link;
+
+                                    //remove http://, https:// etc. from item for better suggestions
+                                    if (obj.history[i].link.startsWith("http://")) {
+                                        str = str.split("http://")[1];
+                                        if (str.startsWith("www.")) {
+                                            str = str.split("www.")[1];
+                                        }
+                                    }
+                                    if (obj.history[i].link.startsWith("https://")) {
+                                        str = str.split("https://")[1];
+                                        if (str.startsWith("www.")) {
+                                            str = str.split("www.")[1];
+                                        }
+                                    }
+                                    //google search engine
+                                    if (!(str.indexOf("google") !== -1 &&
+                                        str.indexOf("search?q=") !== -1)) {
+                                        if (str.startsWith(inputText)) {
+                                            links.push(str);
+
+                                        }
+                                    }
+                                    links.sort(function(a, b){
+                                      // ASC  -> a.length - b.length
+                                      // DESC -> b.length - a.length
+                                      return a.length - b.length;
+                                    });
+
+                                }
+
+                                if (links.length > 0) {
+                                    console.log("sorting");
+                                    //get shortest url
+                                    var oldLink = links.sort(function (a, b) { return a.length - b.length; })[0];
+                                    var shortest = oldLink;
+                                    shortest = shortest.substring(0, shortest.indexOf("/"));
+                                    links[0] = shortest;
+                                    if (oldLink.replace("/") != shortest)
+                                    links.push(oldLink);
+                                    else {
+                                        links.splice(links.indexOf(oldLink), 1);
+                                    }
+                                    //remove duplicates from array
+                                    var uniqueLinks = [];
+                                    $.each(links, function(i, el) {
+                                        if ($.inArray(el, uniqueLinks) === -1) uniqueLinks.push(el);
+                                    });
+
+                                    $.each(uniqueLinks, function(i, el) {
+                                        if (uniqueLinks[i] != null) {
+                                            if (!uniqueLinks[i].toLowerCase().startsWith(inputText)) {
+                                                uniqueLinks.splice(i, 1);
+                                            }
+                                        }
+                                    });
+                                    uniqueLinks.sort(function(a, b){
+                                      return a.length - b.length;
+                                    });
+                                    //limit array length to 3
+                                    if (uniqueLinks.length > 3) {
+                                        uniqueLinks.length = 3;
+                                    }
+                                    var a = uniqueLinks.length;
+                                    //disable setting length to < 0
+                                    if (a < 0) {
+                                        a = 0;
+                                    }
+                                    if (a > 3) {
+                                        a = 3;
+                                    }
+
+                                    allLinks = uniqueLinks;
+                                    //if items length is smaller than array length, add missing items
+                                    if (tab.tabWindow.find('.history').length < a) {
+                                        for (var i = 0; i < a; i++) {
+                                            if (uniqueLinks[i] != null || uniqueLinks[i] != "" || uniqueLinks[i] != "undefined" || typeof(uniqueLinks[i]) !== "undefined") {
+                                                var item = $('<li data-ripple-color="#444" class="suggestions-li ripple history" text="' + uniqueLinks[i] + '">' + uniqueLinks[i] + '</li>');
+                                                suggestions_ul.prepend(item);
+                                                suggestions.css('display', 'block');
+                                                item.click(function(e) {
+                                                    var curr = $(e.currentTarget);
+                                                    webview.loadURL(curr.attr('text'));
+                                                });
+                                                item.mousedown(function(e) {
+                                                    var relX = e.pageX - $(this).offset().left;
+                                                    var relY = e.pageY - $(this).offset().top;
+                                                    Ripple.makeRipple($(this), relX, relY, $(this).width(), $(this).height(), 600, 0);
+                                                });
+                                                item.mouseover(function() {
+                                                    tab.tabWindow.find('.suggestions-li').removeClass("selected");
+                                                    $(this).addClass("selected");
+                                                    searchInput.val($(this).attr('text'));
+                                                });
+                                            }
+                                        }
+                                    } else {
+                                        //otherwise edit existing items to new suggestions
+                                        tab.tabWindow.find('.history').each(function(i) {
+                                            var t = this;
+                                            $(t).html(uniqueLinks[i]);
+                                            $(t).attr('text', uniqueLinks[i]);
+                                            if ($(t).html() == null || $(t).html() == "" || $(t).html() === "undefined") {
+                                                $(t).remove();
+                                            }
+                                        });
+                                    }
+
+                                    //remove unecessary items
+                                    while (tab.tabWindow.find('.history').length > a) {
+                                        tab.tabWindow.find(".history").get(tab.tabWindow.find('.history').length - 1).remove();
+                                    }
+                                    if (canSuggest) {
+                                        autocomplete(searchInput, searchInput.val());
+                                        canSuggest = false;
+                                    }
+                                } else {
+                                    //remove all items from suggestions box when array links's length is 0
+                                    tab.tabWindow.find('.history').each(function(i) {
+                                        $(this).remove();
+                                    });
+
+                                }
+                            },
+                            complete: function() {
+                                suggestions.css('display', 'block');
+                                //load suggestions from Google
+                                if (inputText != "" || inputText != null || typeof inputText !== "undefined") {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "http://google.com/complete/search?client=firefox&q=" + inputText,
+                                        success: function(data) {
+                                            var obj = JSON.parse(data);
+                                            var arr = obj[1].toString().split(",");
+                                            var links = [];
+                                            //filter links
+                                            for (var i = 0; i < arr.length; i++) {
+                                                if (!isInArray(arr[i], links)) {
+                                                    links.push(arr[i]);
+                                                }
+                                            }
+                                            //remove duplicates from array
+                                            var uniqueLinks = [];
+                                            $.each(links, function(i, el) {
+                                                if ($.inArray(el, uniqueLinks) === -1) uniqueLinks.push(el);
+                                            });
+                                            //sort array by length
+                                            uniqueLinks.sort(function(a, b) {
+                                                return a.length - b.length;
+                                            });
+                                            //limit array length to 3
+                                            if (uniqueLinks.length > 3) {
+                                                uniqueLinks.length = 3;
+                                            }
+                                            //if items length is smaller than array length, add missing items
+                                            if (tab.tabWindow.find('.internet').length < 3) {
+                                                for (var i = 0; i < 3; i++) {
+                                                    var s = $('<li data-ripple-color="#444" class="suggestions-li ripple internet" text="' + uniqueLinks[i] + '">' + uniqueLinks[i] + '</li>').appendTo(suggestions_ul);
+                                                    suggestions.css('display', 'block');
+                                                    s.click(function(e) {
+                                                        var curr = $(e.currentTarget);
+                                                        webview.loadURL("http://www.google.com/search?q=" + curr.attr('text'));
+                                                    });
+                                                    s.mousedown(function(e) {
+                                                        var relX = e.pageX - $(this).offset().left;
+                                                        var relY = e.pageY - $(this).offset().top;
+                                                        Ripple.makeRipple($(this), relX, relY, $(this).width(), $(this).height(), 600, 0);
+                                                    });
+                                                    s.mouseover(function() {
+                                                        tab.tabWindow.find('.suggestions-li').removeClass("selected");
+                                                        $(this).addClass("selected");
+                                                        searchInput.val($(this).attr('text'));
+                                                    });
+
+                                                    if (uniqueLinks[i] == null || uniqueLinks[i] == "" || typeof(uniqueLinks[i]) === "undefined") {
+                                                        $(s).remove();
+                                                    }
+                                                }
+                                            } else {
+                                                //otherwise edit existing items to new suggestions
+                                                tab.tabWindow.find('.internet').each(function(i) {
+                                                    var t = this;
+                                                    $(t).html(uniqueLinks[i]);
+                                                    $(t).attr('text', uniqueLinks[i]);
+                                                    if (uniqueLinks[i] == null || uniqueLinks[i] == "" || typeof(uniqueLinks[i]) === "undefined") {
+                                                        $(t).remove();
+                                                    }
+                                                });
+                                            }
+                                            //remove duplicates from ul list
+                                            var seen = [];
+                                            tab.tabWindow.find('.suggestions-ul li').each(function() {
+                                               var txt = $(this).text();
+                                               if (seen[txt])
+                                                   $(this).remove();
+                                               else
+                                                   seen[txt] = true;
+                                            });
+                                            //remove unecessary items
+                                            while (tab.tabWindow.find('.history').length > a) {
+                                                tab.tabWindow.find(".history").get(tab.tabWindow.find('.history').length - 1).remove();
+                                            }
+                                            //select first item from suggestions box
+                                            var t = $(tab.tabWindow.find('.suggestions-li'));
+                                            var s = $(tab.tabWindow.find('.selected'));
+                                            if (s.length == 0) {
+                                                t.first().addClass("selected");
+                                            }
+
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }
+                var t = $(tab.tabWindow.find('.suggestions-li'));
+                var s = $(tab.tabWindow.find('.selected'));
+                if (s.length == 0) {
+                    t.first().addClass("selected");
                 }
             });
 
@@ -729,211 +983,18 @@ class TabWindow {
                 if (key != 8 && key != 13 && key != 17 && key != 18 && key != 16 && key != 9 && key != 20 && key != 46 && key != 32) {
                     canSuggest = true;
                 }
-                if (key != 40 && key != 38) {
-                    //get suggestions from history
-                    if (searchInput.val() != "") {
-                        $.ajax({
-                            type: "GET",
-                            url: historyPath,
-                            success: function(data) {
 
-                                json = data.toString();
-                                //replace weird characters utf-8
-                                json = json.replace("\ufeff", "");
-                                var obj = JSON.parse(json);
-                                var prevLink;
-                                var links = [];
-
-                                for (var i = 0; i < obj.history.length; i++) {
-                                    var str = obj.history[i].link;
-
-                                    //remove http://, https:// etc. from item for better suggestions
-                                    if (obj.history[i].link.startsWith("http://")) {
-                                        str = str.split("http://")[1];
-                                        if (str.startsWith("www.")) {
-                                            str = str.split("www.")[1];
-                                        }
-                                    }
-                                    if (obj.history[i].link.startsWith("https://")) {
-                                        str = str.split("https://")[1];
-                                        if (str.startsWith("www.")) {
-                                            str = str.split("www.")[1];
-                                        }
-                                    }
-                                    //google search engine
-                                    if (str.indexOf("google") !== -1 &&
-                                        str.indexOf("search?q=") !== -1) {
-                                        str = str.match(/google\.[a-zA-Z]{2,4}\/search\?q=(.*)\&/)[1].toString();
-                                        str = str.replace(str.split('&')[1], "");
-                                        str = str.replace("&", "");
-                                        str = str.replace("+", " ");
-                                    }
-                                    if (str.indexOf(searchInput.val()) !== -1) {
-                                        links.push(str);
-                                    }
-                                }
-                                if (links.length > 0) {
-                                    //get shortest url
-                                    var oldLink = links[0];
-                                    oldLink = oldLink.substring(0, oldLink.indexOf('/'));
-                                    oldLink = oldLink.replace("/", "");
-                                    links.push(oldLink);
-                                    //remove duplicates from array
-                                    var uniqueLinks = [];
-                                    $.each(links, function(i, el) {
-                                        if ($.inArray(el, uniqueLinks) === -1) uniqueLinks.push(el);
-                                    });
-                                    //array sorting by length
-                                    uniqueLinks.sort(function(a, b) {
-                                        return a.length - b.length;
-                                    });
-                                    //limit array length to 3
-                                    if (uniqueLinks.length > 3) {
-                                        uniqueLinks.length = 3;
-                                    }
-                                    var a = uniqueLinks.length;
-                                    //disable setting length to < 0
-                                    if (a < 0) {
-                                        a = 0;
-                                    }
-                                    allLinks = uniqueLinks;
-
-                                    //if items length is smaller than array length, add missing items
-                                    if (tab.tabWindow.find('.history').length < a) {
-                                        for (var i = 0; i < a; i++) {
-                                            if (uniqueLinks[i] != null || uniqueLinks[i] != "" || uniqueLinks[i] != "undefined" || typeof(uniqueLinks[i]) !== "undefined") {
-                                                var item = $('<li data-ripple-color="#444" class="suggestions-li ripple history" text="' + uniqueLinks[i] + '">' + uniqueLinks[i] + '</li>');
-                                                suggestions_ul.prepend(item);
-                                                suggestions.css('display', 'block');
-                                                item.click(function(e) {
-                                                    var curr = $(e.currentTarget);
-                                                    webview.loadURL(curr.attr('text'));
-                                                });
-                                                item.mousedown(function(e) {
-                                                    var relX = e.pageX - $(this).offset().left;
-                                                    var relY = e.pageY - $(this).offset().top;
-                                                    Ripple.makeRipple($(this), relX, relY, $(this).width(), $(this).height(), 600, 0);
-                                                });
-                                                item.mouseover(function() {
-                                                    tab.tabWindow.find('.suggestions-li').removeClass("selected");
-                                                    $(this).addClass("selected");
-                                                    searchInput.val($(this).attr('text'));
-                                                });
-                                            }
-                                        }
-                                    } else {
-                                        //otherwise edit existing items to new suggestions
-                                        tab.tabWindow.find('.history').each(function(i) {
-                                            var t = this;
-                                            $(t).html(uniqueLinks[i]);
-                                            $(t).attr('text', uniqueLinks[i]);
-                                            if ($(t).html() == null || $(t).html() == "" || $(t).html() === "undefined") {
-                                                $(t).remove();
-                                            }
-                                        });
-                                    }
-
-                                } else {
-                                    //remove all items from suggestions box when array links's length is 0
-                                    tab.tabWindow.find('.history').each(function(i) {
-                                        $(this).remove();
-                                    });
-                                }
-                            },
-                            complete: function() {
-                                suggestions.css('display', 'block');
-                                //load suggestions from Google
-                                var s = searchInput.val().replace(getSelectionText(), "");
-                                if (s != "" || s != null || typeof s !== "undefined") {
-                                    $.ajax({
-                                        type: "GET",
-                                        url: "http://google.com/complete/search?client=firefox&q=" + searchInput.val().replace(getSelectionText(), ""),
-                                        success: function(data) {
-                                            var obj = JSON.parse(data);
-                                            var arr = obj[1].toString().split(",");
-                                            var links = [];
-                                            //filter links
-                                            for (var i = 0; i < arr.length; i++) {
-                                                if (!isInArray(arr[i], links)) {
-                                                    links.push(arr[i]);
-                                                }
-                                            }
-                                            //remove duplicates from array
-                                            var uniqueLinks = [];
-                                            $.each(links, function(i, el) {
-                                                if ($.inArray(el, uniqueLinks) === -1) uniqueLinks.push(el);
-                                            });
-                                            //sort array by length
-                                            uniqueLinks.sort(function(a, b) {
-                                                return a.length - b.length;
-                                            });
-                                            //limit array length to 3
-                                            if (uniqueLinks.length > 3) {
-                                                uniqueLinks.length = 3;
-                                            }
-                                            //if items length is smaller than array length, add missing items
-                                            if (tab.tabWindow.find('.internet').length < 3) {
-                                                for (var i = 0; i < 3; i++) {
-                                                    var s = $('<li data-ripple-color="#444" class="suggestions-li ripple internet" text="' + uniqueLinks[i] + '">' + uniqueLinks[i] + '</li>').appendTo(suggestions_ul);
-                                                    suggestions.css('display', 'block');
-                                                    s.click(function(e) {
-                                                        var curr = $(e.currentTarget);
-                                                        webview.loadURL("http://www.google.com/search?q=" + curr.attr('text'));
-                                                    });
-                                                    s.mousedown(function(e) {
-                                                        var relX = e.pageX - $(this).offset().left;
-                                                        var relY = e.pageY - $(this).offset().top;
-                                                        Ripple.makeRipple($(this), relX, relY, $(this).width(), $(this).height(), 600, 0);
-                                                    });
-                                                    s.mouseover(function() {
-                                                        tab.tabWindow.find('.suggestions-li').removeClass("selected");
-                                                        $(this).addClass("selected");
-                                                        searchInput.val($(this).attr('text'));
-                                                    });
-
-                                                    if (uniqueLinks[i] == null || uniqueLinks[i] == "" || typeof(uniqueLinks[i]) === "undefined") {
-                                                        $(s).remove();
-                                                    }
-                                                }
-                                            } else {
-                                                //otherwise edit existing items to new suggestions
-                                                tab.tabWindow.find('.internet').each(function(i) {
-                                                    var t = this;
-                                                    $(t).html(uniqueLinks[i]);
-                                                    $(t).attr('text', uniqueLinks[i]);
-                                                    if (uniqueLinks[i] == null || uniqueLinks[i] == "" || typeof(uniqueLinks[i]) === "undefined") {
-                                                        $(t).remove();
-                                                    }
-                                                });
-                                            }
-                                            //select first item from suggestions box
-                                            var t = $(tab.tabWindow.find('.suggestions-li'));
-                                            var s = $(tab.tabWindow.find('.selected'));
-                                            if (s.length == 0) {
-                                                t.first().addClass("selected");
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                    }
-                }
-                var t = $(tab.tabWindow.find('.suggestions-li'));
-                var s = $(tab.tabWindow.find('.selected'));
-                if (s.length == 0) {
-                    t.first().addClass("selected");
-                }
             }
 
             //searchInput functions
 
             function autocomplete(input, text) {
-                if (tab.tabWindow.find('.selected').html().toLowerCase().startsWith(text.toLowerCase())) {
-                    input.val(tab.tabWindow.find('.selected').html());
-                    input[0].setSelectionRange(text.length, tab.tabWindow.find('.selected').html().length);
+                if (tab.tabWindow.find('.selected').html() != null) {
+                    if (tab.tabWindow.find('.selected').html().toLowerCase().startsWith(text.toLowerCase())) {
+                        input.val(tab.tabWindow.find('.selected').html());
+                        input[0].setSelectionRange(text.length, tab.tabWindow.find('.selected').html().length);
+                    }
                 }
-
             }
             var allLinks = [];
 
