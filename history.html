@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <title>History</title>
     <link rel="stylesheet" href="../css/history.css" />
-    <link href="css/controls/materialdesign.less" rel="stylesheet/less" type="text/css" />
-    <script src="js/less.js" type="text/javascript"></script>
+        <link href="css/ripple.css" rel="stylesheet" type="text/css" />
+    <link href="css/controls/materialdesign.css" rel="stylesheet" type="text/css" />
     <style>
         @font-face {
             font-family: "Roboto";
@@ -23,9 +23,6 @@
             src: url('fonts/Roboto-Light.ttf');
         }
     </style>
-    <script src="../js/jquery-3.1.0.min.js"></script>
-    <script src="../js/jquery-ui.min.js"></script>
-        <script src="js/materialdesign.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -53,6 +50,11 @@
 
         </div>
     </div>
+    <script src="../js/jquery-3.1.0.min.js"></script>
+    <script src="../js/jquery-ui.min.js"></script>
+    <script src="js/ripple.js"></script>
+    <script src="js/materialdesign.js" type="text/javascript"></script>
+    <script src="js/history.js"></script>
     <script>
         setInterval(function() {
             $('.searchBox').css('margin-left', (($(window).width() - $('.searchBox').width()) / 2) - 105);
@@ -60,8 +62,6 @@
             $('.selecteditems-toolbar').css('width', $('.card').width());
         }, 1);
     </script>
-    <script src="js/history.js"></script>
-
 </body>
 
 </html>

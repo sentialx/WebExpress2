@@ -1,7 +1,6 @@
 function isInArray(value, array) {
     return array.indexOf(value) > -1;
 }
-console.log(fs);
 var obj = getHistoryData();
 var groups = [];
 var today = new Date();
@@ -24,8 +23,8 @@ for (var i = 0; i < obj.history.length; i++) {
     var jsonItem = obj.history[i];
 
     function additem() {
-        var item = $('<div class="item" style="margin-bottom: -8px;">').appendTo('.card');
-        var checkbox = $('<div class="checkbox" style="display: inline-block; height: 20px; width: 20px;"></div>').appendTo(item);
+        var item = $('<div class="item" style="margin-bottom: -8px; ">').appendTo('.card');
+        var checkbox = $('<div class="checkbox ripple-icon" data-ripple-color="#444" style="display: inline-block;"></div>').appendTo(item);
         checkbox[0].item = item;
         checkbox[0].id = jsonItem.id;
         checkbox.click(function(e) {

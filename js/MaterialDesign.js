@@ -1,7 +1,6 @@
 $(document).ready(function() {
 
     //Switch
-    //variables
     class Switch {
         constructor(where) {
             where.switched = false;
@@ -19,14 +18,7 @@ $(document).ready(function() {
                     ellipseRipple = $(this).find('.ellipse-ripple');
                     var ellipse = $(this).find('.ellipse');
                     if (!where.switched) {
-                        ellipseRipple.stop();
-                        ellipseRipple.css({
-                            height: 48,
-                            width: 48,
-                            left: -17.5 + 28,
-                            top: -15,
-                            position: 'absolute'
-                        });
+                        
                         ellipse.animate({
                             backgroundColor: mdSwitch.attr('ellipse-color')
                         }, {
@@ -45,24 +37,11 @@ $(document).ready(function() {
                             queue: false,
                             duration: 200
                         });
-                        ellipseRipple.css('opacity', 0.4).hide().show("scale", {
-                            procent: 100
-                        }, 200, function() {
-                            ellipseRipple.animate({
-                                opacity: 0
-                            });
-                        });
+                        doRippleIcon($(where), 37, 9);
 
                         where.switched = true;
                     } else {
-                        ellipseRipple.stop();
-                        ellipseRipple.css({
-                            height: 48,
-                            width: 48,
-                            left: -17.5,
-                            top: -15,
-                            position: 'absolute'
-                        });
+                        doRippleIcon($(where), 7, 9)
                         ellipse.animate({
                             backgroundColor: mdSwitch.attr('ellipse-basecolor')
                         }, {
@@ -81,13 +60,7 @@ $(document).ready(function() {
                             queue: false,
                             duration: 200
                         });
-                        ellipseRipple.css('opacity', 0.4).hide().show("scale", {
-                            procent: 100
-                        }, 200, function() {
-                            ellipseRipple.animate({
-                                opacity: 0
-                            });
-                        });
+                        ;
 
                         where.switched = false;
                     }
@@ -96,8 +69,7 @@ $(document).ready(function() {
 
         }
     }
-    //Switch
-    //variables
+    //Checkbox
     class Checkbox {
         constructor(where) {
             where.checked = false;
@@ -105,38 +77,53 @@ $(document).ready(function() {
                 var mdSwitch = instance.find(".md-checkbox");
                 var fill = instance.find(".fill");
                 var fill2 = instance.find(".fill2");
-                var ellipseRipple = instance.find('.ellipse-ripple2');
-                ellipseRipple.hide("scale", {
-                    procent: 0
-                }, 1);
+
                 fill.css('opacity', '0');
                 fill2.css('opacity', '0');
-                fill2.css('margin-left', '-0px');
+                fill2.css('margin-left', '0px');
                 mdSwitch.click(function(e) {
                     if (!where.checked) {
-                        ellipseRipple.css('opacity', 0.4).hide().show("scale", {
-                            procent: 100
-                        }, {duration: 200, queue: false}, function() {
-                            ellipseRipple.animate({
-                                opacity: 0
-                            });
-                        });
-                        fill.animate({opacity: 1}, {duration: 200, queue: false});
-                        fill2.animate({opacity: 1}, {duration: 150, queue: true});
-                        fill2.animate({marginLeft: 24}, {duration: 200, queue: true});
 
+                        fill.animate({
+                            opacity: 1
+                        }, {
+                            duration: 100,
+                            queue: false
+                        });
+                        fill2.animate({
+                            opacity: 1
+                        }, {
+                            duration: 75,
+                            queue: true
+                        });
+                        fill2.animate({
+                            marginLeft: 24
+                        }, {
+                            duration: 200,
+                            queue: true
+                        });
+                        doRippleIcon($(where), 9, 8);
                         where.checked = true;
                     } else {
-                        ellipseRipple.css('opacity', 0.4).hide().show("scale", {
-                            procent: 100
-                        }, {duration: 200, queue: false}, function() {
-                            ellipseRipple.animate({
-                                opacity: 0
-                            });
+                        doRippleIcon($(where), 9, 8);
+                        fill.animate({
+                            opacity: 0
+                        }, {
+                            duration: 100,
+                            queue: false
                         });
-                        fill.animate({opacity: 0}, {duration: 200, queue: false});
-                        fill2.animate({marginLeft: 0}, {duration: 0, queue: false});
-                        fill2.animate({opacity: 0}, {duration: 200, queue: false});
+                        fill2.animate({
+                            marginLeft: 0
+                        }, {
+                            duration: 0,
+                            queue: false
+                        });
+                        fill2.animate({
+                            opacity: 0
+                        }, {
+                            duration: 100,
+                            queue: false
+                        });
 
                         where.checked = false;
                     }
@@ -146,20 +133,39 @@ $(document).ready(function() {
 
         }
     }
+    function doRippleIcon(item, x, y) {
+        item.find('.ripple').css('')
+         Ripple.makeRipple(item, x, y, 17, 17, 300, 0);
+    }
+    //Preloader
+    class Preloader {
+        constructor(where) {
+            var instance = $("<div>").load("controls/preloader.html", function() {
+                instance.find(".path").css('stroke', $(where).attr('color'));
+                instance.find(".path").attr('stroke-width', $(where).attr('thickness'));
+            }).appendTo($(where));
 
-
-
+        }
+    }
     function initializeComponent() {
         $('.switch').each(function(index) {
+            $(this).empty();
             var s = new Switch(this);
         });
         $('.checkbox').each(function(index) {
+            $(this).empty();
             var s = new Checkbox(this);
         });
+        setInterval(function() {
+            $('.preloader').each(function(index) {
+                if ($(this).html() == null || $(this).html() == "") {
+                    $(this).empty();
+                    var s = new Preloader(this);
+                }
+            });
+        }, 1)
 
     }
     initializeComponent();
 
-
-
-})
+});

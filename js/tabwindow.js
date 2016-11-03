@@ -4,6 +4,7 @@ class TabWindow {
         var s = this;
         this.searchInput = null;
         this.webView = null;
+        this.tab = tab;
         tab.tabWindow = $("<div>").load("browser.html", function() {
             //main section
             var webview = tab.tabWindow.find('.webview')[0];
@@ -52,6 +53,30 @@ class TabWindow {
             var userdataPath = '/userdata';
             s.searchInput = searchInput;
             s.webView = webview;
+
+
+            //extensions api
+            function setTitlebarColor(hex) {
+
+            }
+            function setTabsColor(indexArray, hex) {
+
+            }
+            function getTabsColor(indexArray) {
+              return null;
+            }
+            function getTitlebarColor() {
+              return null;
+            }
+            s.setBarColor = function(hex) {
+                /*s.tab.tabWindow.find('.bar').css('background-color', hex);
+                changeContrast();*/
+            }
+            s.getBarColor = function() {
+              return s.tab.tabWindow.find('.bar').css('background-color');
+            }
+
+
             //requires
             var fs = require('fs');
             var IsThere = require("is-there");
@@ -78,7 +103,7 @@ class TabWindow {
             }
 
             function makeRippleIconButton(item) {
-                Ripple.makeRipple(item, item.width() / 2, item.height() / 2, (item.width() - 16) / 2, (item.height() - 16) / 2, iconRippleTime, 0);
+                Ripple.makeRipple(item, item.width() / 2, item.height() / 2, 16, 16, iconRippleTime, 0);
             }
             //Extensions system
             function loadExtensions() {
@@ -120,7 +145,7 @@ class TabWindow {
                                                     type: "GET",
                                                     url: jFileUrl,
                                                     success: function(data) {
-                                                        $('head').append('<script>' + `function a(index) {var currentTab = tabCollection[index]; var currentInstance = currentTab.instance;` + data + `} a(` + tabCollection.indexOf(tab) + `); </script>`);
+                                                        $('head').append('<script>' + `function a(index) {var tab = tabCollection[index]; var instance = tab.instance;` + data + `} a(` + tabCollection.indexOf(tab) + `); </script>`);
                                                     }
                                                 });
 
@@ -142,15 +167,18 @@ class TabWindow {
             } TODO */
 
             //check if background color of bar is dark or light and then set icons foreground to black or white
-            function changeContrast() {
+            function changeContrast(changeTabs) {
                 var brightness = colorBrightness(tab.Color);
                 if (brightness < 125) {
                     //white icons and text
-                    tab.Title.removeClass('light').addClass('dark');
-                    tab.closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close-white.png")');
+                    if (changeTabs) {
+                        tab.Title.removeClass('light').addClass('dark');
+                        tab.closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close-white.png")');
+                        tab.Foreground = 'white';
+                    }
+                   
                     searchBox.css('background-color', 'rgba(255,255,255,0.2) ');
                     searchInput.css('color', '#fff');
-                    tab.Foreground = 'white';
                     forwardBtnIcon.css('background-image', 'url("img/forward-white.png")');
                     backBtnIcon.css('background-image', 'url("img/back-white.png")');
                     refreshBtnIcon.css('background-image', 'url("img/refresh-white.png")');
@@ -161,16 +189,17 @@ class TabWindow {
                     menuBtn.attr('data-ripple-color', '#fff');
                     extBtn.attr('data-ripple-color', '#fff');
                     extBtnIcon.css('background-image', 'url("img/more-vert-white.png")');
-                    less.modifyVars({
-                      '@color': '#fff'
-                    });
+
                 } else {
                     //black icons and text
-                    tab.Title.removeClass('dark').addClass('light');
-                    tab.closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
+                    if (changeTabs) {
+                        tab.Title.removeClass('dark').addClass('light');
+                        tab.closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
+                        tab.Foreground = 'black';
+                    }
+                   
                     searchInput.css('color', '#444');
                     searchBox.css('background-color', '#fff');
-                    tab.Foreground = 'black';
                     forwardBtnIcon.css('background-image', 'url("img/forward.png")');
                     backBtnIcon.css('background-image', 'url("img/back.png")');
                     refreshBtnIcon.css('background-image', 'url("img/refresh.png")');
@@ -181,9 +210,7 @@ class TabWindow {
                     menuBtn.attr('data-ripple-color', '#444');
                     extBtn.attr('data-ripple-color', '#444');
                     extBtnIcon.css('background-image', 'url("img/more-vert.png")');
-                    less.modifyVars({
-                      '@color': '#3F51B5'
-                    });
+
                 }
             }
 
@@ -199,11 +226,14 @@ class TabWindow {
                         var myData = context.getImageData(2, 2, img.width, img.height);
                         if (myData != null) {
                             tab.Color = rgbToHex(myData.data[0], myData.data[1], myData.data[2]);
-                            if (tab.selected)
+                            if (tab.selected) {
                                 tab.Tab.css('background-color', tab.Color);
+                                changeContrast(true);
+                            }
+                            changeContrast(false);
 
                             bar.css('background-color', tab.Color);
-                            changeContrast();
+
                         }
                     };
                     img.src = image.toDataURL();
@@ -262,6 +292,7 @@ class TabWindow {
                 });
                 tab.Favicon.css('opacity', "0");
                 tab.Preloader.css('opacity', "0");
+                if (url != null || url != "")
                 webview.loadURL(url);
             });
             //webview newwindow event
@@ -279,10 +310,8 @@ class TabWindow {
 
                 tab.Favicon.css('opacity', "1");
                 tab.Preloader.css('opacity', "0");
-                //TODO don't change searchInput text when webview url is webexpress://newtab
-                if (webview.getURL().startsWith("webexpress://newtab")) {
-                    searchInput.val("");
-                } else {
+
+                if (!webview.getURL() == "webexpress://newtab" || !webview.getURL() == "about:blank") {
                     searchInput.val(webview.getURL());
                 }
 
@@ -382,9 +411,11 @@ class TabWindow {
                             tab.Color = regex.match(/content="(.*?)"/)[1];
                             if (tab.selected) {
                                 tab.Tab.css('background-color', tab.Color);
+                                changeContrast(true);
+
                             }
+                            changeContrast(false);
                             bar.css('background-color', tab.Color);
-                            changeContrast();
 
                         } else {
                             //getting color from top of a website
@@ -667,11 +698,7 @@ class TabWindow {
                 var key = event.keyCode || event.charCode;
 
                 if (key != 40 && key != 38) {
-                    var t = $(tab.tabWindow.find('.suggestions-li'));
-                    var s = $(tab.tabWindow.find('.selected'));
-                    if (s.length == 0) {
-                        t.first().addClass("selected");
-                    }
+
                     //get suggestions from history
                     var inputText = searchInput.val().toLowerCase().replace(getSelectionText(), "");
                     if (inputText != "") {
@@ -902,12 +929,13 @@ class TabWindow {
                             }
                         });
                     }
+                    var t = $(tab.tabWindow.find('.suggestions-li'));
+                    var s = $(tab.tabWindow.find('.selected'));
+                    if (s.length == 0) {
+                        t.first().addClass("selected");
+                    }
                 }
-                var t = $(tab.tabWindow.find('.suggestions-li'));
-                var s = $(tab.tabWindow.find('.selected'));
-                if (s.length == 0) {
-                    t.first().addClass("selected");
-                }
+
             });
 
             //arrow keys navigating in suggestions box
@@ -963,11 +991,11 @@ class TabWindow {
                                 webview.loadURL("http://" + searchInput.val());
                             }
                         } else {
+                            //TODO: search engines
                             webview.loadURL("http://www.google.com/search?q=" + searchInput.val());
                         }
                     } else {
                         webview.loadURL(searchInput.val());
-
                     }
 
                     return false;

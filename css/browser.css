@@ -6,6 +6,9 @@
     padding-top: 6px;
     -webkit-transition: background-color 0.2s;
 }
+.tabWindow {
+    background-color: #fff;
+}
 
 .searchBox {
     border-radius: 3px;
@@ -13,7 +16,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     background-color: white;
     height: 32px;
-    width: calc(100% - 224px);
+    width: calc(100% - 245px);
     margin-left: 16px;
     -webkit-transition: background-color 0.2s;
     float: left;
@@ -81,6 +84,7 @@
     width: 38px;
     margin-left: 4px;
     float: left;
+    transition: 0.2s all;
 }
 
 .backBtnIcon {
@@ -89,10 +93,12 @@
     margin: 8px;
     background-image: url('../img/back.png');
     background-size: cover;
+    
 }
 
 .backBtn:hover {
     opacity: 1;
+    transition: 0.2s all;
 }
 
 .forwardBtn {
@@ -101,6 +107,7 @@
     width: 38px;
     margin-left: 4px;
     float: left;
+    transition: 0.2s all;
 }
 
 .forwardBtnIcon {
@@ -113,6 +120,7 @@
 
 .forwardBtn:hover {
     opacity: 1;
+    transition: 0.2s all;
 }
 
 .refreshBtn {
@@ -121,6 +129,7 @@
     width: 38px;
     margin-left: 4px;
     float: left;
+    transition: 0.2s all;
 }
 
 .refreshBtnIcon {
@@ -133,14 +142,16 @@
 
 .refreshBtn:hover {
     opacity: 1;
+    transition: 0.2s all;
 }
 
 .menuBtn {
     opacity: 0.6;
     height: 38px;
     width: 38px;
-    margin-left: 4px;
+    margin-left: 12px;
     float: left;
+    transition: 0.2s all;
 }
 
 .menuBtnIcon {
@@ -153,6 +164,7 @@
 
 .menuBtn:hover {
     opacity: 1;
+    transition: 0.2s all;
 }
 
 .extBtn {
@@ -160,8 +172,15 @@
     height: 38px;
     width: 38px;
     margin-top: 0px;
-    margin-left: 2px;
+    margin-left: 0px;
+    margin-right: 8px;
     float: right;
+    transition: 0.2s all;
+}
+
+.extBtn:hover {
+    opacity: 1;
+    transition: 0.2s all;
 }
 
 .extBtnIcon {

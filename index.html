@@ -7,9 +7,8 @@
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/menu.css" />
     <link rel="stylesheet" href="css/browser.css" />
-    <script src="js/materialdesign.js" type="text/javascript"></script>
-    <link href="css/controls/materialdesign.less" rel="stylesheet/less" type="text/css" />
-    <script src="js/less.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="css/controls/materialdesign.css" type="text/css" />
     <link href="css/ripple.css" rel="stylesheet" type="text/css" />
 
     <style>
@@ -31,21 +30,8 @@
 </head>
 
 <body>
-    <script>
-        if (typeof module === 'object') {
-            window.module = module;
-            module = undefined;
-        }
-    </script>
-    <script src="js/jquery-3.1.0.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
-    <script>
-        if (window.module) module = window.module;
-    </script>
-    <style>
-
-    </style>
     <div class="titlebar" id="titlebar">
+
         <div class="ripple windowbutton windowbutton-close"></div>
         <div class="windowbutton windowbutton-maximize"></div>
         <div class="windowbutton windowbutton-minimize"></div>
@@ -60,15 +46,25 @@
     <div class="instances" id="instances">
 
     </div>
-
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+    <script src="js/jquery-3.1.0.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script>
+        if (window.module) module = window.module;
+    </script>
+    <script src="js/materialdesign.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/tabwindow.js"></script>
+    <script src="js/tabbar.js"></script>
+    <script src="js/ripple.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/api.js"></script>
 </body>
-<script src="js/utils.js"></script>
-<script src="js/colorBrightness.js"></script>
-<script src="js/classes.js"></script>
-<script src="js/tabwindow.js"></script>
-<script src="js/tabbar.js"></script>
-<script src="js/ripple.js"></script>
-<script src="js/main.js"></script>
-<script src="js/api.js"></script>
+
 
 </html>

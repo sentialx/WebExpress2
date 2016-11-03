@@ -15,7 +15,7 @@ function addTab(instance, tab) {
     tab.Foreground = 'black';
     tab.Color = selectedTabColor;
     tab.instance = instance;
-    tab.Preloader = $('<div class="md-preloader" style="position: absolute; left: 6px; top: 8px;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="16" width="16" viewbox="0 0 75 75"><circle class="preloader-circle" cx="37.5" cy="37.5" r="33.5" stroke-width="8"/></svg></div>').appendTo(tab.Tab);
+    tab.Preloader = $('<div class="preloader" style="width: 16px;position:absolute; top: 8px; left:6px;" thickness="5" color="#3F51B5"></div>').appendTo(tab.Tab);
     tab.selected = false;
 
     //close button click event
@@ -164,20 +164,22 @@ function calcSizes(animation, addButtonAnimation) {
 
 $('#addTab').click(function() {
     var tab = new Tab();
-    addTab(new TabWindow(tab, "webexpress://newtab"), tab);
+    addTab(new TabWindow(tab, ""), tab);
 });
 
 function selectTab(tab) {
     for (var i = 0; i < tabCollection.length; i++) {
         if (tabCollection[i].Tab != tab) {
             tabCollection[i].Tab.css('background-color', normalColor);
-            tabCollection[i].tabWindow.css('display', 'none');
+            tabCollection[i].tabWindow.css('position', 'absolute');
+            tabCollection[i].tabWindow.css('top', '-50000000px');
             tabCollection[i].Title.removeClass('dark').addClass('light');
             tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
             tabCollection[i].selected = false;
         } else {
             tabCollection[i].Tab.css('background-color', tabCollection[i].Color);
-            tabCollection[i].tabWindow.css('display', 'block');
+            tabCollection[i].tabWindow.css('position', 'relative');
+            tabCollection[i].tabWindow.css('top', '0px');
 
             if (tabCollection[i].instance.searchInput != null && (tabCollection[i].instance.searchInput.val() == "" || tabCollection[i].instance.searchInput.val() == null)) {
                 tabCollection[i].instance.searchInput.focus();
@@ -193,3 +195,4 @@ function selectTab(tab) {
         }
     }
 }
+function Tab() {}

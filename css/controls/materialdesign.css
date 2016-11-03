@@ -57,8 +57,8 @@
     overflow: hidden;
 }
 .border {
-    width: ~"calc(100% - 4px)";
-    height: ~"calc(100% - 4px)";
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
     border-radius: 4px;
     border: 2px solid #757575;
 }
@@ -97,61 +97,83 @@
     background-image: url('../../img/check.png');
 }
 
-@color:       #3F51B5;
-.md-preloader {
-  @easing:      cubic-bezier(.8,.0,.4,.8);
 
-  @speed:       1320ms;
-  @linecap:     square;
-  @partitions:  5;
-  @arc:         0.72;
-  @perimeter:   67px * pi();
 
-  font-size: 0;
-  display: inline-block;
-  animation: outer @speed * @partitions linear infinite;
+body {
+  background-color: #eee;
+}
 
-  svg {
-    animation: inner @speed linear infinite;
+.loader {
+  position: relative;
+  margin: 0 auto;
+}
+.loader:before {
+  content: '';
+  display: block;
+  padding-top: 100%;
+}
 
-    circle {
-      fill: none;
-      stroke: @color;
-      stroke-linecap: @linecap;
-      animation: arc @speed @easing infinite;
-    }
+.circular {
+  -webkit-animation: rotate 1.75s linear infinite;
+          animation: rotate 1.75s linear infinite;
+  height: 100%;
+  -webkit-transform-origin: center center;
+          transform-origin: center center;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.path {
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  -webkit-animation: dash 1.4s ease-in-out infinite;
+  stroke: #000;
+  stroke-linecap: square;
+}
+
+@-webkit-keyframes rotate {
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
   }
+}
 
-  @keyframes outer {
-    0% {
-      transform: rotate(0);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
+@keyframes rotate {
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
   }
-
-  @keyframes inner {
-    0% {
-      transform: rotate(-360deg * (1 - @arc));
-    }
-    100% {
-      transform: rotate(0);
-    }
+}
+@-webkit-keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
   }
-
-  @keyframes arc {
-    0% {
-      stroke-dasharray: 1 @perimeter;
-      stroke-dashoffset: 0;
-    }
-    40% {
-      stroke-dasharray: @arc * @perimeter, @perimeter;
-      stroke-dashoffset: 0;
-    }
-    100% {
-      stroke-dasharray: 1 @perimeter;
-      stroke-dashoffset: -@arc * @perimeter;
-    }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35px;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124px;
+  }
+}
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35px;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124px;
   }
 }

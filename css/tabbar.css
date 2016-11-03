@@ -1,7 +1,7 @@
 .tabbar {
     font-family: Roboto;
     height: 30px;
-    width: calc(100% - 96px);
+    width: calc(100% - 72px);
     position: relative;
     z-index: 9999;
     white-space: nowrap;
@@ -21,8 +21,8 @@
     background-size: cover;
     width: 16px;
     height: 16px;
-    margin-top: 7px;
-    margin-left: 7px;
+    margin-top: 8px;
+    margin-left: 6px;
 }
 
 .tabTitle {
@@ -31,9 +31,9 @@
     font-family: Roboto-Light;
     font-weight: 300;
     margin-top: 8px;
-    margin-left: 30px;
+    margin-left: 26px;
     color: #444;
-    max-width: 60%;
+    max-width: calc(100% - 54px);
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -58,14 +58,14 @@
     float: right;
     height: 16px;
     width: 16px;
-    margin-top: 9px;
+    margin-top: 8px;
     margin-right: 12px;
     font-family: Roboto;
     color: #444;
 }
 
 .closeBtnImg {
-    opacity: 0.75;
+    opacity: 0.6;
     width: calc(100% - 2px);
     height: calc(100% - 2px);
     margin: 1px;
@@ -78,10 +78,10 @@
 }
 
 .addTabBtn {
-    opacity: 0.75;
+    opacity: 0.6;
     position: absolute;
     margin-left: 2px;
-    margin-top: 2px;
+    margin-top: 1px;
     top: 0;
     height: 28px;
     width: 28px;
