@@ -103,7 +103,7 @@ class TabWindow {
             }
 
             function makeRippleIconButton(item) {
-                Ripple.makeRipple(item, item.width() / 2, item.height() / 2, 16, 16, iconRippleTime, 0);
+                Ripple.makeRipple(item, item.width() / 2, item.height() / 2, 14, 14, iconRippleTime, 0);
             }
             //Extensions system
             function loadExtensions() {

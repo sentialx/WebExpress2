@@ -77,54 +77,67 @@ $(document).ready(function() {
                 var mdSwitch = instance.find(".md-checkbox");
                 var fill = instance.find(".fill");
                 var fill2 = instance.find(".fill2");
-
+                var lastState = where.checked;
                 fill.css('opacity', '0');
                 fill2.css('opacity', '0');
                 fill2.css('margin-left', '0px');
+                //checked changed listener
+                setInterval(function() {
+                    if (lastState != where.checked) {
+                        lastState = where.checked;
+                        if (where.checked) {
+                            check();
+                        } else {
+                            uncheck();
+                        }
+                    }
+                }, 1);
+                function check() {
+                    fill.animate({
+                        opacity: 1
+                    }, {
+                        duration: 100,
+                        queue: false
+                    });
+                    fill2.animate({
+                        opacity: 1
+                    }, {
+                        duration: 75,
+                        queue: true
+                    });
+                    fill2.animate({
+                        marginLeft: 24
+                    }, {
+                        duration: 200,
+                        queue: true
+                    });
+                    doRippleIcon($(where), 9, 8);
+                }
+                function uncheck() {
+                    doRippleIcon($(where), 9, 8);
+                    fill.animate({
+                        opacity: 0
+                    }, {
+                        duration: 100,
+                        queue: false
+                    });
+                    fill2.animate({
+                        marginLeft: 0
+                    }, {
+                        duration: 0,
+                        queue: false
+                    });
+                    fill2.animate({
+                        opacity: 0
+                    }, {
+                        duration: 100,
+                        queue: false
+                    });
+                }
                 mdSwitch.click(function(e) {
                     if (!where.checked) {
-
-                        fill.animate({
-                            opacity: 1
-                        }, {
-                            duration: 100,
-                            queue: false
-                        });
-                        fill2.animate({
-                            opacity: 1
-                        }, {
-                            duration: 75,
-                            queue: true
-                        });
-                        fill2.animate({
-                            marginLeft: 24
-                        }, {
-                            duration: 200,
-                            queue: true
-                        });
-                        doRippleIcon($(where), 9, 8);
                         where.checked = true;
                     } else {
-                        doRippleIcon($(where), 9, 8);
-                        fill.animate({
-                            opacity: 0
-                        }, {
-                            duration: 100,
-                            queue: false
-                        });
-                        fill2.animate({
-                            marginLeft: 0
-                        }, {
-                            duration: 0,
-                            queue: false
-                        });
-                        fill2.animate({
-                            opacity: 0
-                        }, {
-                            duration: 100,
-                            queue: false
-                        });
-
                         where.checked = false;
                     }
                 })
@@ -134,7 +147,6 @@ $(document).ready(function() {
         }
     }
     function doRippleIcon(item, x, y) {
-        item.find('.ripple').css('')
          Ripple.makeRipple(item, x, y, 17, 17, 300, 0);
     }
     //Preloader

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>History</title>
     <link rel="stylesheet" href="../css/history.css" />
-        <link href="css/ripple.css" rel="stylesheet" type="text/css" />
+    <link href="css/ripple.css" rel="stylesheet" type="text/css" />
     <link href="css/controls/materialdesign.css" rel="stylesheet" type="text/css" />
     <style>
         @font-face {
@@ -35,12 +35,12 @@
             </div>
         </div>
         <div class="selecteditems-toolbar" style="position: absolute; top: -2px; visibility: hidden;">
-            <div style="float: left;" class="flat-button">
-                <p class="flat-button-content" style="padding-top: 8px; padding-bottom: 8px;">X</p>
+            <div id="unselect-btn" data-ripple-color="#444" style="float: left;margin-top: 24px;margin-right: 32px;" class="icon-button ripple-icon">
+                <div class="icon-button-content" style="background-image: url('img/close.png');"></div>
             </div>
             <p id="selected-items" style="float: left; margin-top: 24px;">Selected items: 1</p>
-            <div style="float: right;" class="flat-button">
-                <p class="flat-button-content" style="padding-top: 8px; padding-bottom: 8px;">DELETE</p>
+            <div id="delete-btn" data-ripple-color="#444" style="float: right; margin-top: 11px;" class="flat-button ripple">
+                <div class="flat-button-content">DELETE</div>
             </div>
         </div>
     </div>
@@ -58,8 +58,8 @@
     <script>
         setInterval(function() {
             $('.searchBox').css('margin-left', (($(window).width() - $('.searchBox').width()) / 2) - 105);
-            $('.selecteditems-toolbar').css('margin-left', (($(window).width() - $('.selecteditems-toolbar').width()) / 2) - 32);
-            $('.selecteditems-toolbar').css('width', $('.card').width());
+            $('.selecteditems-toolbar').css('margin-left', (($(window).width() - $('.selecteditems-toolbar').width()) / 2) - 28);
+            $('.selecteditems-toolbar').css('width', $('.card').width() + 48);
         }, 1);
     </script>
 </body>
