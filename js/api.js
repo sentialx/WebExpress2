@@ -1,17 +1,5 @@
 const fs = require('fs');
-function getHTML(webview, callback) {
-    webview.executeJavaScript('f(); function f() { return document.body.innerHTML;}', function(result) {
-        callback(result);
-    });
-}
 
-function insertHTML(webview, code) {
-    webview.executeJavaScript(`document.body.innerHTML += '${code}'`);
-}
-
-function setHTML(webview, code) {
-    webview.executeJavaScript(`document.body.innerHTML = '${code}'`);
-}
 
 
 class HistoryManager {
@@ -28,7 +16,7 @@ class HistoryManager {
 
     }
     static getAllHistory() {
-      return fs.readFileSync('/userdata/history.json');
+      return JSON.parse(fs.readFileSync('/userdata/history.json'));
     }
 }
 
@@ -47,7 +35,7 @@ class BookmarksManager {
 
     }
     static getAllBookmarks() {
-      return bookmarksArray;
+      //TODO: return JSON object;
     }
 }
 
@@ -66,7 +54,7 @@ class DownloadsManager {
 
     }
     static getAllDownloads() {
-      return downloadsArray;
+      //TODO: return JSON object;
     }
 }
 
@@ -82,31 +70,6 @@ class ExtensionsManager {
 
     }
     static getAllExtensions() {
-      return extensionsArray;
-    }
-}
-
-
-class LayoutManager {
-    constructor() {
-
-    }
-    static setTitlebarColor(hex) {
-
-    }
-    static setTabsColor(indexArray, hex) {
-
-    }
-    static setBarColor(instance, hex) {
-
-    }
-    static getTabsColor(indexArray) {
-      return null;
-    }
-    static getTitlebarColor() {
-      return null;
-    }
-    static getBarColor(instance) {
-      return instance.tabWindow.css('background-color');
+      //TODO: return JSON object;
     }
 }
