@@ -1,7 +1,8 @@
 # WebExpress
 (readme work in progress)
 * version: pre-alpha-0.0.2
-* authors: Eryk Rakowski and Mikołaj Palkiewicz
+* authors: Eryk Rakowski (Sential)
+* other contributors: Mikołaj Palkiewicz (xNerhu22)
 
 #Features
 * Colored tabs
