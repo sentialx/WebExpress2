@@ -589,7 +589,7 @@ class TabWindow {
             function addExtensionDev(count) {
                 var items = 0;
                 while (items != count) {
-                    addExtension("logo.png", function() {});
+                    addExtension("./img/logo.png", function() {});
                     items += 1;
                 }
             }

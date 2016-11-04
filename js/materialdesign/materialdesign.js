@@ -4,7 +4,7 @@ $(document).ready(function() {
     class Switch {
         constructor(where) {
             where.switched = false;
-            var instance = $("<div>").load("controls/switch.html", function() {
+            var instance = $("<div>").load("./html/controls/switch.html", function() {
                 var mdSwitch = instance.find(".md-switch");
                 var ellipseRipple = instance.find('.ellipse-ripple');
                 ellipseRipple.hide("scale", {
@@ -73,7 +73,7 @@ $(document).ready(function() {
     class Checkbox {
         constructor(where) {
             where.checked = false;
-            var instance = $("<div>").load("controls/checkbox.html", function() {
+            var instance = $("<div>").load("./html/controls/checkbox.html", function() {
                 var mdSwitch = instance.find(".md-checkbox");
                 var fill = instance.find(".fill");
                 var fill2 = instance.find(".fill2");
@@ -152,7 +152,7 @@ $(document).ready(function() {
     //Preloader
     class Preloader {
         constructor(where) {
-            var instance = $("<div>").load("controls/preloader.html", function() {
+            var instance = $("<div>").load("./html/controls/preloader.html", function() {
                 var lastColor = $(where).attr('color');
                 instance.find(".path").css('stroke', $(where).attr('color'));
                 instance.find(".path").attr('stroke-width', $(where).attr('thickness'));
