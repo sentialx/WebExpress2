@@ -174,9 +174,9 @@ class TabWindow {
                     if (changeTabs) {
                         tab.Title.removeClass('light').addClass('dark');
                         tab.closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close-white.png")');
-                        tab.Foreground = 'white';
+                        tab.Preloader.attr('color', '#fff');
                     }
-                   
+                    tab.Foreground = 'white';
                     searchBox.css('background-color', 'rgba(255,255,255,0.2) ');
                     searchInput.css('color', '#fff');
                     forwardBtnIcon.css('background-image', 'url("img/forward-white.png")');
@@ -195,9 +195,9 @@ class TabWindow {
                     if (changeTabs) {
                         tab.Title.removeClass('dark').addClass('light');
                         tab.closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
-                        tab.Foreground = 'black';
+                        tab.Preloader.attr('color', '#3F51B5');
                     }
-                   
+                    tab.Foreground = 'black';                   
                     searchInput.css('color', '#444');
                     searchBox.css('background-color', '#fff');
                     forwardBtnIcon.css('background-image', 'url("img/forward.png")');
@@ -412,7 +412,6 @@ class TabWindow {
                             if (tab.selected) {
                                 tab.Tab.css('background-color', tab.Color);
                                 changeContrast(true);
-
                             }
                             changeContrast(false);
                             bar.css('background-color', tab.Color);

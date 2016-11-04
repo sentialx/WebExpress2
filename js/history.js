@@ -33,8 +33,13 @@ $('.icon-button').mousedown(function() {
      Ripple.makeRipple($(this), 10, 10, 15, 15, 300, 0);
 });
 $('#delete-btn').click(function() {
+   
     $('.checkbox').each(function(i) {
         if (this.checked) {
+
+            console.log(obj.history[this.id]);
+            obj.history.splice(this.id, 1);
+            saveHistory(JSON.stringify(obj));
             this.item.remove();
             checkedCount = 0;
             this.group.items -= 1;
@@ -73,7 +78,7 @@ for (var i = 0; i < obj.history.length; i++) {
         checkbox[0].item = item;
         if (header != null)
         checkbox[0].group = header;
-        checkbox[0].id = jsonItem.id;
+        checkbox[0].id = i;
         checkbox.click(function(e) {
             if (this.checked) {
                 checkedCount += 1;

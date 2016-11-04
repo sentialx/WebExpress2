@@ -153,8 +153,16 @@ $(document).ready(function() {
     class Preloader {
         constructor(where) {
             var instance = $("<div>").load("controls/preloader.html", function() {
+                var lastColor = $(where).attr('color');
                 instance.find(".path").css('stroke', $(where).attr('color'));
                 instance.find(".path").attr('stroke-width', $(where).attr('thickness'));
+                 //checked changed listener
+                setInterval(function() {
+                    if (lastColor != $(where).attr('color')) {
+                        lastColor = $(where).attr('color');
+                        instance.find(".path").css('stroke', $(where).attr('color'));
+                    }
+                }, 1);
             }).appendTo($(where));
 
         }
