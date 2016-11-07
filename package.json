@@ -27,9 +27,9 @@
   },
   "homepage": "https://github.com/Sential/WebExpress#readme",
   "devDependencies": {
+    "electron": "^1.4.5",
     "electron-installer-windows": "^0.2.0",
     "electron-packager": "^7.7.0",
-    "electron": "^1.4.5",
     "is-there": "^4.3.3",
     "node-dir": "^0.1.16"
   },

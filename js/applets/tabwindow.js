@@ -4,7 +4,6 @@ class TabWindow {
         var s = this;
         this.searchInput = null;
         this.webView = null;
-        this.tab = tab;
         tab.tabWindow = $("<div>").load("browser.html", function() {
             //main section
             var webview = tab.tabWindow.find('.webview')[0];
@@ -53,6 +52,160 @@ class TabWindow {
             var userdataPath = '/userdata';
             s.searchInput = searchInput;
             s.webView = webview;
+            var xToInspect, yToInspect;
+            var linkToOpen = "";
+            var imageToSave = "";
+
+            //requires
+            const {remote, ipcMain, clipboard} = require('electron')
+            const {Menu, MenuItem} = remote
+            var fs = require('fs');
+            var IsThere = require("is-there");
+            var dir = require('node-dir');
+            webview.addEventListener("ipc-message", function(e){
+                if (e.channel === 'link') {
+                    linkToOpen = e.args[0];
+                    if (e.args[0] == "") {
+                        linkToOpen = "";
+                    }
+                }
+                if (e.channel === 'image') {
+                    imageToSave = e.args[0];
+                    if (e.args[0] == "") {
+                        imageToSave = "";
+                    }
+                }
+                
+            });
+
+            //create and add context menu items
+            var backMenuItem = new MenuItem({label: 'Back', click() { 
+                webview.goBack();
+            }});
+            var forwardMenuItem = new MenuItem({label: 'Forward', click() { 
+                webview.goForward();
+            }});
+            var refreshMenuItem = new MenuItem({label: 'Reload', click() { 
+                webview.reload();
+            }});
+            var openLinkInNewTabMenuItem = new MenuItem({label: 'Open link in new tab', click() { 
+                if (linkToOpen != "") {
+                    var tab = new Tab();
+                    var tw = new TabWindow(tab, linkToOpen);
+                    addTab(tw, tab);
+                }
+            }});
+            var copyLinkMenuItem = new MenuItem({label: 'Copy link address', click() { 
+                if (linkToOpen != "") {
+                    clipboard.writeText(linkToOpen);
+                }
+            }});
+            var saveImageAsMenuItem = new MenuItem({label: 'Save image as', click() { 
+                //saves image as
+            }});
+            var printMenuItem = new MenuItem({label: 'Print', click() { 
+                //prints webpage
+            }});
+            var inspectElementMenuItem = new MenuItem({label: 'Inspect element', click() { 
+                webview.inspectElement(xToInspect, yToInspect);
+            }});
+            var viewSourceMenuItem = new MenuItem({label: 'View source', click() { 
+                //views source
+            }});
+            var separator1 = new MenuItem({type: 'separator'});
+            var separator2 = new MenuItem({type: 'separator'});
+            
+            var menu1 = new Menu();
+
+            /*  Context menu structure:
+
+                    Open link in new tab
+                    Back
+                    Forward
+                    Refresh
+                    =====================
+                    Copy link address
+                    Save image as
+                    Print
+                    =====================
+                    Inspect element
+                    View source
+                    =====================
+                    Extensions
+
+            */
+
+            //append items to context menu
+            menu1.append(openLinkInNewTabMenuItem);
+            menu1.append(backMenuItem);
+            menu1.append(forwardMenuItem);
+            menu1.append(refreshMenuItem);
+
+            menu1.append(separator1);
+
+            menu1.append(copyLinkMenuItem);
+            menu1.append(saveImageAsMenuItem);
+            menu1.append(printMenuItem);
+
+            menu1.append(separator2);
+
+            menu1.append(inspectElementMenuItem);
+            menu1.append(viewSourceMenuItem);
+
+            //configure and open context menu
+            webview.addEventListener('contextmenu', (e) => {
+                e.preventDefault()
+                
+
+                if (imageToSave == "" && linkToOpen == "") {
+                    backMenuItem.visible = true;
+                    forwardMenuItem.visible = true;
+                    refreshMenuItem.visible = true;
+                    printMenuItem.visible = true;
+                    saveImageAsMenuItem.visible = false;
+                    copyLinkMenuItem.visible = false;
+                    openLinkInNewTabMenuItem.visible = false;
+                } else if (imageToSave != "" || linkToOpen != "") {
+                    backMenuItem.visible = false;
+                    forwardMenuItem.visible = false;
+                    refreshMenuItem.visible = false;
+                    printMenuItem.visible = false;
+                }
+
+                if (imageToSave != "" && linkToOpen == "") {
+                    separator1.visible = false;
+                } else {
+                    separator1.visible = true;
+                }
+                
+                if (linkToOpen != "") {
+                    copyLinkMenuItem.visible = true;
+                    openLinkInNewTabMenuItem.visible = true;
+                } else {
+                    copyLinkMenuItem.visible = false;
+                    openLinkInNewTabMenuItem.visible = false;
+                }
+                if (imageToSave != "") {
+                    saveImageAsMenuItem.visible = true;
+                } else {
+                    saveImageAsMenuItem.visible = false;
+                }
+
+                if (webview.canGoBack()) {
+                    backMenuItem.enabled = true;
+                } else {
+                    backMenuItem.enabled = false;
+                }
+                if (webview.canGoForward()) {
+                    forwardMenuItem.enabled = true;
+                } else {
+                    forwardMenuItem.enabled = false;
+                }
+
+                xToInspect = e.pageX - $(webview).offset().left;
+                yToInspect = e.pageY - $(webview).offset().top;
+                menu1.popup(remote.getCurrentWindow())
+            }, false)
 
 
             //extensions api
@@ -75,12 +228,6 @@ class TabWindow {
             s.getBarColor = function() {
               return s.tab.tabWindow.find('.bar').css('background-color');
             }
-
-
-            //requires
-            var fs = require('fs');
-            var IsThere = require("is-there");
-            var dir = require('node-dir');
 
             //check if directory called userdata exists
             if (!IsThere(userdataPath)) {
@@ -383,9 +530,11 @@ class TabWindow {
                     tab.Favicon.css('opacity', "0");
                     tab.Preloader.css('opacity', "1");
                 });
+
                 //webview link mouse over
-                webview.addEventListener('update-target-url', function() {
-                    //TODO
+                webview.addEventListener('update-target-url', function(url) {
+                    linkToOpen = url.url;
+                    console.log(url);
                 });
                 //webview page title changed event
                 webview.addEventListener('page-title-updated', function() {
@@ -456,7 +605,7 @@ class TabWindow {
                 makeRippleMenuItem(this, e);
             });
             devtools.mousedown(function(e) {
-                webview.openDevTools();
+                webview.openDevTools({mode: 'right'});
                 makeRippleMenuItem(this, e);
             });
             screenshot.mousedown(function(e) {
@@ -593,7 +742,6 @@ class TabWindow {
                     items += 1;
                 }
             }
-
             //bar buttons events
 
             extBtn.mousedown(function() {

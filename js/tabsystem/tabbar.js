@@ -124,7 +124,7 @@ function calcSizes(animation, addButtonAnimation) {
     var tabCountTemp = 0;
     for (var i = 0; i < tabCollection.length; i++) {
         var tabWidthTemp = tabWidth;
-        if (!($('#tabbar').width() / tabCollection.length >= tabWidth)) {
+        if (!(($('#tabbar').width() -  $('#addTab').width() - 20) / tabCollection.length >= tabWidth)) {
             tabWidthTemp = ($('#tabbar').width() - $('#addTab').width() - 20) / tabCollection.length;
         } else {
             tabWidthTemp = 170;
