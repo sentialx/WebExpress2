@@ -19,16 +19,16 @@ function addTab(instance, tab) {
     tab.selected = false;
 
     //close button click event
-    tab.closeBtn.click(function(e) {
+    tab.closeBtn.click(function (e) {
         removeTab(tab);
     });
     //tab drag event
     tab.Tab.draggable({
         axis: 'x',
-        stop: function(event, ui) {
+        stop: function (event, ui) {
             calcSizes(true, true);
         },
-        drag: function(event, ui) {
+        drag: function (event, ui) {
             for (var i = 0; i < tabCollection.length; i++) {
                 tabCollection[i].Tab.css('z-index', 1);
 
@@ -48,7 +48,7 @@ function addTab(instance, tab) {
     tabCollection.push(tab);
     selectTab(tab.Tab);
     tab.selected = true;
-    tab.Tab.mousedown(function(e) {
+    tab.Tab.mousedown(function (e) {
         selectTab(tab.Tab);
 
     });
@@ -59,27 +59,28 @@ function addTab(instance, tab) {
     tab.Tab.animate({
         top: 0
     }, {
-        duration: 200
-    });
+            duration: 200
+        });
 }
 
 function removeTab(tab) {
-  if (tabCollection.indexOf(tab) - 1 != -1) {
-      console.log(tabCollection.indexOf(tab) - 1);
-      selectTab(tabCollection[tabCollection.indexOf(tab) - 1].Tab);
-  } else {
-      if (tabCollection[1] != null)
-          selectTab(tabCollection[1].Tab);
-  }
+    tab.tabWindow.remove();
+    if (tabCollection.indexOf(tab) - 1 != -1) {
+        console.log(tabCollection.indexOf(tab) - 1);
+        selectTab(tabCollection[tabCollection.indexOf(tab) - 1].Tab);
+    } else {
+        if (tabCollection[1] != null)
+            selectTab(tabCollection[1].Tab);
+    }
 
-  tabCollection.splice(tabCollection.indexOf(tab), 1);
-  tab.Tab.remove();
-  if (tabCollection.length == 0) {
-      const remote = require('electron').remote;
-      var window = remote.getCurrentWindow();
-      window.close();
-  }
-  calcSizes(true, true);
+    tabCollection.splice(tabCollection.indexOf(tab), 1);
+    tab.Tab.remove();
+    if (tabCollection.length == 0) {
+        const remote = require('electron').remote;
+        var window = remote.getCurrentWindow();
+        window.close();
+    }
+    calcSizes(true, true);
 }
 
 function getTabFromMousePoint(callingTab) {
@@ -99,14 +100,14 @@ function changePos(callingTab) {
     callingTab.Tab.animate({
         left: tabCollection.indexOf(callingTab) * tabCollection[0].Tab.width()
     }, {
-        duration: 200,
-        complete: function() {
-            locked = false
-        }, queue: false
-    });
+            duration: 200,
+            complete: function () {
+                locked = false
+            }, queue: false
+        });
 }
 
-document.onmousemove = function(e) {
+document.onmousemove = function (e) {
     cursorX = e.pageX;
     cursorY = e.pageY;
 }
@@ -124,7 +125,7 @@ function calcSizes(animation, addButtonAnimation) {
     var tabCountTemp = 0;
     for (var i = 0; i < tabCollection.length; i++) {
         var tabWidthTemp = tabWidth;
-        if (!(($('#tabbar').width() -  $('#addTab').width() - 20) / tabCollection.length >= tabWidth)) {
+        if (!(($('#tabbar').width() - $('#addTab').width() - 20) / tabCollection.length >= tabWidth)) {
             tabWidthTemp = ($('#tabbar').width() - $('#addTab').width() - 20) / tabCollection.length;
         } else {
             tabWidthTemp = 170;
@@ -135,15 +136,15 @@ function calcSizes(animation, addButtonAnimation) {
             tabCollection[i].Tab.animate({
                 left: tabCountTemp * tabCollection[0].Tab.width()
             }, {
-                duration: 200, queue: false
-            });
+                    duration: 200, queue: false
+                });
 
         } else {
             tabCollection[i].Tab.animate({
                 left: tabCountTemp * tabCollection[0].Tab.width()
             }, {
-                duration: 1, queue: false
-            });
+                    duration: 1, queue: false
+                });
         }
         tabCountTemp += 1;
     }
@@ -152,8 +153,8 @@ function calcSizes(animation, addButtonAnimation) {
             $('#addTab').animate({
                 left: tabCollection.length * tabCollection[0].Tab.width()
             }, {
-                duration: 200, queue: false
-            });
+                    duration: 200, queue: false
+                });
         } else {
             $('#addTab').css({
                 left: tabCollection.length * tabCollection[0].Tab.width()
@@ -162,7 +163,7 @@ function calcSizes(animation, addButtonAnimation) {
     }
 }
 
-$('#addTab').click(function() {
+$('#addTab').click(function () {
     var tab = new Tab();
     addTab(new TabWindow(tab, ""), tab);
 });
@@ -195,4 +196,4 @@ function selectTab(tab) {
         }
     }
 }
-function Tab() {}
+function Tab() { }

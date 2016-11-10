@@ -1,18 +1,24 @@
 const remote = require('electron').remote;
-
+var historyPath = '/userdata/history.json';
+var extensionsPath = '/userdata/extensions';
+var userdataPath = '/userdata';
 var mainWindow = remote.getCurrentWindow();
-$(document).ready(function() {
+var fs = require('fs');
+var IsThere = require("is-there");
+var dir = require('node-dir');
+
+$(document).ready(function () {
     var tab = new Tab();
     addTab(new TabWindow(tab, "webexpress://newtab"), tab);
 });
-window.onresize = function(event) {
+window.onresize = function (event) {
     calcSizes(false, false);
 };
 
-$('.windowbutton-close').click(function() {
+$('.windowbutton-close').click(function () {
     mainWindow.close();
 });
-$('.windowbutton-maximize').click(function() {
+$('.windowbutton-maximize').click(function () {
     if (mainWindow.isMaximized()) {
         mainWindow.unmaximize();
     } else {
@@ -20,6 +26,29 @@ $('.windowbutton-maximize').click(function() {
     }
 
 });
-$('.windowbutton-minimize').click(function() {
+$('.windowbutton-minimize').click(function () {
     mainWindow.minimize();
 });
+
+
+
+function checkFiles() {
+    //check if directory called userdata exists
+    if (!IsThere(userdataPath)) {
+        fs.mkdir(userdataPath);
+    }
+    //check if directory called extensions exists
+    if (!IsThere(extensionsPath)) {
+        fs.mkdir(extensionsPath);
+    }
+    //check if file called history.json exists
+    if (!IsThere(historyPath)) {
+        fs.writeFile(historyPath, '{"history":[]}');
+    }
+}
+
+/*function loadThemes() {
+    if (jFileType == "stylesheet" || jFileType == "css") {
+        $('head').append('<link rel="stylesheet" type="text/css" href="' + jFileUrl + '">')
+    }
+} TODO */

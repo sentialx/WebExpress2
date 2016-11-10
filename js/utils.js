@@ -1,6 +1,6 @@
-function isInArray(value, array) {
-    return array.indexOf(value) > -1;
-}
+//variables
+var iconRippleTime = 300;
+var rippleTime = 400;
 
 function decode_utf8(s) {
     return unescape(encodeURIComponent(s));
@@ -73,3 +73,31 @@ function colorBrightness(color) {
 
     return brightness;
 };
+function autocomplete(input, text) {
+    var text1 = input.val();
+    if (text != null || text != "") {
+        if (text.toLowerCase().startsWith(text1.toLowerCase())) {
+            input.val(text);
+            input[0].setSelectionRange(text1.length, text.length);
+        }
+    }
+}
+function getSelectionText() {
+    var text = "";
+    if (window.getSelection) {
+        text = window.getSelection().toString();
+    } else if (document.selection && document.selection.type != "Control") {
+        text = document.selection.createRange().text;
+    }
+    return text;
+}
+
+function makeRippleMenuItem(menuItem, e) {
+    var relX = e.pageX - $(menuItem).offset().left;
+    var relY = e.pageY - $(menuItem).offset().top;
+    Ripple.makeRipple($(menuItem), relX, relY, $(menuItem).width(), $(menuItem).height(), rippleTime, 0);
+}
+
+function makeRippleIconButton(item) {
+    Ripple.makeRipple(item, item.width() / 2, item.height() / 2, 14, 14, iconRippleTime, 0);
+}
