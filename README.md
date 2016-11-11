@@ -1,6 +1,5 @@
 # WebExpress
 (readme work in progress)
-* version: pre-alpha-0.0.3
 * authors: Eryk Rakowski (Sential)
 * other contributors: Mikołaj Palkiewicz (xNerhu22)
 
