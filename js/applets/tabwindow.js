@@ -553,6 +553,7 @@ class TabWindow {
             menu.mousedown(function(event) {
                 event.stopPropagation();
             });
+            //Extensions system
             function refreshExtensions() {
                 for (var i3 = 0; i3 < loadedExts.length; i3++) {
                     $(loadedExts[i3]).remove();
@@ -560,7 +561,6 @@ class TabWindow {
                 loadedExts = [];
                 loadExtensions();
             }
-            //Extensions system
             function loadExtensions() {
                 //get all .JSON files in folder to an array
                 var listOfExtensions = [];

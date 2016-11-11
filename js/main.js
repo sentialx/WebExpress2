@@ -1,7 +1,11 @@
 const remote = require('electron').remote;
-var historyPath = '/userdata/history.json';
-var extensionsPath = '/userdata/extensions';
-var userdataPath = '/userdata';
+const {app} = require('electron').remote;
+var os = require('os');
+
+var historyPath = app.getPath('userData') + '/userdata/history.json';
+var extensionsPath = app.getPath('userData') + '/userdata/extensions';
+var userdataPath = app.getPath('userData') + '/userdata';
+
 var mainWindow = remote.getCurrentWindow();
 var fs = require('fs');
 var IsThere = require("is-there");
