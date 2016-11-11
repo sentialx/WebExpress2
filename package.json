@@ -1,15 +1,11 @@
 {
   "name": "WebExpress",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "An advanced Internet browser in Electron",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . --all",
-    "pack-win64": "asar p C:/Users/SentialX/Desktop/WebExpress/WebExpress-win32-x64/resources/app C:/Users/SentialX/Desktop/WebExpress/WebExpress-win32-x64/resources/app.asar",
-    "pack-win32": "asar p C:/Users/SentialX/Desktop/WebExpress/WebExpress-win32-ia32/resources/app C:/Users/SentialX/Desktop/WebExpress/WebExpress-win32-ia32/resources/app.asar",
-    "pack-linux64": "asar p C:/Users/SentialX/Desktop/WebExpress/WebExpress-linux-x64/resources/app C:/Users/SentialX/Desktop/WebExpress/WebExpress-linux-x64/resources/app.asar",
-    "pack-linux32": "asar p C:/Users/SentialX/Desktop/WebExpress/WebExpress-linux-ia32/resources/app C:/Users/SentialX/Desktop/WebExpress/WebExpress-linux-ia32/resources/app.asar"
+    "build": "electron-packager . --all --overwrite --asar"
   },
   "repository": {
     "type": "git",
@@ -27,7 +23,7 @@
   },
   "homepage": "https://github.com/Sential/WebExpress#readme",
   "devDependencies": {
-    "electron": "^1.4.5",
+    "electron": "^1.4.6",
     "electron-installer-windows": "^0.2.0",
     "electron-packager": "^7.7.0",
     "is-there": "^4.3.3",
@@ -37,7 +33,7 @@
     "asar": "^0.12.2",
     "electron-packager": "^7.7.0",
     "electron-installer-windows": "^0.2.0",
-    "electron": "^1.4.5"
+    "electron": "^1.4.6"
   },
-  "license": "ISC"
+  "license": "MIT"
 }
