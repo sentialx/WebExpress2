@@ -17,7 +17,7 @@ if (mm < 10) {
     mm = '0' + mm;
 }
 today = mm + '-' + dd + '-' + yyyy;
-
+var checkboxes = [];
 obj.history = obj.history.reverse();
 var checkedCount = 0;
 $('#unselect-btn').click(function() {
@@ -36,11 +36,18 @@ $('#delete-btn').click(function() {
    
     $('.checkbox').each(function(i) {
         if (this.checked) {
-
             console.log(obj.history[this.id]);
-            obj.history.splice(this.id, 1);
-            saveHistory(JSON.stringify(obj));
+            
+            for (var i = 0; i < obj.history.length; i++) {
+                if (obj.history[i].id == this.id) {
+                    obj.history.splice(i, 1);
+                }
+            }
             this.item.remove();
+            if (this.item.length <= 0) {
+                checkedCount = 0;
+                verifyCheckboxes(); 
+            }
             checkedCount = 0;
             this.group.items -= 1;
             if (this.group.items <= 0) {
@@ -51,6 +58,11 @@ $('#delete-btn').click(function() {
             verifyCheckboxes();
         }
     });
+    obj.history.sort(function(a, b) {
+        return parseFloat(a.id) - parseFloat(b.id);
+    });
+    saveHistory("");
+    saveHistory(JSON.stringify(obj));
 });
 $('.flat-button').mousedown(function(e) {
     var relX = e.pageX - $(this).offset().left;
@@ -78,7 +90,7 @@ for (var i = 0; i < obj.history.length; i++) {
         checkbox[0].item = item;
         if (header != null)
         checkbox[0].group = header;
-        checkbox[0].id = i;
+        checkbox[0].id = jsonItem.id;
         checkbox.click(function(e) {
             if (this.checked) {
                 checkedCount += 1;
@@ -87,6 +99,7 @@ for (var i = 0; i < obj.history.length; i++) {
             }
             verifyCheckboxes();
         });
+        checkboxes.push(checkbox[0])
         var hour = $('<p style="display: inline-block;margin-left: 16px; width: 50px;color: #9E9E9E;position: relative; top: -4px;">' + jsonItem.time + '</p>').appendTo(item);
         var title = $('<p style="margin-left: 52px;display: inline-block;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;max-width: 40%;max-height: 16px; position: relative; top: 14px; margin-top: -4px;">' + jsonItem.title + '</p>').appendTo(item);
         var link = $('<a href="' + jsonItem.link + '" style="margin-left: 16px; display: inline-block;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;max-width: 30%; max-height: 16px; margin-top: -4px;">' + jsonItem.link + '</a>').appendTo(item);

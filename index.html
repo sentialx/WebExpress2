@@ -15,12 +15,12 @@
             font-family: Roboto;
             src: url('fonts/Roboto.ttf');
         }
-
+        
         @font-face {
             font-family: Roboto-Medium;
             src: url('fonts/Roboto-Medium.ttf');
         }
-
+        
         @font-face {
             font-family: Roboto-Light;
             src: url('fonts/Roboto-Light.ttf');
@@ -43,7 +43,7 @@
 
     </script>
     <div class="instances" id="instances">
-         
+
     </div>
     <script>
         if (typeof module === 'object') {
@@ -62,7 +62,8 @@
     <script src="js/tabsystem/tabbar.js"></script>
     <script src="js/materialdesign/ripple.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/extensions/api.js"></script>
+        <iframe id="extensions" srcdoc="<html><body><script src='js/jquery/jquery-3.1.0.min.js'></script><script src='js/extensions/api.js'></script></body></html>">
+    </iframe>
 </body>
 
 

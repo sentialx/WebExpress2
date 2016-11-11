@@ -4,7 +4,14 @@ class TabWindow {
         var s = this;
         this.searchInput = null;
         this.webView = null;
-        tab.tabWindow = $("<div>").load("browser.html", function() {
+        this.loadedExts = [];
+        this.deleteExtensions = function() {
+            for (var i3 = 0; i3 < s.loadedExts.length; i3++) {
+                $(s.loadedExts[i3]).remove();
+            }
+            s.loadedExts = [];
+        }
+        tab.tabWindow = $("<div>").load("browser.html", function () {
             //main section
             var webview = tab.tabWindow.find('.webview')[0];
             var searchInput = $(tab.tabWindow.find('.searchInput')[0]);
@@ -49,7 +56,6 @@ class TabWindow {
             var xToInspect, yToInspect;
             var imageToSave = '';
             var linkToOpen = '';
-            var loadedExts = [];
 
             //requires
             const {remote, ipcMain, clipboard} = require('electron')
@@ -233,35 +239,13 @@ class TabWindow {
 
             }, false)
 
-            /*extensions api*/
-            function setTitlebarColor(hex) {
-
-            }
-            function setTabsColor(indexArray, hex) {
-
-            }
-            function getTabsColor(indexArray) {
-                return null;
-            }
-            function getTitlebarColor() {
-                return null;
-            }
-            s.setBarColor = function(hex) {
-                /*s.tab.tabWindow.find('.bar').css('background-color', hex);
-                changeContrast();*/
-            }
-            s.getBarColor = function() {
-                return s.tab.tabWindow.find('.bar').css('background-color');
-            }
-            /*API END*/
-
             //check if background color of bar is dark or light and then set icons foreground to black or white
             function changeContrast(changeTabs) {
                 var brightness = colorBrightness(tab.Color);
                 if (brightness < 125) {
                     //white icons and text
                     if (changeTabs) {
-                        tab.Title.removeClass('light').addClass('dark');
+                        tab.Title.css('color', 'white');
                         tab.closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close-white.png")');
                         tab.Preloader.attr('color', '#fff');
                     }
@@ -282,7 +266,7 @@ class TabWindow {
                 } else {
                     //black icons and text
                     if (changeTabs) {
-                        tab.Title.removeClass('dark').addClass('light');
+                        tab.Title.css('color', '#444');
                         tab.closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
                         tab.Preloader.attr('color', '#3F51B5');
                     }
@@ -305,12 +289,12 @@ class TabWindow {
 
             //get color from top of website
             function getColor() {
-                webview.capturePage(function(image) {
+                webview.capturePage(function (image) {
 
                     var canvas = document.createElement('canvas');
                     var context = canvas.getContext('2d');
                     var img = new Image();
-                    img.onload = function() {
+                    img.onload = function () {
                         context.drawImage(img, 0, 0);
                         var myData = context.getImageData(2, 2, img.width, img.height);
                         if (myData != null) {
@@ -332,7 +316,7 @@ class TabWindow {
             }
 
             //global events
-            $(window).click(function() {
+            $(window).click(function () {
                 if (menuToggled) {
                     menu.css('opacity', 1).animate({
                         opacity: 0
@@ -340,7 +324,7 @@ class TabWindow {
                         top: -32
                     }, {
                             queue: false,
-                            complete: function() {
+                            complete: function () {
                                 menu.css('visibility', 'hidden');
                             },
                             duration: 200
@@ -351,10 +335,10 @@ class TabWindow {
             });
 
             //global timer
-            setInterval(function() {
+            setInterval(function () {
                 if (searchInput.val() == "" || searchInput.val() == null) {
                     suggestions.css('display', 'none');
-                    tab.tabWindow.find('.suggestions-li').each(function(i) {
+                    tab.tabWindow.find('.suggestions-li').each(function (i) {
                         $(this).remove();
                     });
                 }
@@ -362,12 +346,12 @@ class TabWindow {
 
             //webview section
             //webview ready event
-            $(webview).ready(function() {
+            $(webview).ready(function () {
 
                 $.ajax({
                     type: "GET",
                     url: "http://google.com/complete/search?client=firefox&q=webexpress",
-                    success: function(data) {
+                    success: function (data) {
 
                     }
                 });
@@ -391,7 +375,7 @@ class TabWindow {
             })
 
             //webview page load end event
-            webview.addEventListener('did-finish-load', function() {
+            webview.addEventListener('did-finish-load', function () {
 
 
                 tab.Favicon.css('opacity', "1");
@@ -419,7 +403,7 @@ class TabWindow {
                     today = mm + '-' + dd + '-' + yyyy;
 
                     //read history.json file and append new history items
-                    fs.readFile(historyPath, function(err, data) {
+                    fs.readFile(historyPath, function (err, data) {
                         if (err) throw err;
                         var json = data.toString();
                         //replace weird characters in utf-8
@@ -450,7 +434,7 @@ class TabWindow {
                             var jsonStr = JSON.stringify(obj);
                             json = jsonStr;
                             //append new history item to history.json
-                            fs.writeFile(historyPath, json, function(err) {
+                            fs.writeFile(historyPath, json, function (err) {
                                 if (err) {
                                     return console.log(err);
                                 }
@@ -461,10 +445,10 @@ class TabWindow {
 
                 }
 
-                //wait for 200 milliseconds
-                setTimeout(function() {
+                //wait for 400 milliseconds
+                setTimeout(function () {
                     //check if <meta name="theme-color" content="..."> tag exists. When it exists then tab gets the color from content="...", otherwise it getting color from top of a website
-                    webview.executeJavaScript("function s() {var markup = document.documentElement.innerHTML; return markup} s();", false, function(result) {
+                    webview.executeJavaScript("function s() {var markup = document.documentElement.innerHTML; return markup} s();", false, function (result) {
                         var regexp = /<meta name='?.theme-color'?.*>/;
                         if (regexp.test(result)) {
                             //getting color from <meta name="theme-color" content="...">
@@ -487,23 +471,23 @@ class TabWindow {
             });
 
             //webview start loading event
-            webview.addEventListener('did-start-loading', function() {
-                setTimeout(function() {
+            webview.addEventListener('did-start-loading', function () {
+                setTimeout(function () {
                     suggestions.css('display', 'none');
                 }, 200);
                 tab.Favicon.css('opacity', "0");
                 tab.Preloader.css('opacity', "1");
             });
             //webview page title changed event
-            webview.addEventListener('page-title-updated', function(title) {
+            webview.addEventListener('page-title-updated', function (title) {
                 tab.Title.html("<p style='display: inline; width:50%;'>" + webview.getTitle() + "</p>");
             });
             //webview load commit event
-            webview.addEventListener('load-commit', function(title) {
+            webview.addEventListener('load-commit', function (title) {
                 suggestions.css('display', 'none');
             });
             //webview page favicon updated event
-            webview.addEventListener('page-favicon-updated', function(favicon) {
+            webview.addEventListener('page-favicon-updated', function (favicon) {
                 console.log(favicon.favicons[0]);
                 tab.Favicon.html("<div class='favicon' style='background-image: url(\"" + favicon.favicons[0] + "\");'></div>");
                 tab.Favicon.css('opacity', "1");
@@ -514,61 +498,59 @@ class TabWindow {
             menu.css('opacity', 0);
 
             //menu events
-            settings.mousedown(function(e) {
+            settings.mousedown(function (e) {
                 makeRippleMenuItem(this, e);
             });
-            history.mousedown(function(e) {
+            history.mousedown(function (e) {
                 makeRippleMenuItem(this, e);
             });
-            history.click(function(e) {
+            history.click(function (e) {
                 var tab = new Tab();
                 var tw = new TabWindow(tab, `webexpress://history`);
                 addTab(tw, tab);
             });
-            bookmarks.mousedown(function(e) {
+            bookmarks.mousedown(function (e) {
                 makeRippleMenuItem(this, e);
             });
-            downloads.mousedown(function(e) {
+            downloads.mousedown(function (e) {
                 makeRippleMenuItem(this, e);
             });
-            extensions.mousedown(function(e) {
+            extensions.mousedown(function (e) {
                 makeRippleMenuItem(this, e);
             });
-            newWindow.mousedown(function(e) {
+            newWindow.mousedown(function (e) {
                 makeRippleMenuItem(this, e);
             });
-            fullscreen.mousedown(function(e) {
+            fullscreen.mousedown(function (e) {
                 makeRippleMenuItem(this, e);
             });
-            devtools.mousedown(function(e) {
+            devtools.mousedown(function (e) {
                 webview.openDevTools({ mode: 'right' });
                 makeRippleMenuItem(this, e);
             });
-            screenshot.mousedown(function(e) {
+            screenshot.mousedown(function (e) {
                 makeRippleMenuItem(this, e);
             });
-            privacy.mousedown(function(e) {
+            privacy.mousedown(function (e) {
                 makeRippleMenuItem(this, e);
             });
-            menu.mousedown(function(event) {
+            menu.mousedown(function (event) {
                 event.stopPropagation();
             });
             //Extensions system
             function refreshExtensions() {
-                for (var i3 = 0; i3 < loadedExts.length; i3++) {
-                    $(loadedExts[i3]).remove();
-                }
-                loadedExts = [];
+                s.deleteExtensions();
+                resetExtMenu();
                 loadExtensions();
             }
             function loadExtensions() {
                 //get all .JSON files in folder to an array
                 var listOfExtensions = [];
                 var listOfExtensionsDirs = [];
-                dir.subdirs(extensionsPath, function(err, subdirs) {
+                dir.subdirs(extensionsPath, function (err, subdirs) {
                     if (err) throw err;
                     for (var i = 0; i < subdirs.length; i++) {
-                        dir.files(subdirs[i], function(err, files) {
+                        dir.files(subdirs[i], function (err, files) {
                             if (err) throw err;
                             for (var i2 = 0; i2 < files.length; i2++) {
                                 if (endsWith(files[i2], ".json")) {
@@ -577,7 +559,7 @@ class TabWindow {
                                     $.ajax({
                                         type: "GET",
                                         url: files[i2],
-                                        success: function(data) {
+                                        success: function (data) {
                                             var jsonObject = JSON.parse(data);
                                             //Deserialize JSON string
                                             var jName = jsonObject.name;
@@ -588,7 +570,7 @@ class TabWindow {
                                             var jPopupPage = jsonObject.popuppage;
                                             var jSettingsPage = jsonObject.settingspage;
                                             var jScripts = jsonObject.scripts;
-                                            addExtension(extensionsPath + "/" + jFolder + "/" + jIcon, function() {
+                                            addExtension(extensionsPath + "/" + jFolder + "/" + jIcon, function () {
 
                                             });
 
@@ -597,17 +579,21 @@ class TabWindow {
                                                 $.ajax({
                                                     type: "GET",
                                                     url: jFileUrl,
-                                                    success: function(data) {
-                                                        var id = tabCollection.indexOf(tab);
-                                                        var extension = $(`<script>
-                                                        function a(index) {
-                                                            var tab = tabCollection[index]; 
-                                                            var instance = tab.instance;
-                                                            ${data}
-                                                        } a(${id}); 
-                                                        </script>`).appendTo('body');
+                                                    success: function (data) {
+                                                        $('#extensions').ready(function() {
+                                                            var id = tabCollection.indexOf(tab);
+                                                            $('#extensions')[0].contentWindow.parent = window
+                                                            var extension = $(`<script async>
+                                                            function a(index) {
+                                                                var api = new API(parent.tabCollection[index], parent)
+                                                                parent = null
+                                                                ${data}
+                                                            } a(${id}); 
+                                                            </script>`).appendTo($('#extensions').contents().find('body'));
 
-                                                        loadedExts.push(extension);
+                                                            s.loadedExts.push(extension);
+                                                        })
+                                                        
                                                     }
                                                 });
 
@@ -629,21 +615,38 @@ class TabWindow {
             var extCount = 0;
             var pagesCount = 1;
             var indicatorsCount = 0;
+            var currentPage = tab.tabWindow.find('.ext-page')
+            var selectedPage = 0
+            pageCollection.push(currentPage)
 
-            var currentPage = tab.tabWindow.find('.ext-page');
-            var selectedPage = 0;
-            pageCollection.push(currentPage);
+            function resetExtMenu() {
+                extCollection = []
+                pageCollection = []
+                indicatorsCollection = [];
+                extCount = 0
+                pagesCount = 1
+                indicatorsCount = 0
+                tab.tabWindow.find('.ext-page').remove()
+                tab.tabWindow.find('.ext-indicators').remove()
+                tab.tabWindow.find('.ext-menu').append('<ul class="ext-page"></ul>')
+                tab.tabWindow.find('.ext-menu').append('<ul class="ext-indicators"></ul>')
+                currentPage = tab.tabWindow.find('.ext-page')
+                selectedPage = 0
+                pageCollection.push(currentPage)
+            }
 
             function addExtension(image, clickEvent) {
                 if (extCount != 9) {
 
                     var ext = $('<li class="ext-item ripple" data-ripple-color="#444"><div class="ext-item-icon" style="background-image: url(\'' + image + '\')"></div></li>').appendTo(currentPage);
-                    ext.click(function() {
+                    ext.click(function () {
                         clickEvent();
                     });
-                    ext.mousedown(function() {
+
+                    ext.mousedown(function () {
                         makeRippleIconButton($(this));
                     });
+                    $('.ripple-effect').css('z-index', '2');
                     extCollection.push(ext);
                     extCount += 1;
                 } else {
@@ -651,12 +654,13 @@ class TabWindow {
                     currentPage = $('<ul class="ext-page"></ul>').appendTo(tab.tabWindow.find('.ext-menu'));
 
                     var ext = $('<li class="ext-item ripple" data-ripple-color="#444"><div class="ext-item-icon" style="background-image: url(\'' + image + '\')"></div></li>').appendTo(currentPage);
-                    ext.click(function() {
+                    ext.click(function () {
                         clickEvent();
                     });
-                    ext.mousedown(function() {
+                    ext.mousedown(function () {
                         makeRippleIconButton($(this));
                     });
+                    $('.ripple-effect').css('z-index', '2');
                     pageCollection.push(currentPage);
                     extCollection.push(ext);
                     pagesCount += 1;
@@ -677,7 +681,7 @@ class TabWindow {
             function createIndicator(index) {
                 var indicator = $('<li class="ext-indicator"></li>').appendTo(tab.tabWindow.find('.ext-indicators'));
 
-                indicator.click(function() {
+                indicator.click(function () {
                     console.log("previous Index: " + selectedPage);
                     if (selectedPage > index) {
                         //from left to right
@@ -742,22 +746,22 @@ class TabWindow {
             function addExtensionDev(count) {
                 var items = 0;
                 while (items != count) {
-                    addExtension("./img/logo.png", function() { });
+                    addExtension("./img/logo.png", function () { });
                     items += 1;
                 }
             }
             //bar buttons events
 
-            extBtn.mousedown(function() {
+            extBtn.mousedown(function () {
                 makeRippleIconButton($(this));
             });
-            extBtn.click(function() {
+            extBtn.click(function () {
                 if (!extMenuToggled) {
                     //menu fade in animation
                     extMenu.css('visibility', 'visible');
                     extMenu.css('opacity', 0).animate({
                         opacity: 1
-                    }, 200, function() {
+                    }, 200, function () {
                         extMenuToggled = true
                     }).css('top', -32).animate({
                         top: 8
@@ -774,7 +778,7 @@ class TabWindow {
                         top: -32
                     }, {
                             queue: false,
-                            complete: function() {
+                            complete: function () {
                                 extMenu.css('visibility', 'hidden');
                             },
                             duration: 200
@@ -782,36 +786,36 @@ class TabWindow {
                     extMenuToggled = false;
                 }
             });
-            backBtn.click(function() {
+            backBtn.click(function () {
                 if (webview.canGoBack()) {
                     webview.goBack();
                 }
             });
-            backBtn.mousedown(function() {
+            backBtn.mousedown(function () {
                 makeRippleIconButton($(this));
             });
-            forwardBtn.click(function() {
+            forwardBtn.click(function () {
                 if (webview.canGoForward()) {
                     webview.goForward();
                 }
             });
-            forwardBtn.mousedown(function() {
+            forwardBtn.mousedown(function () {
                 makeRippleIconButton($(this));
             });
-            refreshBtn.click(function() {
+            refreshBtn.click(function () {
                 webview.reload();
                 refreshExtensions();
             });
-            refreshBtn.mousedown(function() {
+            refreshBtn.mousedown(function () {
                 makeRippleIconButton($(this));
             });
-            menuBtn.click(function() {
+            menuBtn.click(function () {
                 if (!menuToggled) {
                     //menu fade in animation
                     menu.css('visibility', 'visible');
                     menu.css('opacity', 0).animate({
                         opacity: 1
-                    }, 200, function() {
+                    }, 200, function () {
                         menuToggled = true
                     }).css('top', -32).animate({
                         top: 8
@@ -828,7 +832,7 @@ class TabWindow {
                         top: -32
                     }, {
                             queue: false,
-                            complete: function() {
+                            complete: function () {
                                 menu.css('visibility', 'hidden');
                             },
                             duration: 200
@@ -836,17 +840,17 @@ class TabWindow {
                     menuToggled = false;
                 }
             });
-            menuBtn.mousedown(function() {
+            menuBtn.mousedown(function () {
                 makeRippleIconButton($(this));
             });
 
             //searchInput section
             //searchInput events
-            searchInput.focusin(function() {
+            searchInput.focusin(function () {
                 $(this).select();
             });
 
-            searchInput.on("input", function(e) {
+            searchInput.on("input", function (e) {
                 var key = event.keyCode || event.charCode;
 
                 if (key != 40 && key != 38) {
@@ -858,7 +862,7 @@ class TabWindow {
                         $.ajax({
                             type: "GET",
                             url: historyPath,
-                            success: function(data) {
+                            success: function (data) {
                                 var json = data.toString();
                                 //replace weird characters utf-8
                                 json = json.replace("\ufeff", "");
@@ -895,15 +899,15 @@ class TabWindow {
                                     if (links.length > 0) {
 
                                         //get shortest link from array links
-                                        var oldLink = links.sort(function(a, b) { return a.length - b.length; })[0];
-                                        var newLink = links.sort(function(a, b) { return a.length - b.length; })[0];
+                                        var oldLink = links.sort(function (a, b) { return a.length - b.length; })[0];
+                                        var newLink = links.sort(function (a, b) { return a.length - b.length; })[0];
                                         //get important part of link ex. webexpress.tk for better suggestions
                                         newLink = newLink.substr(0, newLink.indexOf('/'));
                                         if (oldLink != newLink) {
                                             links.push(newLink);
                                         }
                                         //sort links by length
-                                        links.sort(function(a, b) {
+                                        links.sort(function (a, b) {
                                             return b.length - a.length;
                                         });
                                         //get most similar link to addressbar text
@@ -923,7 +927,7 @@ class TabWindow {
                                         }
                                         //remove duplicates from array
                                         var uniqueLinks = [];
-                                        $.each(links, function(i, el) {
+                                        $.each(links, function (i, el) {
                                             if ($.inArray(el, uniqueLinks) === -1) uniqueLinks.push(el)
                                         });
                                         //limit array length to 3
@@ -940,15 +944,15 @@ class TabWindow {
                                         //append missing items
                                         while (tab.tabWindow.find('.history').length < finalLength) {
                                             var s = $('<li data-ripple-color="#444" class="suggestions-li ripple history"></li>').prependTo($(suggestions_ul));
-                                            s.click(function(e) {
+                                            s.click(function (e) {
                                                 webview.loadURL($(this).html());
                                             });
-                                            s.mousedown(function(e) {
+                                            s.mousedown(function (e) {
                                                 var relX = e.pageX - $(this).offset().left;
                                                 var relY = e.pageY - $(this).offset().top;
                                                 Ripple.makeRipple($(this), relX, relY, $(this).width(), $(this).height(), 600, 0);
                                             });
-                                            s.mouseover(function() {
+                                            s.mouseover(function () {
                                                 tab.tabWindow.find('.suggestions-li').removeClass("selected");
                                                 $(this).addClass("selected");
                                                 searchInput.val($(this).html());
@@ -959,7 +963,7 @@ class TabWindow {
                                             tab.tabWindow.find('.history').first().remove()
                                         }
                                         //change each item content to new link from array
-                                        tab.tabWindow.find('.history').each(function(i) {
+                                        tab.tabWindow.find('.history').each(function (i) {
                                             $(this).html(uniqueLinks[i]);
                                         })
 
@@ -969,14 +973,14 @@ class TabWindow {
                                         }
                                     } else {
                                         //if array items is empty, remove all items
-                                        tab.tabWindow.find('.history').each(function(i) {
+                                        tab.tabWindow.find('.history').each(function (i) {
                                             $(this).remove();
                                         });
                                     }
 
                                 } else {
                                     //if addressbar text is empty, clear all items
-                                    tab.tabWindow.find('.history').each(function(i) {
+                                    tab.tabWindow.find('.history').each(function (i) {
                                         $(this).remove();
                                     });
                                 }
@@ -986,14 +990,14 @@ class TabWindow {
                                 t.first().addClass("selected");
 
                             },
-                            complete: function() {
+                            complete: function () {
                                 suggestions.css('display', 'block');
                                 //load suggestions from Google
                                 if (inputText != "" || inputText != null || typeof inputText !== "undefined") {
                                     $.ajax({
                                         type: "GET",
                                         url: "http://google.com/complete/search?client=firefox&q=" + inputText,
-                                        success: function(data) {
+                                        success: function (data) {
                                             var obj = JSON.parse(data);
                                             var arr = obj[1].toString().split(",");
                                             var links = [];
@@ -1008,11 +1012,11 @@ class TabWindow {
                                             }
                                             //remove duplicates from array
                                             var uniqueLinks = [];
-                                            $.each(links, function(i, el) {
+                                            $.each(links, function (i, el) {
                                                 if ($.inArray(el, uniqueLinks) === -1) uniqueLinks.push(el);
                                             });
                                             //sort array by length
-                                            uniqueLinks.sort(function(a, b) {
+                                            uniqueLinks.sort(function (a, b) {
                                                 return a.length - b.length;
                                             });
                                             //limit array length to 3
@@ -1029,15 +1033,15 @@ class TabWindow {
                                             //append missing items
                                             while (tab.tabWindow.find('.internet').length < finalLength) {
                                                 var s = $('<li data-ripple-color="#444" class="suggestions-li ripple internet"></li>').appendTo($(suggestions_ul));
-                                                s.click(function(e) {
+                                                s.click(function (e) {
                                                     webview.loadURL("http://www.google.com/search?q=" + $(this).html());
                                                 });
-                                                s.mousedown(function(e) {
+                                                s.mousedown(function (e) {
                                                     var relX = e.pageX - $(this).offset().left;
                                                     var relY = e.pageY - $(this).offset().top;
                                                     Ripple.makeRipple($(this), relX, relY, $(this).width(), $(this).height(), 600, 0);
                                                 });
-                                                s.mouseover(function() {
+                                                s.mouseover(function () {
                                                     tab.tabWindow.find('.suggestions-li').removeClass("selected");
                                                     $(this).addClass("selected");
                                                     searchInput.val($(this).html());
@@ -1048,7 +1052,7 @@ class TabWindow {
                                                 tab.tabWindow.find('.internet').first().remove()
                                             }
                                             //change each item content to new link from array
-                                            tab.tabWindow.find('.internet').each(function(i) {
+                                            tab.tabWindow.find('.internet').each(function (i) {
                                                 $(this).html(uniqueLinks[i]);
                                             })
 
@@ -1062,7 +1066,7 @@ class TabWindow {
 
             });
             var canSuggest = false;
-            searchInput[0].onkeydown = function() {
+            searchInput[0].onkeydown = function () {
                 var key = event.keyCode || event.charCode;
                 //blacklist: backspace, enter, ctrl, alt, shift, tab, caps lock, delete, space
                 if (key != 8 && key != 13 && key != 17 && key != 18 && key != 16 && key != 9 && key != 20 && key != 46 && key != 32) {
@@ -1071,7 +1075,7 @@ class TabWindow {
             }
 
             //arrow keys navigating in suggestions box
-            searchInput.keydown(function(e) {
+            searchInput.keydown(function (e) {
                 //arrow key up
                 if (e.keyCode == 38) {
                     e.preventDefault();
@@ -1108,7 +1112,7 @@ class TabWindow {
 
             });
 
-            searchInput.keypress(function(e) {
+            searchInput.keypress(function (e) {
                 //if enter key was pressed
                 if (e.which == 13) {
                     tab.tabWindow.find('#webviewcontainer').css('visibility', 'visible');

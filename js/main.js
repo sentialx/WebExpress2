@@ -3,7 +3,8 @@ const {app} = require('electron').remote;
 var os = require('os');
 
 var historyPath = app.getPath('userData') + '/userdata/history.json';
-var extensionsPath = app.getPath('userData') + '/userdata/extensions';
+var extensionsPath = app.getPath('userData').replace(/\\/g, '/') + '/userdata/extensions';
+console.log(extensionsPath);
 var userdataPath = app.getPath('userData') + '/userdata';
 
 var mainWindow = remote.getCurrentWindow();
