@@ -8,6 +8,7 @@
 * Colored tabs
 * Settings `TODO`
 * History
+* Context menu
 * Suggestions
 * Bookmarks `TODO`
 * Downloads `TODO`
@@ -19,9 +20,14 @@
 
 #Getting source code
 You need to install node.js
+### Starting
 ```
 git clone https://github.com/Sential/WebExpress.git
 npm install && npm start
+```
+### Building
+```
+npm run build
 ```
 
 #Downloads
@@ -31,11 +37,10 @@ npm install && npm start
 `TODO`
 
 #`TODO`
-* Fix navigation by arrow keys in suggestions box
 * Bookmarks
 * Extensions
 * New tab page
-* Context menus, keyboard shortcuts etc.
+* keyboard shortcuts
 * Other features like screenshots etc.
 * Downloads
 * Tutorial for extensions
