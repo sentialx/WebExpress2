@@ -22,6 +22,7 @@ You need to install node.js
 ### Starting
 ```
 git clone https://github.com/Sential/WebExpress.git
+cd WebExpress
 npm install && npm start
 ```
 ### Building
