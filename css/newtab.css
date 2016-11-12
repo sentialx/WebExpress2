@@ -1,0 +1,150 @@
+@font-face {
+    font-family: Roboto;
+    src: url(../fonts/Roboto.ttf);
+}
+
+@font-face {
+    font-family: Roboto-Medium;
+    src: url(../fonts/Roboto-Medium.ttf);
+}
+
+@font-face {
+    font-family: Roboto-Light;
+    src: url(../fonts/Roboto-Light.ttf);
+}
+
+html, body {
+  height: 100%;
+  font-size: 16px;
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: #FFFFFF;
+  font-family: 'Roboto', sans-serif;
+  color: #444;
+  overflow: auto !important;
+}
+
+.baner {
+    width: 100px;
+    height: 100px;
+    background-image: url(../img/nersentlogo.png);
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+}
+
+.url {
+    margin-top: 20px;
+    min-width: 300px;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.md-input {
+    height: 50px;
+    position: relative;
+    font-family: 'Roboto', sans-serif;
+}
+
+.md-input .hint {
+    position: absolute;
+    font-size: 18px;
+    left: 6px;
+    top: 8px;
+    opacity: 0.6;
+    transition: all 0.2s;
+    color: #444;
+}
+
+.md-input-animate-hint {
+    font-size: 14px !important;
+    top: -10px !important;
+}
+
+.md-input .text {
+    position: absolute;
+    width: 100%;
+    height: 40px;
+    border: none;
+    outline: none;
+    color: #444;
+    padding-left: 6px;
+    font-size: 18px;
+    background-color: transparent;
+}
+
+.md-input .divider1 {
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    background-color: #000;
+    opacity: 0.2;
+    border-radius: 2px;
+}
+
+.md-input .divider2 {
+    width: 0%;
+    height: 3px;
+    position: absolute;
+    bottom: 7px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    background-color: #1abc9c;
+    border-radius: 2px;
+    transition: all 0.2s;
+}
+
+.md-input-animate-divider {
+    width: 100% !important;
+}
+
+.bookmarks {
+    list-style: none;
+    width: 60%;
+    margin-top: 60px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+    position: relative;
+}
+
+.bookmarks li {
+    width: 300px;
+    height: 200px;
+    background-color: white;
+    position: relative;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.bookmarks li .topbar {
+    width: 100%;
+    height: 32px;
+    background-color: #eee;
+    position: absolute;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.bookmarks li .topbar img {
+    width: 25px;
+    height: 25px;
+    left: 6px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.bookmarks li .topbar .pagetitle {
+    color: #444;
+    position: absolute;
+    top: 50%;
+    left: 36px;
+    transform: translateY(-50%);
+    font-size: 16px;
+}

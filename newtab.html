@@ -3,30 +3,28 @@
   <head>
     <meta charset="utf-8">
     <title>New tab</title>
-    <meta name='theme-color' content='#ffffff'>
+    <meta name='theme-color' content='#FAFAFA'>
+    <link href="css/newtab.css" rel="stylesheet">
   </head>
   <body>
-    <style>
-      body {
-        background-color: white;
-        font-family: 'Roboto', sans-serif;
-      }
-      @font-face {
-          font-family: Roboto;
-          src: url('fonts/Roboto.ttf');
-      }
-
-      @font-face {
-          font-family: Roboto-Medium;
-          src: url('fonts/Roboto-Medium.ttf');
-      }
-
-      @font-face {
-          font-family: Roboto-Light;
-          src: url('fonts/Roboto-Light.ttf');
-      }
-    </style>
-    <h1 style="margin-left: 50px; margin-top: 25px; margin-right: 50px;">New tab page.</h1>
-    <h3 style="margin-left: 50px; margin-top: 25px; margin-right: 50px;">This browser is in early development. Some functions may not work.</h3>
+    <div class="baner"></div>
+    <div class="md-input url">
+        <div class="hint">Write url or search in Google</div>
+        <input class="text" type="text">
+        <div class="divider1"></div>
+        <div class="divider2"></div>
+    </div>
+    <ul class="bookmarks">
+        <li>
+            <div class="topbar">
+                <img src="img/nersentlogo.png">
+                <div class="pagetitle">Nersent</div>
+            </div> 
+        </li>
+    </ul>
+   <!-- <h1 style="margin-left: 50px; margin-top: 25px; margin-right: 50px;">New tab page.</h1>
+    <h3 style="margin-left: 50px; margin-top: 25px; margin-right: 50px;">This browser is in early development. Some functions may not work.</h3>-->
   </body>
+  <script src="js/jquery/jquery-3.1.0.min.js"></script>
+  <script src="js/newtab.js"></script>
 </html>
