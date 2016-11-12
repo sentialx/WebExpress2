@@ -71,7 +71,6 @@ function removeTab(tab) {
     tab.tabWindow.remove();
     tab.instance.deleteExtensions();
     if (tabCollection.indexOf(tab) - 1 != -1) {
-        console.log(tabCollection.indexOf(tab) - 1);
         selectTab(tabCollection[tabCollection.indexOf(tab) - 1].Tab);
     } else {
         if (tabCollection[1] != null)
