@@ -3,7 +3,7 @@
 * authors: Eryk Rakowski (Sential)
 * other contributors: Mikołaj Palkiewicz (xNerhu22)
 
-#Features
+## Features
 * Colored tabs
 * Settings `TODO`
 * History
@@ -17,7 +17,7 @@
 * Extensions (work in progress)
 * Beautiful UI (material design)
 
-#Getting source code
+## Getting source code
 You need to install node.js
 ### Starting
 ```
@@ -30,22 +30,17 @@ npm install && npm start
 npm run build
 ```
 
-#Downloads
-`TODO`:LINK
+## Tutorials
+Tutorials are on wiki page: https://github.com/Sential/WebExpress/wiki
 
-#Screenshots
-`TODO`
-
-#`TODO`
+## `TODO`
 * Bookmarks
-* Extensions
 * New tab page
 * keyboard shortcuts
 * Other features like screenshots etc.
 * Downloads
-* Tutorial for extensions
 
-#See bug or missing feature?
+## See bug or missing feature?
 You can write on Issues page or create new pull request
 
 
