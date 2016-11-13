@@ -7,7 +7,6 @@ body {
 }
 
 .toolbar {
-
     position: fixed;
     width: 100%;
     z-index: 999;
@@ -24,7 +23,7 @@ body {
 }
 
 .item {
-  margin-top: -11px;
+    margin-top: -11px;
 }
 
 .card {
@@ -87,13 +86,13 @@ a {
     top: 0px;
     width: 50%;
     max-width: 1024px;
-    margin-top: 12px;
+    margin-top: 11px;
     color: #fff;
     padding: 8px;
     padding-left: 16px;
-    height: auto;
-    border-radius: 2px;
-    background-color: rgba(255, 255, 255, 0.3);
+    height: 20px;
+    border-radius: 1px;
+    background-color: rgba(0, 0, 0, 0.2);
 }
 .flat-button {
     -webkit-user-select: none;

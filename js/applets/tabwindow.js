@@ -114,13 +114,12 @@ class TabWindow {
             //get color from top of website
             function getColor() {
                 webview.capturePage(function (image) {
-
                     var canvas = document.createElement('canvas');
                     var context = canvas.getContext('2d');
                     var img = new Image();
                     img.onload = function () {
                         context.drawImage(img, 0, 0);
-                        var myData = context.getImageData(2, 2, img.width, img.height);
+                        var myData = context.getImageData(2, 2, 3, 3);
                         if (myData != null) {
                             tab.Color = rgbToHex(myData.data[0], myData.data[1], myData.data[2]);
                             if (tab.selected) {
@@ -343,8 +342,8 @@ class TabWindow {
                         forwardMenuItem.enabled = false;
                     }
 
-                    xToInspect = e.pageX - $(webview).offset().left;
-                    yToInspect = e.pageY - $(webview).offset().top;
+                    xToInspect = params.x;
+                    yToInspect = params.y;
                     menu1.popup(remote.getCurrentWindow())
 
                 }, false)
@@ -364,6 +363,28 @@ class TabWindow {
                         searchInput.val(url);
                     }
                 }
+                 //wait for 200 milliseconds
+                setTimeout(function () {
+                    //check if <meta name="theme-color" content="..."> tag exists. When it exists then tab gets the color from content="...", otherwise it getting color from top of a website
+                    webview.executeJavaScript("function s() {var markup = document.documentElement.innerHTML; return markup} s();", false, function (result) {
+                        var regexp = /<meta name='?.theme-color'?.*>/;
+                        if (regexp.test(result)) {
+                            //getting color from <meta name="theme-color" content="...">
+                            var regex = result.match(regexp).toString();
+                            tab.Color = regex.match(/content="(.*?)"/)[1];
+                            if (tab.selected) {
+                                tab.Tab.css('background-color', tab.Color);
+                                changeContrast(true);
+                            }
+                            changeContrast(false);
+                            bar.css('background-color', tab.Color);
+
+                        } else {
+                            //getting color from top of a website
+                            getColor();
+                        }
+                    });
+                }, 400);
 
 
             })
