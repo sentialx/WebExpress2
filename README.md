@@ -1,7 +1,6 @@
 # WebExpress
 (readme work in progress)
-* authors: Eryk Rakowski (Sential)
-* other contributors: Mikołaj Palkiewicz (xNerhu22)
+* authors: Eryk Rakowski (Sential) and Mikołaj Palkiewicz (xNerhu22)
 
 ## Features
 * Colored tabs
