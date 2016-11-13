@@ -35,6 +35,46 @@ html, body {
   overflow: auto !important;
 }
 
+.topbar {
+    width: 100%;
+    height: 50px;
+    position: relative;
+    padding: 0;
+}
+
+.topbar .rightnavbar {
+    height: 100%;
+    width: 100px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 0;
+    margin: 0;
+    margin-right: 26px;
+    list-style: none;
+}
+
+.topbar .rightnavbar .item {
+    position: absolute;
+    right: 0px;
+    top: 0;
+    width: 50px;
+    height: 50px;
+    text-decoration: none;
+}
+
+.topbar .rightnavbar .nersent {
+    width: 45px;
+    height: 45px;
+    background-image: url(../img/nersentlogo.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 26px 26px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
 .banner {
     width: 100px;
     height: 100px;
@@ -48,7 +88,7 @@ html, body {
 }
 
 .url {
-    margin-top: 32px;
+    margin-top: 26px;
     min-width: 300px;
     max-width: 512px;
     width: 50%;
@@ -127,7 +167,7 @@ html, body {
     position: relative;
 }
 
-.bookmarks li {
+.bookmarks a {
     width: 196px;
     height: 128px;
     position: relative;
@@ -138,7 +178,7 @@ html, body {
     border-radius: 2px;
 }
 
-.bookmarks li .icon {
+.bookmarks a .icon {
     width: 24px;
     height: 24px;
     position: absolute;
@@ -148,7 +188,7 @@ html, body {
     transform: translateY(-50%);
 }
 
-.bookmarks li .title {
+.bookmarks a .title {
     position: absolute;
     left: 44px;
     right: 0;

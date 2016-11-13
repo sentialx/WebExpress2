@@ -42,4 +42,14 @@ $(document).ready(function () {
             return false;
         }
     });
+
+    function makeRippleMenuItem(menuItem, e) {
+        var relX = e.pageX - $(menuItem).offset().left;
+        var relY = e.pageY - $(menuItem).offset().top;
+        Ripple.makeRipple($(menuItem), relX, relY, $(menuItem).width(), $(menuItem).height(), 500, 0);
+    }
+
+    $('.bookmarks a').mousedown(function(e) {
+        makeRippleMenuItem($(this), e);
+    });
 });
