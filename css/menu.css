@@ -5,6 +5,7 @@
     -webkit-user-select: none;
     cursor: default;
     margin-left: 16px;
+    margin-top: 44px;
     opacity: 0;
     position: absolute;
     visibility: hidden;
@@ -56,6 +57,7 @@
     width: 154px;
     position: absolute;
     top: 32px;
+    margin-top: 44px;
     right: 16px;
     background-color: #fff;
     border-radius: 2px;

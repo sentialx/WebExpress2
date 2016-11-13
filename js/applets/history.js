@@ -72,7 +72,7 @@ $('.flat-button').mousedown(function(e) {
 function verifyCheckboxes() {
     $('#selected-items').html('Selected items: ' + checkedCount);
     if (checkedCount >= 1) {
-        $(".toolbar").animate({backgroundColor: '#00BCD4'}, {duration: 200, queue: false});
+        $(".toolbar").animate({backgroundColor: '#03A9F4'}, {duration: 200, queue: false});
         $('.default-toolbar').css('visibility', 'hidden');
         $('.selecteditems-toolbar').css('visibility', 'visible');
     } else {

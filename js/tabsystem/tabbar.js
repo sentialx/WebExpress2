@@ -1,11 +1,13 @@
 var tabCollection = [];
-var tabWidth = 170;
+var tabWidth = 190;
+var tabHeight = 32;
 var selectedTabColor = '#fff';
 var locked = false;
 var cursorX;
 var cursorY;
 var normalColor = '#eee';
 var Foreground = '#444';
+var borderColor = 'rgba(0,0,0,0.1)';
 
 function addTab(instance, tab) {
     //declarations in Tab class
@@ -18,7 +20,7 @@ function addTab(instance, tab) {
     tab.instance = instance;
     tab.Preloader = $('<div class="preloader" style="width: 16px;position:absolute; top: 8px; left:6px;" thickness="5" color="#3F51B5"></div>').appendTo(tab.Tab);
     tab.selected = false;
-    tab.getColor = function() {
+    tab.getColor = function () {
         return tab.Tab.css('background-color')
     }
 
@@ -28,6 +30,7 @@ function addTab(instance, tab) {
     });
     //tab drag event
     tab.Tab.draggable({
+        containment: "parent",
         axis: 'x',
         stop: function (event, ui) {
             calcSizes(true, true);
@@ -44,6 +47,7 @@ function addTab(instance, tab) {
                 var indexOverTab = tabCollection.indexOf(overTab);
                 tabCollection[indexTab] = overTab;
                 tabCollection[indexOverTab] = tab;
+                overTab.Tab.stop();
                 changePos(overTab);
             }
         }
@@ -65,6 +69,13 @@ function addTab(instance, tab) {
     }, {
             duration: 200
         });
+    setInterval(function () {
+        if (tabCollection.indexOf(tab) == 0) {
+            tab.Tab.css('border-left', 'none');
+        } else {
+            tab.Tab.css('border-left', '1px solid ' + borderColor);
+        }
+    }, 1)
 }
 
 function removeTab(tab) {
@@ -78,7 +89,9 @@ function removeTab(tab) {
     }
 
     tabCollection.splice(tabCollection.indexOf(tab), 1);
-    tab.Tab.remove();
+    tab.Tab.animate({top: 50}, {duration: 200, complete: function() {
+        tab.Tab.remove();
+    }})
     if (tabCollection.length == 0) {
         const remote = require('electron').remote;
         var window = remote.getCurrentWindow();
@@ -88,25 +101,26 @@ function removeTab(tab) {
 }
 
 function getTabFromMousePoint(callingTab) {
-    if (!locked) {
         for (var i = 0; i < tabCollection.length; i++) {
             if (tabCollection[i] != callingTab) {
                 if (contains(tabCollection[i].Tab[0])) {
+                    if (!tabCollection[i].locked)
                     return tabCollection[i];
                 }
             }
         }
-    }
+    
 }
 
 function changePos(callingTab) {
-    locked = true;
+    callingTab.locked = true;
     callingTab.Tab.animate({
-        left: tabCollection.indexOf(callingTab) * tabCollection[0].Tab.width()
+        left: tabCollection.indexOf(callingTab) * tabCollection[0].Tab.width(),
+        easing: 'easeOutQuint'
     }, {
             duration: 200,
             complete: function () {
-                locked = false
+                callingTab.locked = false;
             }, queue: false
         });
 }
@@ -129,10 +143,10 @@ function calcSizes(animation, addButtonAnimation) {
     var tabCountTemp = 0;
     for (var i = 0; i < tabCollection.length; i++) {
         var tabWidthTemp = tabWidth;
-        if (!(($('#tabbar').width() - $('#addTab').width() - 20) / tabCollection.length >= tabWidth)) {
-            tabWidthTemp = ($('#tabbar').width() - $('#addTab').width() - 20) / tabCollection.length;
+        if (!(($('#tabbar').width() - $('#addTab').width() - 15) / tabCollection.length >= tabWidth)) {
+            tabWidthTemp = ($('#tabbar').width() - $('#addTab').width() - 15) / tabCollection.length;
         } else {
-            tabWidthTemp = 170;
+            tabWidthTemp = tabWidth;
         }
         tabCollection[i].Tab.css('width', tabWidthTemp);
 
@@ -183,6 +197,7 @@ function selectTab(tab) {
             } else {
                 tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
             }
+            tabCollection[i].Tab.css('height', tabHeight - 1)
 
             tabCollection[i].selected = false;
         } else {
@@ -200,6 +215,7 @@ function selectTab(tab) {
                 tabCollection[i].Title.css('color', '#fff')
                 tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close-white.png")');
             }
+            tabCollection[i].Tab.css('height', tabHeight)
             tabCollection[i].selected = true;
         }
     }

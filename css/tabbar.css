@@ -1,7 +1,7 @@
 .tabbar {
     font-family: Roboto;
-    height: 30px;
-    width: calc(100% - 72px);
+    height: 100%;
+    width: calc(100% - 84px);
     position: relative;
     z-index: 9999;
     white-space: nowrap;
@@ -12,11 +12,18 @@
 
 .titlebar {
     background-color: #eee;
-    height: 30px;
+    height: 32px;
     width: 100%;
-    -webkit-app-region: drag
+    -webkit-app-region: drag;
+    z-index: 999;
 }
-
+.border5 {
+    height: 1px;
+    position: relative;
+    bottom: 1px;
+    width: 100%;
+    background-color: rgba(0,0,0,0.1);
+}
 .favicon {
     background-size: cover;
     width: 16px;
@@ -28,9 +35,9 @@
 .tabTitle {
     float: left;
     font-size: 14px;
-    font-family: Roboto-Light;
+    font-family: Roboto;
     font-weight: 300;
-    margin-top: 8px;
+    margin-top: 9px;
     margin-left: 26px;
     color: #444;
     max-width: calc(100% - 54px);
@@ -40,11 +47,13 @@
 }
 
 .tab {
-    width: 170px;
-    height: 32px;
+    width: 225px;
+    height: 31px;
     background-color: #fff;
     position: absolute;
-    top: -30px;
+     border-right: 1px solid rgba(0,0,0,0.1);
+     border-left: 1px solid rgba(0,0,0,0.1);
+      border-bottom: 1px solid rgba(0,0,0,0.1);
     -webkit-app-region: no-drag;
     -webkit-transition: background-color 0.2s;
 }
@@ -58,7 +67,7 @@
     float: right;
     height: 16px;
     width: 16px;
-    margin-top: 8px;
+    margin-top: 9px;
     margin-right: 12px;
     font-family: Roboto;
     color: #444;
@@ -81,7 +90,7 @@
     opacity: 0.6;
     position: absolute;
     margin-left: 2px;
-    margin-top: 1px;
+    margin-top: 2px;
     top: 0;
     height: 28px;
     width: 28px;

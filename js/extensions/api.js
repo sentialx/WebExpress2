@@ -6,7 +6,7 @@ class API {
     t.getTitlebarColor = function () {
       return $('#titlebar').css('background-color')
     }
-    t.getSelectedTab = function() {
+    t.getSelectedTab = function () {
       for (var i = 0; i < parent.tabCollection.length; i++) {
         if (parent.tabCollection[i].selected) {
           return parent.tabCollection[i]
@@ -34,22 +34,36 @@ class API {
         $(parent.document.body).find(".addTabImg").css('background-image', 'url(img/add.png)')
       }
       for (var i = 0; i < parent.tabCollection.length; i++) {
+        if (parent.Foreground == "#fff") {
+          parent.borderColor = "rgba(255,255,255,0.2)";
+          parent.tabCollection[i].Tab.css('border-left', '1px solid rgba(255,255,255,0.1)');
+          parent.tabCollection[i].Tab.css('border-right', '1px solid rgba(255,255,255,0.1)');
+          parent.tabCollection[i].Tab.css('border-bottom', '1px solid rgba(255,255,255,0.1)');
+          //parent.find('.border5').css('background-color', 'rgba(255,255,255,0.1)');
+        } else {
+          parent.borderColor = "rgba(0,0,0,0.2)";
+          parent.tabCollection[i].Tab.css('border-left', '1px solid rgba(0,0,0,0.1)');
+          parent.tabCollection[i].Tab.css('border-right', '1px solid rgba(0,0,0,0.1)');
+          parent.tabCollection[i].Tab.css('border-bottom', '1px solid rgba(0,0,0,0.1)');
+          //parent.find('.border5').css('background-color', 'rgba(0,0,0,0.1)');
+        }
+
         if (!parent.tabCollection[i].selected) {
           parent.normalColor = color;
           parent.tabCollection[i].Tab.css('background-color', parent.normalColor);
-           if (parent.Foreground == "#fff") {
-              parent.tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close-white.png")');
-           } else {
-              parent.tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
-           }
+          if (parent.Foreground == "#fff") {
+            parent.tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close-white.png")');
+          } else {
+            parent.tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
+          }
           parent.tabCollection[i].Title.css('color', parent.Foreground);
         }
       }
     }
-    t.getTabColor = function() {
+    t.getTabColor = function () {
       return $(tab.Tab).css('background-color');
     }
-    t.getBarColor = function() {
+    t.getBarColor = function () {
       return tab.tabWindow.find('.bar').css('background-color');
     }
     //history
