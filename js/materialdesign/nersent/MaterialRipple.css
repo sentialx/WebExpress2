@@ -1,0 +1,25 @@
+/*
+  AUTHOR: xNerhu (Mikołaj Palkiewicz)
+  GITHUB: https://github.com/xNerhu22/
+  DATE: 18.09.2016
+  COPY RIGHT 2013-2017 Nersent
+*/
+.ripple{
+  overflow:hidden;
+  position: relative;
+  box-sizing: border-box;
+  transform: translate3d(0, 0, 0);
+  user-select: none;
+}
+
+.ripple-effect{
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255,255,255,0.5);
+  user-select: none;
+  pointer-events: none;
+  padding: 0;
+  margin: 0;
+  opacity: 0.6;
+  transform: translate3d(-50%,-50%,0);
+}

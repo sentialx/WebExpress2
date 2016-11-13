@@ -5,43 +5,37 @@
   <meta charset="utf-8">
   <title>New tab</title>
   <meta name='theme-color' content='#FAFAFA'>
+  <link href="js/materialdesign/nersent/MaterialRipple.css" rel="stylesheet">
   <link href="css/newtab.css" rel="stylesheet">
 </head>
 
 <body>
+  <div class="topbar">
+
+  </div>
   <div class="banner"></div>
   <div class="md-input url">
-    <div class="hint">Write url or search in Google</div>
+    <div class="hint noselectable">Write url or search in Google</div>
     <input class="text" type="text">
     <div class="divider1"></div>
     <div class="divider2"></div>
   </div>
   <ul class="bookmarks">
-    <li class="bookmark">
-
+    <li class="bookmark ripple ripple-auto-mousedown" style="background-color: #3b5998;" data-ripple-fadein-opacity="0.4">
+       <img class="icon noselectable" src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-facebook-512.png">
+       <div class="title">Facebook</div>
     </li>
-    <li class="bookmark">
-
+    <li class="bookmark ripple ripple-auto-mousedown" style="background-color: #cf3427;" data-ripple-fadein-opacity="0.4">
+       <img class="icon noselectable" src="http://учебныепрезентации.рф/images/joomgallery/thumbnails/_____1/___4/__5/flat_20141016_2042301237.png">
+       <div class="title">YouTube</div>
     </li>
-    <li class="bookmark">
-
-    </li>
-    <li class="bookmark">
-
-    </li>
-    <li class="bookmark">
-
-    </li>
-    <li class="bookmark">
-
-    </li>
-
   </ul>
 
   <!-- <h1 style="margin-left: 50px; margin-top: 25px; margin-right: 50px;">New tab page.</h1>
     <h3 style="margin-left: 50px; margin-top: 25px; margin-right: 50px;">This browser is in early development. Some functions may not work.</h3>-->
 </body>
 <script src="js/jquery/jquery-3.1.0.min.js"></script>
+<script src="js/materialdesign/nersent/MaterialRipple.js"></script>
 <script src="js/newtab.js"></script>
 
 </html>
