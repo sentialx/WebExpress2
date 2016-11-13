@@ -67,7 +67,7 @@ function addTab(instance, tab) {
     tab.Tab.animate({
         top: 0
     }, {
-            duration: 200
+            duration: 300
         });
     setInterval(function () {
         if (tabCollection.indexOf(tab) == 0) {
@@ -89,7 +89,7 @@ function removeTab(tab) {
     }
 
     tabCollection.splice(tabCollection.indexOf(tab), 1);
-    tab.Tab.animate({top: 50}, {duration: 200, complete: function() {
+    tab.Tab.animate({top: 50}, {duration: 300, complete: function() {
         tab.Tab.remove();
     }})
     if (tabCollection.length == 0) {
@@ -154,7 +154,7 @@ function calcSizes(animation, addButtonAnimation) {
             tabCollection[i].Tab.animate({
                 left: tabCountTemp * tabCollection[0].Tab.width()
             }, {
-                    duration: 200, queue: false
+                    duration: 300, queue: false
                 });
 
         } else {
@@ -171,7 +171,7 @@ function calcSizes(animation, addButtonAnimation) {
             $('#addTab').animate({
                 left: tabCollection.length * tabCollection[0].Tab.width()
             }, {
-                    duration: 200, queue: false
+                    duration: 300, queue: false
                 });
         } else {
             $('#addTab').css({
@@ -190,7 +190,7 @@ function selectTab(tab) {
         if (tabCollection[i].Tab != tab) {
             tabCollection[i].Tab.css('background-color', normalColor);
             tabCollection[i].tabWindow.css('position', 'absolute');
-            tabCollection[i].tabWindow.css('top', '-50000000px');
+            tabCollection[i].tabWindow.css('top', '-50000px');
             tabCollection[i].Title.css('color', Foreground)
             if (Foreground == "#fff") {
                 tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close-white.png")');

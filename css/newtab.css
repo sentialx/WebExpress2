@@ -18,16 +18,16 @@ html, body {
   font-size: 16px;
   margin: 0 !important;
   padding: 0 !important;
-  background-color: #FFFFFF;
+  background-color: #FaFaFa;
   font-family: 'Roboto', sans-serif;
   color: #444;
   overflow: auto !important;
 }
 
-.baner {
+.banner {
     width: 100px;
     height: 100px;
-    background-image: url(../img/nersentlogo.png);
+    background-image: url(../img/logo.png);
     background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
@@ -37,8 +37,9 @@ html, body {
 }
 
 .url {
-    margin-top: 20px;
+    margin-top: 32px;
     min-width: 300px;
+    max-width: 512px;
     width: 50%;
     margin-left: auto;
     margin-right: auto;
@@ -96,7 +97,7 @@ html, body {
     left: 0;
     right: 0;
     margin: 0 auto;
-    background-color: #1abc9c;
+    background-color: #03A9F4;
     border-radius: 2px;
     transition: all 0.2s;
 }
@@ -107,20 +108,26 @@ html, body {
 
 .bookmarks {
     list-style: none;
-    width: 60%;
     margin-top: 60px;
+    width: 636px;
     margin-left: auto;
     margin-right: auto;
     padding: 0;
     position: relative;
 }
-
+.bookmark {
+    float:left;
+    margin-right: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    border-radius: 2px;
+}
 .bookmarks li {
-    width: 300px;
-    height: 200px;
+    width: 196px;
+    height: 128px;
     background-color: white;
     position: relative;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+
 }
 
 .bookmarks li .topbar {
@@ -128,7 +135,7 @@ html, body {
     height: 32px;
     background-color: #eee;
     position: absolute;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+
 }
 
 .bookmarks li .topbar img {

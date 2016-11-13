@@ -63,7 +63,6 @@ class TabWindow {
 
             checkFiles();
 
-
             //check if background color of bar is dark or light and then set icons foreground to black or white
             function changeContrast(changeTabs) {
                 var brightness = colorBrightness(tab.Color);
@@ -476,8 +475,9 @@ class TabWindow {
                 tab.Title.html("<p style='display: inline; width:50%;'>" + webview.getTitle() + "</p>");
             });
             //webview load commit event
-            webview.addEventListener('load-commit', function (title) {
+            webview.addEventListener('load-commit', function (url, isMain) {
                 suggestions.css('display', 'none');
+
             });
             //webview page favicon updated event
             webview.addEventListener('page-favicon-updated', function (favicon) {
