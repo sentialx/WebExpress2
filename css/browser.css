@@ -58,7 +58,7 @@
 }
 
 .suggestions-ul {
-    font-size: 16px;
+    font-size: 14px;
     padding-left: 0;
     overflow: hidden;
     position: relative;
@@ -66,14 +66,17 @@
 }
 
 .suggestions-ul> li {
-  max-width: 100%;
+    max-width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding-top: 6px;
-    padding-bottom: 4px;
-    padding-left: 64px;
-    padding-right: 64px;
+    padding-top: 8px;
+    padding-bottom: 6px;
+    margin-left: 96px;
+    margin-right: 96px;
+    padding-left: 16px;
+    padding-right: 16px;
+    border-radius: 3px;
 }
 
 .suggestions-ul> li:hover {
@@ -81,7 +84,8 @@
 }
 
 .selected {
-    background-color: #E0E0E0;
+    background-color: #3F51B5;
+    color: #fff;
 }
 
 .backBtn {
@@ -190,9 +194,9 @@
 }
 
 .extBtnIcon {
-  width: calc(100% - 16px);
-  height: calc(100% - 16px);
-  margin: 8px;
-background-image: url('../img/more-vert.png');
-background-size: cover;
+    width: calc(100% - 16px);
+    height: calc(100% - 16px);
+    margin: 8px;
+    background-image: url('../img/more-vert.png');
+    background-size: cover;
 }

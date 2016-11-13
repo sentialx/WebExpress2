@@ -1,6 +1,7 @@
 function isInArray(value, array) {
     return array.indexOf(value) > -1;
 }
+
 var obj = getHistoryData();
 var groups = [];
 var today = new Date();
@@ -72,12 +73,14 @@ $('.flat-button').mousedown(function(e) {
 function verifyCheckboxes() {
     $('#selected-items').html('Selected items: ' + checkedCount);
     if (checkedCount >= 1) {
-        $(".toolbar").animate({backgroundColor: '#03A9F4'}, {duration: 200, queue: false});
+        $(".toolbar").animate({backgroundColor: '#283593'}, {duration: 200, queue: false});
         $('.default-toolbar').css('visibility', 'hidden');
-        $('.selecteditems-toolbar').css('visibility', 'visible');
+        $('.selecteditems-toolbar').css({visibility: 'visible', opacity: 0});
+        $('.selecteditems-toolbar').animate({opacity: 1}, {duration: 200, queue: false});
     } else {
         $(".toolbar").animate({backgroundColor: '#3F51B5'}, {duration: 200, queue: false});
-        $('.default-toolbar').css('visibility', 'visible');
+        $('.default-toolbar').css({visibility: 'visible', opacity: 0});
+         $('.default-toolbar').animate({opacity: 1}, {duration: 200, queue: false})
         $('.selecteditems-toolbar').css('visibility', 'hidden');
     }
 }
