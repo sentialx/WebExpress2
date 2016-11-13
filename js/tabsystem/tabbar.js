@@ -189,8 +189,7 @@ function selectTab(tab) {
     for (var i = 0; i < tabCollection.length; i++) {
         if (tabCollection[i].Tab != tab) {
             tabCollection[i].Tab.css('background-color', normalColor);
-            tabCollection[i].tabWindow.css('position', 'absolute');
-            tabCollection[i].tabWindow.css('top', '-50000px');
+            tabCollection[i].tabWindow.css('display', 'none');
             tabCollection[i].Title.css('color', Foreground)
             if (Foreground == "#fff") {
                 tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close-white.png")');
@@ -202,8 +201,7 @@ function selectTab(tab) {
             tabCollection[i].selected = false;
         } else {
             tabCollection[i].Tab.css('background-color', tabCollection[i].Color);
-            tabCollection[i].tabWindow.css('position', 'relative');
-            tabCollection[i].tabWindow.css('top', '0px');
+            tabCollection[i].tabWindow.css('display', 'flex');
 
             if (tabCollection[i].instance.searchInput != null && (tabCollection[i].instance.searchInput.val() == "" || tabCollection[i].instance.searchInput.val() == null)) {
                 tabCollection[i].instance.searchInput.focus();

@@ -5,7 +5,7 @@ var Ripple = class Ripple {
             btnOffset = $buttonElement.offset(),
             xPos = xpos,
             yPos = ypos,
-            size = parseInt(Math.min(height, width) * 0.5),
+            size = 0,
             animateSize = parseInt(Math.max(width, height) * Math.PI);
         $rippleElement
             .css({
@@ -19,9 +19,18 @@ var Ripple = class Ripple {
             .animate({
                 width: animateSize,
                 height: animateSize,
-                opacity: fadeoutopacity
             }, time, 'linear', function () {
-                $(this).remove();
+               
             });
+            $(element).click(function() {
+                $rippleElement.animate({opacity: fadeoutopacity}, {duration: time, queue: false, complete: function() {
+                     $(this).remove();
+                }})
+            })
+            $(element).on('mouseout', function() {
+                $rippleElement.animate({opacity: fadeoutopacity}, {duration: time, queue: false, complete: function() {
+                     $(this).remove();
+                }})
+            })
     }
 };
