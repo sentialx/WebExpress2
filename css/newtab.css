@@ -61,6 +61,7 @@ html, body {
     width: 50px;
     height: 50px;
     text-decoration: none;
+    float: left;
 }
 
 .topbar .rightnavbar .nersent {
@@ -70,6 +71,32 @@ html, body {
     background-position: center;
     background-repeat: no-repeat;
     background-size: 26px 26px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.topbar .rightnavbar .extension {
+    width: 45px;
+    height: 45px;
+    background-image: url(../img/extension.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 22px 22px;
+    right: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.topbar .rightnavbar .game {
+    width: 45px;
+    height: 45px;
+    background-image: url(../img/play.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 26px 26px;
+    right: 80px;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
