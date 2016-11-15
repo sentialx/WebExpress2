@@ -52,4 +52,6 @@ $(document).ready(function () {
     $('.bookmarks a').mousedown(function(e) {
         makeRippleMenuItem($(this), e);
     });
+    var marginRight = 8;
+    $('.bookmarks').css('width', $('.bookmarks a').width() * 3 + 3 * marginRight);
 });

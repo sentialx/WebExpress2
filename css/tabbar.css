@@ -60,7 +60,6 @@
 
 .tab:hover {
     background-color: #fff;
-    -webkit-transition: background-color 0.2s;
 }
 
 .closeBtn {
