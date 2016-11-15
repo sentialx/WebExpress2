@@ -134,7 +134,7 @@ $(document).ready(function() {
                         queue: false
                     });
                 }
-                mdSwitch.click(function(e) {
+                mdSwitch.mousedown(function(e) {
                     if (!where.checked) {
                         where.checked = true;
                     } else {

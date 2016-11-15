@@ -67,7 +67,7 @@ function addTab(instance, tab) {
     tab.Tab.animate({
         top: 0
     }, {
-            duration: 300
+            duration: 200
         });
     setInterval(function () {
         if (tabCollection.indexOf(tab) == 0) {
@@ -76,6 +76,18 @@ function addTab(instance, tab) {
             tab.Tab.css('border-left', '1px solid ' + borderColor);
         }
     }, 1)
+    tab.Tab.mouseenter(function (){
+        var color = hexToRgb(tab.Color);
+        var r = color.r;
+        var g = color.g;
+        var b = color.b;
+        if (!tab.selected)
+        tab.Tab.animate({backgroundColor: `rgba(${r}, ${g}, ${b}, 0.5)`}, {duration: 50, queue: false})
+    })
+    tab.Tab.mouseleave(function() {
+        if (!tab.selected)
+        tab.Tab.animate({backgroundColor: normalColor}, {duration: 50, queue: false})
+    })
 }
 
 function removeTab(tab) {
@@ -89,7 +101,7 @@ function removeTab(tab) {
     }
 
     tabCollection.splice(tabCollection.indexOf(tab), 1);
-    tab.Tab.animate({top: 50}, {duration: 300, complete: function() {
+    tab.Tab.animate({top: 50}, {duration: 200, complete: function() {
         tab.Tab.remove();
     }})
     if (tabCollection.length == 0) {
@@ -154,7 +166,7 @@ function calcSizes(animation, addButtonAnimation) {
             tabCollection[i].Tab.animate({
                 left: tabCountTemp * tabCollection[0].Tab.width()
             }, {
-                    duration: 300, queue: false
+                    duration: 200, queue: false
                 });
 
         } else {
@@ -171,7 +183,7 @@ function calcSizes(animation, addButtonAnimation) {
             $('#addTab').animate({
                 left: tabCollection.length * tabCollection[0].Tab.width()
             }, {
-                    duration: 300, queue: false
+                    duration: 200, queue: false
                 });
         } else {
             $('#addTab').css({
@@ -201,8 +213,7 @@ function selectTab(tab) {
             tabCollection[i].selected = false;
         } else {
             tabCollection[i].Tab.css('background-color', tabCollection[i].Color);
-            tabCollection[i].tabWindow.css('display', 'flex');
-
+            tabCollection[i].tabWindow.css('display', 'block');
             if (tabCollection[i].instance.searchInput != null && (tabCollection[i].instance.searchInput.val() == "" || tabCollection[i].instance.searchInput.val() == null)) {
                 tabCollection[i].instance.searchInput.focus();
             }

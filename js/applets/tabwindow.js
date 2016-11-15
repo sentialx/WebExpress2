@@ -159,7 +159,6 @@ class TabWindow {
 
             //global timer
             setInterval(function () {
-                $(webview).css('height', tab.tabWindow.find('.webviewcontainer').height());
                 if (searchInput.val() == "" || searchInput.val() == null) {
                     suggestions.css('display', 'none');
                     tab.tabWindow.find('.suggestions-li').each(function (i) {
