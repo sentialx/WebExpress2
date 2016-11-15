@@ -45,7 +45,7 @@ html, body {
     top: 50%;
     transform: translateY(-50%);
     border-radius: 2px;
-    border: 1px solid silver;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 .mcharacter {
