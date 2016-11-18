@@ -72,6 +72,17 @@ class API {
     t.history.getHistory = function () {
       return JSON.parse(parent.fs.readFileSync(parent.historyPath));
     }
-    t.webview = tab.instance.webView;
+    t.webview = function() {}
+    function pageLoadEndEvent() {
+      t.webview.pageLoadEnd()
+    }
+    t.webview.pageLoadEnd = function() {
+
+    }
+    tab.instance.webView.addEventListener('did-finish-load', pageLoadEndEvent)
+    //dispose API
+    t.dispose = function() {
+       tab.instance.webView.removeEventListener('did-finish-load', pageLoadEndEvent)
+    }
   }
 }

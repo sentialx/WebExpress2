@@ -5,9 +5,13 @@ class TabWindow {
         this.searchInput = null;
         this.webView = null;
         this.loadedExts = [];
+        this.apis = [];
         this.deleteExtensions = function () {
             for (var i3 = 0; i3 < s.loadedExts.length; i3++) {
                 $(s.loadedExts[i3]).remove();
+            }
+            for (var i = 0; i < s.apis.length; i++) {
+                s.apis[i].dispose()
             }
             s.loadedExts = [];
         }
@@ -598,6 +602,7 @@ class TabWindow {
                                                             var extension = $(`<script async>
                                                             function a(index) {
                                                                 var api = new API(parent.tabCollection[index], parent)
+                                                                parent.tabCollection[index].instance.apis.push(api)
                                                                 parent = null
                                                                 ${data}
                                                             } a(${id}); 
