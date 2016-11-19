@@ -1,6 +1,8 @@
+
 class TabWindow {
 
     constructor(tab, url) {
+
         var s = this;
         this.searchInput = null;
         this.webView = null;
@@ -63,10 +65,8 @@ class TabWindow {
             var imageToSave = '';
             var linkToOpen = '';
 
-            //requires
-            const {remote, ipcMain, clipboard} = require('electron')
-            const {Menu, MenuItem} = remote
-
+            var {remote, ipcMain, clipboard} = require('electron')
+            var {Menu, MenuItem} = remote
             checkFiles();
 
             //check if background color of bar is dark or light and then set icons foreground to black or white
@@ -268,6 +268,10 @@ class TabWindow {
                 });
                 tab.Favicon.css('opacity', "0");
                 tab.Preloader.css('opacity', "0");
+                if (fileToStart != null) {
+                    url = fileToStart;
+                    fileToStart = null;
+                }
                 if (url != null || url != "")
                     webview.loadURL(url);
 
@@ -413,33 +417,36 @@ class TabWindow {
             }, 1)
             //get color from top of website
             function getColor() {
-                webview.capturePage({ x: 0, y: 0, width: 2, height: 2 }, function (image) {
-                    var canvas = document.createElement('canvas');
-                    var context = canvas.getContext('2d');
-                    var img = new Image();
-                    img.onload = function () {
-                        context.drawImage(img, 0, 0);
-                        var myData = context.getImageData(1, 1, 1, 1);
-                        if (myData != null) {
+                if (webview != null) {
+                    webview.capturePage({ x: 0, y: 0, width: 2, height: 2 }, function (image) {
+                        var canvas = document.createElement('canvas');
+                        var context = canvas.getContext('2d');
+                        var img = new Image();
+                        img.onload = function () {
+                            context.drawImage(img, 0, 0);
+                            var myData = context.getImageData(1, 1, 1, 1);
+                            if (myData != null) {
 
-                            var color = rgbToHex(myData.data[0], myData.data[1], myData.data[2]);
-                            if (color != lastColor) {
-                                tab.Color = color;
-                                if (tab.selected) {
-                                    tab.Tab.css('background-color', tab.Color);
-                                    changeContrast(true);
+                                var color = rgbToHex(myData.data[0], myData.data[1], myData.data[2]);
+                                if (color != lastColor) {
+                                    tab.Color = color;
+                                    if (tab.selected) {
+                                        tab.Tab.css('background-color', tab.Color);
+                                        changeContrast(true);
+                                    }
+                                    changeContrast(false);
+                                    lastColor = tab.Color;
+                                    bar.css('background-color', tab.Color);
+
                                 }
-                                changeContrast(false);
-                                lastColor = tab.Color;
-                                bar.css('background-color', tab.Color);
-
                             }
-                        }
-                    };
-                    img.src = image.toDataURL();
-                    canvas.width = 3;
-                    canvas.height = 3;
-                });
+                        };
+                        img.src = image.toDataURL();
+                        canvas.width = 3;
+                        canvas.height = 3;
+                    });
+                }
+
             }
             function tryGetColor() {
                 //check if <meta name="theme-color" content="..."> tag exists. When it exists then tab gets the color from content="...", otherwise it getting color from top of a website

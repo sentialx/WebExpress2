@@ -1,7 +1,8 @@
 const remote = require('electron').remote;
 const {app} = require('electron').remote;
 var os = require('os');
-
+var fileToStart = remote.getGlobal("startArgs").data[2]
+fileToStart = fileToStart.replace(/\\/g,"/");
 var historyPath = app.getPath('userData') + '/userdata/history.json';
 var extensionsPath = app.getPath('userData').replace(/\\/g, '/') + '/userdata/extensions';
 console.log(extensionsPath);
