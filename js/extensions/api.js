@@ -16,7 +16,7 @@ class API {
     }
     t.setTitlebarColor = function (color) {
       $(parent.document.body).find('#titlebar').css('background-color', color)
-      if (parent.colorBrightness(color) < 125) {
+      if (colorBrightness(color) < 125) {
         //white
         parent.Foreground = "#fff";
       } else {
@@ -63,6 +63,9 @@ class API {
     }
     t.getTabColor = function () {
       return $(tab.Tab).css('background-color')
+    }
+    t.setTabColor = function() {
+      
     }
     t.getBarColor = function () {
       return tab.tabWindow.find('.bar').css('background-color')

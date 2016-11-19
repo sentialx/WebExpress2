@@ -117,32 +117,7 @@ class TabWindow {
                 }
             }
 
-            //get color from top of website
-            function getColor() {
-                webview.capturePage(function (image) {
-                    var canvas = document.createElement('canvas');
-                    var context = canvas.getContext('2d');
-                    var img = new Image();
-                    img.onload = function () {
-                        context.drawImage(img, 0, 0);
-                        var myData = context.getImageData(2, 2, 3, 3);
-                        if (myData != null) {
-                            tab.Color = rgbToHex(myData.data[0], myData.data[1], myData.data[2]);
-                            if (tab.selected) {
-                                tab.Tab.css('background-color', tab.Color);
-                                changeContrast(true);
-                            }
-                            changeContrast(false);
 
-                            bar.css('background-color', tab.Color);
-
-                        }
-                    };
-                    img.src = image.toDataURL();
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                });
-            }
 
             //global events
             $(window).click(function () {
@@ -361,130 +336,141 @@ class TabWindow {
                     addTab(new TabWindow(tab, e.url), tab);
                 }
             })
-            //webview navigate in page event
-            webview.addEventListener('did-navigate-in-page', function (event, url, isMain) {
-                if (url != null) {
-                    if (!url.startsWith("webexpress://newtab") && url != "about:blank") {
-                        searchInput.val(url);
-                    }
-                }
-                 //wait for 200 milliseconds
-                setTimeout(function () {
-                    //check if <meta name="theme-color" content="..."> tag exists. When it exists then tab gets the color from content="...", otherwise it getting color from top of a website
-                    webview.executeJavaScript("function s() {var markup = document.documentElement.innerHTML; return markup} s();", false, function (result) {
-                        var regexp = /<meta name='?.theme-color'?.*>/;
-                        if (regexp.test(result)) {
-                            //getting color from <meta name="theme-color" content="...">
-                            var regex = result.match(regexp).toString();
-                            tab.Color = regex.match(/content="(.*?)"/)[1];
-                            if (tab.selected) {
-                                tab.Tab.css('background-color', tab.Color);
-                                changeContrast(true);
-                            }
-                            changeContrast(false);
-                            bar.css('background-color', tab.Color);
-
-                        } else {
-                            //getting color from top of a website
-                            getColor();
+            var lasturl = "";
+            var lastColor = "s";
+            setInterval(function () {
+                tryGetColor();
+            }, 200)
+            setInterval(function () {
+                if (webview.getURL() != null) {
+                    if (lasturl != webview.getURL()) {
+                        if (!webview.getURL().startsWith("webexpress://newtab") && webview.getURL() != "about:blank") {
+                            searchInput.val(webview.getURL());
                         }
-                    });
-                }, 400);
 
-
-            })
-            //webview page load end event
-            webview.addEventListener('did-finish-load', function () {
-
-
-                tab.Favicon.css('opacity', "1");
-                tab.Preloader.css('opacity', "0");
-                if (!webview.getURL().startsWith("webexpress://newtab") && webview.getURL() != "about:blank") {
-                    searchInput.val(webview.getURL());
-                }
-
-                //prevent duplicates in history
-                if (lastUrl != webview.getURL()) {
-                    var array;
-                    //get today's date
-                    var today = new Date();
-                    var dd = today.getDate();
-                    var mm = today.getMonth() + 1;
-                    var yyyy = today.getFullYear();
-                    if (dd < 10) {
-                        dd = '0' + dd
-                    }
-
-                    if (mm < 10) {
-                        mm = '0' + mm
-                    }
-                    today = mm + '-' + dd + '-' + yyyy;
-
-                    //read history.json file and append new history items
-                    fs.readFile(historyPath, function (err, data) {
-                        if (err) throw err;
-                        var json = data.toString();
-                        //replace weird characters in utf-8
-                        json = json.replace("\ufeff", "");
-                        var obj = JSON.parse(json);
-                        if (!webview.getURL().startsWith("webexpress://") && !webview.getURL().startsWith("about:blank")) {
-                            var date = new Date();
-                            var current_hour = date.getHours();
-                            var current_minute = date.getMinutes();
-                            var time = `${current_hour}:${current_minute}`;
-                            if (obj['history'][obj['history'].length - 1] == null) {
-                                obj['history'].push({
-                                    "link": webview.getURL(),
-                                    "title": webview.getTitle(),
-                                    "date": today,
-                                    "time": time,
-                                    "id": 0
-                                });
-                            } else {
-                                obj['history'].push({
-                                    "link": webview.getURL(),
-                                    "title": webview.getTitle(),
-                                    "date": today,
-                                    "time": time,
-                                    "id": obj['history'][obj['history'].length - 1].id + 1
-                                });
+                        //prevent duplicates in history
+                        if (lastUrl != webview.getURL()) {
+                            var array;
+                            //get today's date
+                            var today = new Date();
+                            var dd = today.getDate();
+                            var mm = today.getMonth() + 1;
+                            var yyyy = today.getFullYear();
+                            if (dd < 10) {
+                                dd = '0' + dd
                             }
-                            var jsonStr = JSON.stringify(obj);
-                            json = jsonStr;
-                            //append new history item to history.json
-                            fs.writeFile(historyPath, json, function (err) {
-                                if (err) {
-                                    return console.log(err);
+
+                            if (mm < 10) {
+                                mm = '0' + mm
+                            }
+                            today = mm + '-' + dd + '-' + yyyy;
+
+                            //read history.json file and append new history items
+                            fs.readFile(historyPath, function (err, data) {
+                                if (err) throw err;
+                                var json = data.toString();
+                                //replace weird characters in utf-8
+                                json = json.replace("\ufeff", "");
+                                var obj = JSON.parse(json);
+                                if (!webview.getURL().startsWith("webexpress://") && !webview.getURL().startsWith("about:blank")) {
+                                    var date = new Date();
+                                    var current_hour = date.getHours();
+                                    var current_minute = date.getMinutes();
+                                    var time = `${current_hour}:${current_minute}`;
+                                    if (obj['history'][obj['history'].length - 1] == null) {
+                                        obj['history'].push({
+                                            "link": webview.getURL(),
+                                            "title": webview.getTitle(),
+                                            "date": today,
+                                            "time": time,
+                                            "id": 0
+                                        });
+                                    } else {
+                                        obj['history'].push({
+                                            "link": webview.getURL(),
+                                            "title": webview.getTitle(),
+                                            "date": today,
+                                            "time": time,
+                                            "id": obj['history'][obj['history'].length - 1].id + 1
+                                        });
+                                    }
+                                    var jsonStr = JSON.stringify(obj);
+                                    json = jsonStr;
+                                    //append new history item to history.json
+                                    fs.writeFile(historyPath, json, function (err) {
+                                        if (err) {
+                                            return console.log(err);
+                                        }
+                                    });
+                                    lastUrl = webview.getURL();
                                 }
                             });
-                            lastUrl = webview.getURL();
+
                         }
-                    });
-
+                        lasturl = webview.getURL()
+                    }
                 }
+            }, 1)
+            //get color from top of website
+            function getColor() {
+                webview.capturePage({ x: 0, y: 0, width: 2, height: 2 }, function (image) {
+                    var canvas = document.createElement('canvas');
+                    var context = canvas.getContext('2d');
+                    var img = new Image();
+                    img.onload = function () {
+                        context.drawImage(img, 0, 0);
+                        var myData = context.getImageData(1, 1, 1, 1);
+                        if (myData != null) {
 
-                //wait for 400 milliseconds
-                setTimeout(function () {
-                    //check if <meta name="theme-color" content="..."> tag exists. When it exists then tab gets the color from content="...", otherwise it getting color from top of a website
-                    webview.executeJavaScript("function s() {var markup = document.documentElement.innerHTML; return markup} s();", false, function (result) {
-                        var regexp = /<meta name='?.theme-color'?.*>/;
-                        if (regexp.test(result)) {
-                            //getting color from <meta name="theme-color" content="...">
-                            var regex = result.match(regexp).toString();
-                            tab.Color = regex.match(/content="(.*?)"/)[1];
+                            var color = rgbToHex(myData.data[0], myData.data[1], myData.data[2]);
+                            if (color != lastColor) {
+                                tab.Color = color;
+                                if (tab.selected) {
+                                    tab.Tab.css('background-color', tab.Color);
+                                    changeContrast(true);
+                                }
+                                changeContrast(false);
+                                lastColor = tab.Color;
+                                bar.css('background-color', tab.Color);
+
+                            }
+                        }
+                    };
+                    img.src = image.toDataURL();
+                    canvas.width = 3;
+                    canvas.height = 3;
+                });
+            }
+            function tryGetColor() {
+                //check if <meta name="theme-color" content="..."> tag exists. When it exists then tab gets the color from content="...", otherwise it getting color from top of a website
+                webview.executeJavaScript("function s() {var markup = document.documentElement.innerHTML; return markup} s();", false, function (result) {
+                    var regexp = /<meta name='?.theme-color'?.*>/;
+                    if (regexp.test(result)) {
+
+                        //getting color from <meta name="theme-color" content="...">
+                        var regex = result.match(regexp).toString();
+                        var color = regex.match(/content="(.*?)"/)[1];
+                        if (color != lastColor) {
                             if (tab.selected) {
+                                tab.Color = color
                                 tab.Tab.css('background-color', tab.Color);
                                 changeContrast(true);
                             }
                             changeContrast(false);
                             bar.css('background-color', tab.Color);
-
-                        } else {
-                            //getting color from top of a website
-                            getColor();
+                            lastColor = tab.Color;
                         }
-                    });
-                }, 400);
+                    } else {
+                        //getting color from top of a website
+                        getColor();
+                    }
+                });
+            }
+            //webview page load end event
+            webview.addEventListener('did-frame-finish-load', function () {
+                tab.Favicon.css('opacity', "1");
+                tab.Preloader.css('opacity', "0");
+                lastColor = "";
 
             });
 
