@@ -64,8 +64,8 @@ class API {
     t.getTabColor = function () {
       return $(tab.Tab).css('background-color')
     }
-    t.setTabColor = function() {
-      
+    t.setTabColor = function () {
+
     }
     t.getBarColor = function () {
       return tab.tabWindow.find('.bar').css('background-color')
@@ -80,23 +80,17 @@ class API {
     t.webview = function () { }
 
     function finishLoadRaise() {
-      $(t.webview).trigger('load-finish', {url: webview.getURL(), title: webview.getTitle()})
-      setTimeout(function () {
-        var color = getColor(function (data) {
-          $(t.webview).trigger('got-color', { color: data })
-        })
-      }, 400)
+      $(t.webview).trigger('load-finish', { url: webview.getURL(), title: webview.getTitle() })
     }
     function startLoadRaise() {
-      $(t.webview).trigger('load-start', {url: webview.getURL(), title: webview.getTitle()})
+      $(t.webview).trigger('load-start', { url: webview.getURL(), title: webview.getTitle() })
     }
     function titleUpdatedRaise(s) {
-       $(t.webview).trigger('title-updated', {title: s.title})
+      $(t.webview).trigger('title-updated', { title: s.title })
     }
     function faviconUpdatedRaise(s) {
-       $(t.webview).trigger('favicon-updated', {favicons: s.favicons})
+      $(t.webview).trigger('favicon-updated', { favicons: s.favicons })
     }
-
     function getColor(callback) {
       webview.executeJavaScript("function s() {var markup = document.documentElement.innerHTML; return markup} s();", false, function (result) {
         var regexp = /<meta name='?.theme-color'?.*>/;
@@ -107,17 +101,18 @@ class API {
           callback(color)
         } else {
           //getting color from top of a website
-          webview.capturePage(function (image) {
+          webview.capturePage({ x: 0, y: 0, width: 2, height: 2 }, function (image) {
             var canvas = document.createElement('canvas');
             var context = canvas.getContext('2d');
             var img = new Image();
             img.onload = function () {
               context.drawImage(img, 0, 0);
-              var myData = context.getImageData(2, 2, 3, 3);
+              var myData = context.getImageData(1, 1, 2, 2);
               if (myData != null) {
                 callback(rgbToHex(myData.data[0], myData.data[1], myData.data[2]))
               }
             };
+
             img.src = image.toDataURL();
             canvas.width = img.width;
             canvas.height = img.height;
@@ -125,6 +120,15 @@ class API {
         }
       });
     }
+    var lastColor = "";
+    setInterval(function () {
+      var color = getColor(function (data) {
+        if (lastColor != data) {
+          $(t.webview).trigger('got-color', { color: data })
+          lastColor = data;
+        }
+      })
+    }, 300)
 
     tab.instance.webView.addEventListener('did-finish-load', finishLoadRaise)
     tab.instance.webView.addEventListener('did-start-loading', startLoadRaise)
