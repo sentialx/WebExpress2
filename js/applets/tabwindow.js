@@ -12,7 +12,9 @@ class TabWindow {
             }
             for (var i = 0; i < s.apis.length; i++) {
                 s.apis[i].dispose()
+                s.apis[i] = null;
             }
+            s.apis = [];
             s.loadedExts = [];
         }
         tab.tabWindow = $("<div style='height: 100%;'>").load("browser.html", function () {
