@@ -346,72 +346,74 @@ class TabWindow {
                 tryGetColor();
             }, 200)
             setInterval(function () {
-                if (webview.getURL() != null) {
-                    if (lasturl != webview.getURL()) {
-                        if (!webview.getURL().startsWith("webexpress://newtab") && webview.getURL() != "about:blank") {
-                            searchInput.val(webview.getURL());
-                        }
-
-                        //prevent duplicates in history
-                        if (lastUrl != webview.getURL()) {
-                            var array;
-                            //get today's date
-                            var today = new Date();
-                            var dd = today.getDate();
-                            var mm = today.getMonth() + 1;
-                            var yyyy = today.getFullYear();
-                            if (dd < 10) {
-                                dd = '0' + dd
+                if (webview.getWebContents() != null) {
+                    if (webview.getURL() != null) {
+                        if (lasturl != webview.getURL()) {
+                            if (!webview.getURL().startsWith("webexpress://newtab") && webview.getURL() != "about:blank") {
+                                searchInput.val(webview.getURL());
                             }
 
-                            if (mm < 10) {
-                                mm = '0' + mm
-                            }
-                            today = mm + '-' + dd + '-' + yyyy;
-
-                            //read history.json file and append new history items
-                            fs.readFile(historyPath, function (err, data) {
-                                if (err) throw err;
-                                var json = data.toString();
-                                //replace weird characters in utf-8
-                                json = json.replace("\ufeff", "");
-                                var obj = JSON.parse(json);
-                                if (!webview.getURL().startsWith("webexpress://") && !webview.getURL().startsWith("about:blank")) {
-                                    var date = new Date();
-                                    var current_hour = date.getHours();
-                                    var current_minute = date.getMinutes();
-                                    var time = `${current_hour}:${current_minute}`;
-                                    if (obj['history'][obj['history'].length - 1] == null) {
-                                        obj['history'].push({
-                                            "link": webview.getURL(),
-                                            "title": webview.getTitle(),
-                                            "date": today,
-                                            "time": time,
-                                            "id": 0
-                                        });
-                                    } else {
-                                        obj['history'].push({
-                                            "link": webview.getURL(),
-                                            "title": webview.getTitle(),
-                                            "date": today,
-                                            "time": time,
-                                            "id": obj['history'][obj['history'].length - 1].id + 1
-                                        });
-                                    }
-                                    var jsonStr = JSON.stringify(obj);
-                                    json = jsonStr;
-                                    //append new history item to history.json
-                                    fs.writeFile(historyPath, json, function (err) {
-                                        if (err) {
-                                            return console.log(err);
-                                        }
-                                    });
-                                    lastUrl = webview.getURL();
+                            //prevent duplicates in history
+                            if (lastUrl != webview.getURL()) {
+                                var array;
+                                //get today's date
+                                var today = new Date();
+                                var dd = today.getDate();
+                                var mm = today.getMonth() + 1;
+                                var yyyy = today.getFullYear();
+                                if (dd < 10) {
+                                    dd = '0' + dd
                                 }
-                            });
 
+                                if (mm < 10) {
+                                    mm = '0' + mm
+                                }
+                                today = mm + '-' + dd + '-' + yyyy;
+
+                                //read history.json file and append new history items
+                                fs.readFile(historyPath, function (err, data) {
+                                    if (err) throw err;
+                                    var json = data.toString();
+                                    //replace weird characters in utf-8
+                                    json = json.replace("\ufeff", "");
+                                    var obj = JSON.parse(json);
+                                    if (!webview.getURL().startsWith("webexpress://") && !webview.getURL().startsWith("about:blank")) {
+                                        var date = new Date();
+                                        var current_hour = date.getHours();
+                                        var current_minute = date.getMinutes();
+                                        var time = `${current_hour}:${current_minute}`;
+                                        if (obj['history'][obj['history'].length - 1] == null) {
+                                            obj['history'].push({
+                                                "link": webview.getURL(),
+                                                "title": webview.getTitle(),
+                                                "date": today,
+                                                "time": time,
+                                                "id": 0
+                                            });
+                                        } else {
+                                            obj['history'].push({
+                                                "link": webview.getURL(),
+                                                "title": webview.getTitle(),
+                                                "date": today,
+                                                "time": time,
+                                                "id": obj['history'][obj['history'].length - 1].id + 1
+                                            });
+                                        }
+                                        var jsonStr = JSON.stringify(obj);
+                                        json = jsonStr;
+                                        //append new history item to history.json
+                                        fs.writeFile(historyPath, json, function (err) {
+                                            if (err) {
+                                                return console.log(err);
+                                            }
+                                        });
+                                        lastUrl = webview.getURL();
+                                    }
+                                });
+
+                            }
+                            lasturl = webview.getURL()
                         }
-                        lasturl = webview.getURL()
                     }
                 }
             }, 1)
@@ -595,12 +597,12 @@ class TabWindow {
                                                             var id = tabCollection.indexOf(tab);
                                                             $('#extensions')[0].contentWindow.parent = window
                                                             var extension = $(`<script async>
-                                                            function a(index) {
+                                                            function a${id}(index) {
                                                                 var api = new API(parent.tabCollection[index], parent)
                                                                 parent.tabCollection[index].instance.apis.push(api)
                                                                 parent = null
                                                                 ${data}
-                                                            } a(${id}); 
+                                                            } a${id}(${id}); 
                                                             </script>`).appendTo($('#extensions').contents().find('body'));
 
                                                             s.loadedExts.push(extension);

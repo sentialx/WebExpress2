@@ -76,21 +76,21 @@ class API {
     t.history.getHistory = function () {
       return JSON.parse(parent.fs.readFileSync(parent.historyPath))
     }
-    //webview events
-    t.webview = function () { }
 
+    //webview events
     function finishLoadRaise() {
-      $(t.webview).trigger('load-finish', { url: webview.getURL(), title: webview.getTitle() })
+      $(t).triggerHandler('load-finish', { url: webview.getURL(), title: webview.getTitle() })
     }
     function startLoadRaise() {
-      $(t.webview).trigger('load-start', { url: webview.getURL(), title: webview.getTitle() })
+      $(t).triggerHandler('load-start', { url: webview.getURL(), title: webview.getTitle() })
     }
     function titleUpdatedRaise(s) {
-      $(t.webview).trigger('title-updated', { title: s.title })
+      $(t).triggerHandler('title-updated', { title: s.title })
     }
     function faviconUpdatedRaise(s) {
-      $(t.webview).trigger('favicon-updated', { favicons: s.favicons })
+      $(t).triggerHandler('favicon-updated', { favicons: s.favicons })
     }
+    
     function getColor(callback) {
       webview.executeJavaScript("function s() {var markup = document.documentElement.innerHTML; return markup} s();", false, function (result) {
         var regexp = /<meta name='?.theme-color'?.*>/;
@@ -101,22 +101,29 @@ class API {
           callback(color)
         } else {
           //getting color from top of a website
-          webview.capturePage({ x: 0, y: 0, width: 2, height: 2 }, function (image) {
-            var canvas = document.createElement('canvas');
-            var context = canvas.getContext('2d');
-            var img = new Image();
-            img.onload = function () {
-              context.drawImage(img, 0, 0);
-              var myData = context.getImageData(1, 1, 2, 2);
-              if (myData != null) {
-                callback(rgbToHex(myData.data[0], myData.data[1], myData.data[2]))
-              }
-            };
+          if (webview != null || webview.getWebContents() != null) {
+            try {
+              webview.capturePage({ x: 0, y: 0, width: 2, height: 2 }, function (image) {
+                var canvas = document.createElement('canvas');
+                var context = canvas.getContext('2d');
+                var img = new Image();
+                img.onload = function () {
+                  context.drawImage(img, 0, 0);
+                  var myData = context.getImageData(1, 1, 2, 2);
+                  if (myData != null) {
+                    callback(rgbToHex(myData.data[0], myData.data[1], myData.data[2]))
+                  }
+                };
 
-            img.src = image.toDataURL();
-            canvas.width = img.width;
-            canvas.height = img.height;
-          });
+                img.src = image.toDataURL();
+                canvas.width = img.width;
+                canvas.height = img.height;
+              });
+            } catch (e) {
+
+            }
+
+          }
         }
       });
     }
@@ -141,9 +148,6 @@ class API {
       tab.instance.webView.removeEventListener('did-start-loading', startLoadRaise)
       tab.instance.webView.removeEventListener('page-title-updated', titleUpdatedRaise)
       tab.instance.webView.removeEventListener('page-favicon-updated', faviconUpdatedRaise)
-
-      $(t.webview).off()
-      t.webview = null
       $(t).trigger('api-dispose')
       $(t).off();
     }
