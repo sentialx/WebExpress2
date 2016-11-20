@@ -109,7 +109,9 @@
     width: calc(100% - 12px);
     height: calc(100% - 12px);
     margin: 6px;
-    background-size: cover;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .ext-page {

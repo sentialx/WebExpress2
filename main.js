@@ -24,6 +24,9 @@ function createWindow() {
         item.setSavePath(item.getFilename()) //TODO set path to downloads folder
     })
 }
+process.on('uncaughtException', function (error) {
+    console.log(error);
+})
 protocol.registerStandardSchemes(['webexpress'])
 app.on('ready', function () {
     protocol.registerFileProtocol('webexpress', (request, callback) => {

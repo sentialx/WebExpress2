@@ -66,9 +66,12 @@ class TabWindow {
             var linkToOpen = '';
 
             var {remote, ipcMain, clipboard} = require('electron')
+            var bw = remote.getCurrentWindow()
             var {Menu, MenuItem} = remote
             checkFiles();
-
+            bw.on('closed', function() {
+                canGetColor = false;
+            })
             //check if background color of bar is dark or light and then set icons foreground to black or white
             function changeContrast(changeTabs) {
                 var brightness = colorBrightness(tab.Color);
@@ -342,7 +345,9 @@ class TabWindow {
             })
             var lasturl = "";
             var lastColor = "s";
+            var canGetColor = true;
             setInterval(function () {
+                if (canGetColor)
                 tryGetColor();
             }, 200)
             setInterval(function () {
@@ -419,7 +424,7 @@ class TabWindow {
             }, 1)
             //get color from top of website
             function getColor() {
-                if (webview != null) {
+                if (typeof (webview) !== "undefined" && webview != null && webview.getWebContents() != null) {
                     webview.capturePage({ x: 0, y: 0, width: 2, height: 2 }, function (image) {
                         var canvas = document.createElement('canvas');
                         var context = canvas.getContext('2d');
@@ -448,32 +453,33 @@ class TabWindow {
                         canvas.height = 3;
                     });
                 }
-
             }
             function tryGetColor() {
-                //check if <meta name="theme-color" content="..."> tag exists. When it exists then tab gets the color from content="...", otherwise it getting color from top of a website
-                webview.executeJavaScript("function s() {var markup = document.documentElement.innerHTML; return markup} s();", false, function (result) {
-                    var regexp = /<meta name='?.theme-color'?.*>/;
-                    if (regexp.test(result)) {
+                if (webview != null && webview.getWebContents() != null) {
+                    //check if <meta name="theme-color" content="..."> tag exists. When it exists then tab gets the color from content="...", otherwise it getting color from top of a website
+                    webview.executeJavaScript("function s() {var markup = document.documentElement.innerHTML; return markup} s();", false, function (result) {
+                        var regexp = /<meta name='?.theme-color'?.*>/;
+                        if (regexp.test(result)) {
 
-                        //getting color from <meta name="theme-color" content="...">
-                        var regex = result.match(regexp).toString();
-                        var color = regex.match(/content="(.*?)"/)[1];
-                        if (color != lastColor) {
-                            if (tab.selected) {
-                                tab.Color = color
-                                tab.Tab.css('background-color', tab.Color);
-                                changeContrast(true);
+                            //getting color from <meta name="theme-color" content="...">
+                            var regex = result.match(regexp).toString();
+                            var color = regex.match(/content="(.*?)"/)[1];
+                            if (color != lastColor) {
+                                if (tab.selected) {
+                                    tab.Color = color
+                                    tab.Tab.css('background-color', tab.Color);
+                                    changeContrast(true);
+                                }
+                                changeContrast(false);
+                                bar.css('background-color', tab.Color);
+                                lastColor = tab.Color;
                             }
-                            changeContrast(false);
-                            bar.css('background-color', tab.Color);
-                            lastColor = tab.Color;
+                        } else {
+                            //getting color from top of a website
+                            getColor();
                         }
-                    } else {
-                        //getting color from top of a website
-                        getColor();
-                    }
-                });
+                    });
+                }
             }
             //webview page load end event
             webview.addEventListener('did-frame-finish-load', function () {

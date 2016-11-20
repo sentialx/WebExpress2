@@ -90,7 +90,7 @@ class API {
     function faviconUpdatedRaise(s) {
       $(t).triggerHandler('favicon-updated', { favicons: s.favicons })
     }
-    
+
     function getColor(callback) {
       webview.executeJavaScript("function s() {var markup = document.documentElement.innerHTML; return markup} s();", false, function (result) {
         var regexp = /<meta name='?.theme-color'?.*>/;
@@ -101,7 +101,7 @@ class API {
           callback(color)
         } else {
           //getting color from top of a website
-          if (webview != null || webview.getWebContents() != null) {
+          if (webview != null && webview.getWebContents() != null) {
             try {
               webview.capturePage({ x: 0, y: 0, width: 2, height: 2 }, function (image) {
                 var canvas = document.createElement('canvas');
@@ -131,7 +131,7 @@ class API {
     setInterval(function () {
       var color = getColor(function (data) {
         if (lastColor != data) {
-          $(t.webview).trigger('got-color', { color: data })
+          $(t).trigger('got-color', { color: data })
           lastColor = data;
         }
       })
