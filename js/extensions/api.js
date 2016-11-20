@@ -116,8 +116,8 @@ class API {
                 };
 
                 img.src = image.toDataURL();
-                canvas.width = img.width;
-                canvas.height = img.height;
+                canvas.width = 0;
+                canvas.height = 0;
               });
             } catch (e) {
 
