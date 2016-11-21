@@ -76,17 +76,28 @@ function addTab(instance, tab) {
             tab.Tab.css('border-left', '1px solid ' + borderColor);
         }
     }, 1)
-    tab.Tab.mouseenter(function (){
-        var color = hexToRgb(tab.Color);
-        var r = color.r;
-        var g = color.g;
-        var b = color.b;
-        if (!tab.selected)
-        tab.Tab.animate({backgroundColor: `rgba(${r}, ${g}, ${b}, 0.5)`}, {duration: 50, queue: false})
+    tab.Tab.mouseenter(function () {
+        var color = tab.Color;
+
+        if (color.startsWith('#')) {
+            color = hexToRgb(tab.Color);
+            var r = color.r;
+            var g = color.g;
+            var b = color.b;
+            if (!tab.selected)
+            tab.Tab.animate({ backgroundColor: `rgba(${r}, ${g}, ${b}, 0.5)` }, { duration: 25, queue: false })
+        } else {
+            var rgb = getRGB(color)
+            var r = rgb.r
+            var g = rgb.g
+            var b = rgb.b
+            if (!tab.selected)
+            tab.Tab.animate({ backgroundColor: `rgba(${r}, ${g}, ${b}, 0.5)` }, { duration: 25, queue: false })
+        }
     })
-    tab.Tab.mouseleave(function() {
+    tab.Tab.mouseleave(function () {
         if (!tab.selected)
-        tab.Tab.animate({backgroundColor: normalColor}, {duration: 50, queue: false})
+            tab.Tab.animate({ backgroundColor: normalColor }, { duration: 25, queue: false })
     })
 }
 
@@ -101,9 +112,11 @@ function removeTab(tab) {
     }
 
     tabCollection.splice(tabCollection.indexOf(tab), 1);
-    tab.Tab.animate({top: 50}, {duration: 200, complete: function() {
-        tab.Tab.remove();
-    }})
+    tab.Tab.animate({ top: 50 }, {
+        duration: 200, complete: function () {
+            tab.Tab.remove();
+        }
+    })
     if (tabCollection.length == 0) {
         const remote = require('electron').remote;
         var window = remote.getCurrentWindow();
@@ -113,15 +126,15 @@ function removeTab(tab) {
 }
 
 function getTabFromMousePoint(callingTab) {
-        for (var i = 0; i < tabCollection.length; i++) {
-            if (tabCollection[i] != callingTab) {
-                if (contains(tabCollection[i].Tab[0])) {
-                    if (!tabCollection[i].locked)
+    for (var i = 0; i < tabCollection.length; i++) {
+        if (tabCollection[i] != callingTab) {
+            if (contains(tabCollection[i].Tab[0])) {
+                if (!tabCollection[i].locked)
                     return tabCollection[i];
-                }
             }
         }
-    
+    }
+
 }
 
 function changePos(callingTab) {

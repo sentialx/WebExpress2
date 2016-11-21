@@ -1,7 +1,7 @@
 var fs = require('fs');
 var os = require('os');
+const {ipcRenderer} = require('electron')
 const {app} = require('electron').remote;
-
 var historyPath = app.getPath('userData') + '/userdata/history.json';
 var extensionsPath = app.getPath('userData') + '/userdata/extensions';
 var userdataPath = app.getPath('userData') + '/userdata';
@@ -17,4 +17,22 @@ global.saveHistory = function (json) {
         }
     });
 }
+
+ipcRenderer.on('getDocument', function (e) {
+    var children = document.body.getElementsByTagName("*");
+    var colors = []
+    for (var i = 0; i < children.length; i++) {
+        colors.push(children[i].style.backgroundColor)
+    }
+    colors.reverse();
+    var s = 0;
+    for (var i = 0; i < colors.length; i++) {
+        if (colors[i].startsWith('rgb') || colors[i].startsWith('#')) {
+            color = colors[i];
+            ipcRenderer.sendToHost('document', color)
+            break;
+        }
+    }
+
+})
 

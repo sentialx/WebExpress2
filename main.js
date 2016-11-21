@@ -25,7 +25,7 @@ function createWindow() {
     })
 }
 process.on('uncaughtException', function (error) {
-    console.log(error);
+
 })
 protocol.registerStandardSchemes(['webexpress'])
 app.on('ready', function () {

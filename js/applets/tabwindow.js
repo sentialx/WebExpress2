@@ -8,6 +8,7 @@ class TabWindow {
         this.webView = null;
         this.loadedExts = [];
         this.apis = [];
+        this.actualColor = ""
         this.deleteExtensions = function () {
             for (var i3 = 0; i3 < s.loadedExts.length; i3++) {
                 $(s.loadedExts[i3]).remove();
@@ -69,7 +70,7 @@ class TabWindow {
             var bw = remote.getCurrentWindow()
             var {Menu, MenuItem} = remote
             checkFiles();
-            bw.on('closed', function() {
+            bw.on('closed', function () {
                 canGetColor = false;
             })
             //check if background color of bar is dark or light and then set icons foreground to black or white
@@ -344,12 +345,7 @@ class TabWindow {
                 }
             })
             var lasturl = "";
-            var lastColor = "s";
-            var canGetColor = true;
-            setInterval(function () {
-                if (canGetColor)
-                tryGetColor();
-            }, 200)
+            var lastColor = "";
             setInterval(function () {
                 if (webview.getWebContents() != null) {
                     if (webview.getURL() != null) {
@@ -422,10 +418,16 @@ class TabWindow {
                     }
                 }
             }, 1)
+            setInterval(function () {
+                if (tab.selected) {
+                    tryGetColor();
+                }
+            }, 200)
             //get color from top of website
             function getColor() {
                 if (typeof (webview) !== "undefined" && webview != null && webview.getWebContents() != null) {
-                    webview.capturePage({ x: 0, y: 0, width: 2, height: 2 }, function (image) {
+
+                    webview.capturePage({ x: 1, y: 1, width: 2, height: 2 }, function (image) {
                         var canvas = document.createElement('canvas');
                         var context = canvas.getContext('2d');
                         var img = new Image();
@@ -444,7 +446,7 @@ class TabWindow {
                                     changeContrast(false);
                                     lastColor = tab.Color;
                                     bar.css('background-color', tab.Color);
-
+                                    s.actualColor = tab.Color;
                                 }
                             }
                         };
@@ -452,6 +454,23 @@ class TabWindow {
                         canvas.width = 3;
                         canvas.height = 3;
                     });
+
+
+
+                    /*webview.send("getDocument", []);
+                    webview.addEventListener('ipc-message', function (e) {
+                        if (e.channel === 'document') {
+                            if (tab.selected) {
+                                tab.Color = e.args[0]
+                                tab.Tab.css('background-color', tab.Color);
+                                changeContrast(true);
+                            }
+                            changeContrast(false);
+                            bar.css('background-color', tab.Color);
+                        }
+                    })*/
+
+
                 }
             }
             function tryGetColor() {
@@ -473,6 +492,7 @@ class TabWindow {
                                 changeContrast(false);
                                 bar.css('background-color', tab.Color);
                                 lastColor = tab.Color;
+                                s.actualColor = tab.Color;
                             }
                         } else {
                             //getting color from top of a website
@@ -486,9 +506,7 @@ class TabWindow {
                 tab.Favicon.css('opacity', "1");
                 tab.Preloader.css('opacity', "0");
                 lastColor = "";
-
             });
-
             //webview start loading event
             webview.addEventListener('did-start-loading', function () {
                 setTimeout(function () {
