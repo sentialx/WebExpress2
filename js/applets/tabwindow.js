@@ -104,6 +104,7 @@ class TabWindow {
                         tab.closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
                         tab.Preloader.attr('color', '#3F51B5');
                     }
+
                     tab.Foreground = 'black';
                     searchInput.css('color', '#444');
                     searchBox.css('background-color', '#fff');
@@ -493,6 +494,7 @@ class TabWindow {
                                 bar.css('background-color', tab.Color);
                                 lastColor = tab.Color;
                                 s.actualColor = tab.Color;
+
                             }
                         } else {
                             //getting color from top of a website

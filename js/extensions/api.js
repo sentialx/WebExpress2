@@ -153,7 +153,7 @@ class API {
       $(t).triggerHandler('load-stop')
     }
     function gotResponseDetailsRaise(s) {
-      $(t).triggerHandler('got-response-details', { status: s})
+      $(t).triggerHandler('got-response-details', s)
     }
     function gotRedirectRequestRaise(ou, nu, isMain) {
       $(t).triggerHandler('got-redirect-request', { oldURL: ou, newURL: nu, isFrameMain: isMain })
