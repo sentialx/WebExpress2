@@ -452,8 +452,8 @@ class TabWindow {
                             }
                         };
                         img.src = image.toDataURL();
-                        canvas.width = 3;
-                        canvas.height = 3;
+                        canvas.width = 2;
+                        canvas.height = 2;
                     });
 
 
