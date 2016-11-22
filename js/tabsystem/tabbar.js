@@ -134,7 +134,6 @@ function getTabFromMousePoint(callingTab) {
             }
         }
     }
-
 }
 
 function changePos(callingTab) {

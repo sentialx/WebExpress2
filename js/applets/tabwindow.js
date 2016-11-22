@@ -418,7 +418,7 @@ class TabWindow {
                         }
                     }
                 }
-            }, 1)
+            }, 200)
             setInterval(function () {
                 if (tab.selected) {
                     tryGetColor();

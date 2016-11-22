@@ -13,7 +13,7 @@ var Ripple = class Ripple {
                 left: xPos,
                 width: size,
                 height: size,
-                backgroundColor: $buttonElement.data("ripple-color")
+                backgroundColor: $buttonElement.attr("data-ripple-color")
             })
             .appendTo($buttonElement)
             .animate({
@@ -22,7 +22,7 @@ var Ripple = class Ripple {
             }, time, 'linear', function () {
                
             });
-            $(element).click(function() {
+            $(element).mouseup(function() {
                 $rippleElement.animate({opacity: fadeoutopacity}, {duration: time, queue: false, complete: function() {
                      $(this).remove();
                 }})

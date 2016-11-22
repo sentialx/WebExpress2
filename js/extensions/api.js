@@ -3,17 +3,15 @@ class API {
     var t = this
     var instance = tab.instance;
     var webview = tab.instance.webView;
-    t.webview = webview;
-    //layout
+    t.webviews = []
+    //global variables
+    t.tab = new Tab(tab, t)
+    t.instance = new Instance(tab.instance, t)
+    t.webview = new WebView(webview, t)
+
+    //window methods
     t.getTitlebarColor = function () {
       return $('#titlebar').css('background-color')
-    }
-    t.getSelectedTab = function () {
-      for (var i = 0; i < parent.tabCollection.length; i++) {
-        if (parent.tabCollection[i].selected) {
-          return parent.tabCollection[i]
-        }
-      }
     }
     t.setTitlebarColor = function (color) {
       $(parent.document.body).find('#titlebar').css('background-color', color)
@@ -62,75 +60,322 @@ class API {
         }
       }
     }
-    t.getTabColor = function () {
-      return $(tab.Tab).css('background-color')
-    }
-    t.setTabColor = function () {
 
-    }
-    t.getBarColor = function () {
-      return tab.tabWindow.find('.bar').css('background-color')
+    //tabs object
+    t.tabs = {
+      getSelectedTab: function () {
+        for (var i = 0; i < parent.tabCollection.length; i++) {
+          if (parent.tabCollection[i].selected) {
+            var itab = parent.tabCollection[i]
+            var tab = new Tab(itab, t)
+            return tab
+          }
+        }
+      },
     }
     //history
-    t.history = function () { }
-
-    t.history.getHistory = function () {
-      return JSON.parse(parent.fs.readFileSync(parent.historyPath))
+    t.history = {
+      getHistory: function () {
+        return JSON.parse(parent.fs.readFileSync(parent.historyPath))
+      }
     }
-    //webview methods
-    t.webview.loadURL = webview.loadURL;
-    t.webview.getURL = webview.getURL;
-    t.webview.getTitle = webview.getTitle;
-    t.webview.isLoading = webview.isLoading;
-    t.webview.isWaitingForResponse = webview.isWaitingForResponse;
-    t.webview.stop = webview.stop;
-    t.webview.reload = webview.reload;
-    t.webview.reloadIgnoringCache = webview.reloadIgnoringCache;
-    t.webview.canGoBack = webview.canGoBack;
-    t.webview.canGoForward = webview.canGoForward;
-    t.webview.canGoToOffset = webview.canGoToOffset;
-    t.webview.clearHistory = webview.clearHistory;
-    t.webview.goBack = webview.goBack;
-    t.webview.goForward = webview.goForward;
-    t.webview.goToIndex = webview.goToIndex;
-    t.webview.goToOffset = webview.goToOffset;
-    t.webview.isCrashed = webview.isCrashed;
-    t.webview.setUserAgent = webview.setUserAgent;
-    t.webview.getUserAgent = webview.getUserAgent;
-    t.webview.insertCSS = webview.insertCSS;
-    t.webview.executeJavaScript = webview.executeJavaScript;
-    t.webview.openDevTools = webview.openDevTools;
-    t.webview.closeDevTools = webview.closeDevTools;
-    t.webview.isDevToolsOpened = webview.isDevToolsOpened;
-    t.webview.isDevToolsFocused = webview.isDevToolsFocused;
-    t.webview.inspectElement = webview.inspectElement;
-    t.webview.inspectServiceWorker = webview.inspectServiceWorker;
-    t.webview.setAudioMuted = webview.setAudioMuted;
-    t.webview.isAudioMuted = webview.isAudioMuted;
-    t.webview.undo = webview.redo;
-    t.webview.redo = webview.cut;
-    t.webview.cut = webview.copy;
-    t.webview.copy = webview.paste;
-    t.webview.pasteAndMatchStyle = webview.pasteAndMatchStyle;
-    t.webview.delete = webview.delete;
-    t.webview.selectAll = webview.selectAll;
-    t.webview.unselect = webview.unselect;
-    t.webview.replace = webview.replace;
-    t.webview.replaceMisspelling = webview.replaceMisspelling;
-    t.webview.insertText = webview.insertText;
-    t.webview.findInPage = webview.findInPage;
-    t.webview.stopFindInPage = webview.stopFindInPage;
-    t.webview.print = webview.print;
-    t.webview.printToPDF = webview.printToPDF;
-    t.webview.capturePage = webview.capturePage;
-    t.webview.send = webview.send;
-    t.webview.sendInputEvent = webview.sendInputEvent;
-    t.webview.setZoomFactor = webview.setZoomFactor;
-    t.webview.setZoomLevel = webview.setZoomLevel;
-    t.webview.showDefinitionForSelection = webview.showDefinitionForSelection;
-    t.webview.getWebContents = webview.getWebContents;
 
-    //webview events
+    var lastColor = "";
+    setInterval(function () {
+      if (lastColor != instance.actualColor) {
+        $(t).triggerHandler('got-color', { color: instance.actualColor })
+        lastColor = instance.actualColor
+      }
+    }, 1)
+
+    function getColor(callback) {
+      webview.executeJavaScript("function s() {var markup = document.documentElement.innerHTML; return markup} s();", false, function (result) {
+        var regexp = /<meta name='?.theme-color'?.*>/;
+        if (regexp.test(result)) {
+          //getting color from <meta name="theme-color" content="...">
+          var regex = result.match(regexp).toString();
+          var color = regex.match(/content="(.*?)"/)[1];
+          callback(color, true)
+        } else {
+          //getting color from top of a website
+          if (webview != null && webview.getWebContents() != null) {
+            try {
+              webview.capturePage({ x: 0, y: 0, width: 2, height: 2 }, function (image) {
+                var canvas = document.createElement('canvas');
+                var context = canvas.getContext('2d');
+                var img = new Image();
+                img.onload = function () {
+                  context.drawImage(img, 0, 0);
+                  var myData = context.getImageData(1, 1, 2, 2);
+                  if (myData != null) {
+                    callback(rgbToHex(myData.data[0], myData.data[1], myData.data[2]), false)
+                  }
+                };
+
+                img.src = image.toDataURL();
+                canvas.width = 0;
+                canvas.height = 0;
+              });
+            } catch (e) {
+
+            }
+          }
+        }
+      });
+    }
+
+    //dispose API
+    t.dispose = function () {
+      for (var i = 0; i < t.webviews.length; i++) {
+        t.webviews[i].destroy()
+      }
+      $(t).trigger('api-dispose')
+      $(t).off()
+    }
+  }
+}
+class WebView {
+  constructor(webview, api) {
+    api.webviews.push(this)
+    var t = this;
+    //methods    
+    t.destroy = function () {
+      t.removeHandlers()
+      $(t).off()
+    }
+    t.loadURL = function (url, options) {
+      webview.loadURL(url, options)
+    }
+    t.loadURL = function (url) {
+      webview.loadURL(url)
+    }
+    t.getURL = function() {
+      return webview.getURL()
+    }
+    t.getTitle = function() {
+      return webview.getTitle()
+    }
+    t.isLoading = function() {
+      return webview.isLoading()
+    }
+    t.isWaitingForResponse = function() {
+      return webview.isWaitingForResponse()
+    }
+    t.stop = function() {
+      webview.stop()
+    }
+    t.reload = function() {
+      webview.reload()
+    }
+    t.reloadIgnoringCache = function() {
+      webview.reloadIgnoringCache()
+    }
+    t.canGoBack = function() {
+      return webview.canGoBack()
+    }
+    t.canGoForward = function() {
+      return webview.canGoForward()
+    }
+    t.canGoToOffset = function(offset) {
+      return webview.canGoToOffset(offset)
+    }
+    t.clearHistory = function() {
+      webview.clearHistory()
+    }
+    t.goBack = function() {
+      webview.goBack()
+    }
+    t.canGoForward = function() {
+      webview.canGoForward()
+    }
+    t.goToIndex = function(index) {
+      webview.goToIndex(index)
+    }
+    t.goToOffset = function(offset) {
+      webview.goToOffset(offset)
+    }
+    t.isCrashed = function() {
+      return webview.isCrashed()
+    }
+    t.setUserAgent = function(userAgent) {
+      webview.setUserAgent(userAgent)
+    }
+    t.getUserAgent = function() {
+      return webview.getUserAgent()
+    }
+    t.insertCSS = function(css) {
+      webview.insertCSS(css)
+    }
+    t.executeJavaScript = function(code, userGesture, callback) {
+      webview.executeJavaScript(code, userGesture, callback)
+    }
+    t.executeJavaScript = function(code, userGesture) {
+      webview.executeJavaScript(code, userGesture)
+    }
+    t.executeJavaScript = function(code, callback) {
+      webview.executeJavaScript(code, false, callback)
+    }
+    t.openDevTools = function() {
+      webview.openDevTools()
+    }
+    t.closeDevTools = function() {
+      webview.closeDevTools()
+    }
+    t.isDevToolsOpened = function() {
+      return webview.isDevToolsOpened()
+    }
+    t.isDevToolsFocused = function() {
+      return webview.isDevToolsFocused()
+    }
+    t.inspectElement = function(x, y) {
+      webview.inspectElement(x, y)
+    }
+    t.inspectServiceWorker = function() {
+      webview.inspectServiceWorker()
+    }
+    t.setAudioMuted = function(muted) {
+      webview.setAudioMuted(muted)
+    }
+    t.isAudioMuted = function() {
+      return webview.isAudioMuted()
+    }
+    t.undo = function() {
+      webview.undo()
+    }
+    t.redo = function() {
+      webview.redo()
+    }
+    t.cut = function() {
+      webview.cut()
+    }
+    t.copy = function() {
+      webview.copy()
+    }
+    t.paste = function() {
+      webview.paste()
+    }
+    t.pasteAndMatchStyle = function() {
+      webview.pasteAndMatchStyle()
+    }
+    t.delete = function() {
+      webview.delete()
+    }
+    t.selectAll = function() {
+      webview.selectAll()
+    }
+    t.unselect = function() {
+      webview.unselect()
+    }
+    t.replace = function(text) {
+      webview.replace(text)
+    }
+    t.replaceMisspelling = function(text) {
+      webview.replaceMisspelling(text)
+    }
+    t.insertText = function(text) {
+      webview.insertText(text)
+    }
+    t.findInPage = function(text, options) {
+      return webview.findInPage(text, options)
+    } 
+    t.findInPage = function(text) {
+      return webview.findInPage(text)
+    }
+    t.stopFindInPage = function(action) {
+      webview.stopFindInPage(action)
+    }
+    t.print = function(options) {
+      webview.print(options)
+    }
+    t.printToPDF = function(options, callback) {
+      webview.printToPDF(options, callback)
+    }
+    t.printToPDF = function(options) {
+      webview.printToPDF(options)
+    }
+    t.capturePage = function(rect, callback) {
+      webview.capturePage(rect, callback)
+    }
+    t.capturePage = function(callback) {
+      webview.capturePage(callback)
+    }
+    t.sendInputEvent = function(event) {
+      webview.sendInputEvent(event)
+    }
+    t.setZoomFactor = function(factor) {
+      webview.setZoomFactor(factor)
+    }
+    t.setZoomLevel = function(level) {
+      webview.setZoomLevel(level)
+    }
+    t.showDefinitionForSelection = function() {
+      webview.showDefinitionForSelection()
+    }
+    t.getWebContents = function() {
+      return webview.getWebContents()
+    }
+    //events
+    t.removeHandlers = function () {
+      webview.removeEventListener('did-frame-finish-load', frameFinishLoadRaise)
+      webview.removeEventListener('did-start-loading', startLoadRaise)
+      webview.removeEventListener('page-title-updated', titleUpdatedRaise)
+      webview.removeEventListener('page-favicon-updated', faviconUpdatedRaise)
+      webview.removeEventListener('load-commit', loadCommitRaise)
+      webview.removeEventListener('did-fail-load', loadFailRaise)
+      webview.removeEventListener('did-stop-loading', loadStopRaise)
+      webview.removeEventListener('did-get-response-details', gotResponseDetailsRaise)
+      webview.removeEventListener('did-get-redirect-request', gotRedirectRequestRaise)
+      webview.removeEventListener('dom-ready', domReadyRaise)
+      webview.removeEventListener('enter-html-full-screen', enterHTMLFullscreenRaise)
+      webview.removeEventListener('leave-html-full-screen', leaveHTMLFullscreenRaise)
+      webview.removeEventListener('console-message', consoleMessageRaise)
+      webview.removeEventListener('found-in-page', foundInPageRaise)
+      webview.removeEventListener('new-window', newWindowRaise)
+      webview.removeEventListener('will-navigate', willNavigateRaise)
+      webview.removeEventListener('did-navigate', navigatedRaise)
+      webview.removeEventListener('did-navigate-in-page', navigatedInPageRaise)
+      webview.removeEventListener('close', closedRaise)
+      webview.removeEventListener('crashed', crashedRaise)
+      webview.removeEventListener('gpu-crashed', gpuCrashedRaise)
+      webview.removeEventListener('plugin-crashed', pluginCrashedRaise)
+      webview.removeEventListener('destroyed', destroyedRaise)
+      webview.removeEventListener('media-started-playing', mediaStartedPlayingRaise)
+      webview.removeEventListener('media-paused', mediaPausedRaise)
+      webview.removeEventListener('update-target-url', updateTargetUrlRaise)
+      webview.removeEventListener('devtools-opened', devtoolsOpenedRaise)
+      webview.removeEventListener('devtools-closed', devtoolsClosedRaise)
+      webview.removeEventListener('devtools-focused', devtoolsFocusedRaise)
+    }
+    webview.addEventListener('did-frame-finish-load', frameFinishLoadRaise)
+    webview.addEventListener('did-start-loading', startLoadRaise)
+    webview.addEventListener('page-title-updated', titleUpdatedRaise)
+    webview.addEventListener('page-favicon-updated', faviconUpdatedRaise)
+    webview.addEventListener('load-commit', loadCommitRaise)
+    webview.addEventListener('did-fail-load', loadFailRaise)
+    webview.addEventListener('did-stop-loading', loadStopRaise)
+    webview.addEventListener('did-get-response-details', gotResponseDetailsRaise)
+    webview.addEventListener('did-get-redirect-request', gotRedirectRequestRaise)
+    webview.addEventListener('dom-ready', domReadyRaise)
+    webview.addEventListener('enter-html-full-screen', enterHTMLFullscreenRaise)
+    webview.addEventListener('leave-html-full-screen', leaveHTMLFullscreenRaise)
+    webview.addEventListener('console-message', consoleMessageRaise)
+    webview.addEventListener('found-in-page', foundInPageRaise)
+    webview.addEventListener('new-window', newWindowRaise)
+    webview.addEventListener('will-navigate', willNavigateRaise)
+    webview.addEventListener('did-navigate', navigatedRaise)
+    webview.addEventListener('did-navigate-in-page', navigatedInPageRaise)
+    webview.addEventListener('close', closedRaise)
+    webview.addEventListener('crashed', crashedRaise)
+    webview.addEventListener('gpu-crashed', gpuCrashedRaise)
+    webview.addEventListener('plugin-crashed', pluginCrashedRaise)
+    webview.addEventListener('destroyed', destroyedRaise)
+    webview.addEventListener('media-started-playing', mediaStartedPlayingRaise)
+    webview.addEventListener('media-paused', mediaPausedRaise)
+    webview.addEventListener('update-target-url', updateTargetUrlRaise)
+    webview.addEventListener('devtools-opened', devtoolsOpenedRaise)
+    webview.addEventListener('devtools-closed', devtoolsClosedRaise)
+    webview.addEventListener('devtools-focused', devtoolsFocusedRaise)
+
     function frameFinishLoadRaise(isMain) {
       $(t).triggerHandler('load-finish', { url: webview.getURL(), title: webview.getTitle(), isFrameMain: isMain })
     }
@@ -218,119 +463,32 @@ class API {
     function devtoolsFocusedRaise() {
       $(t).triggerHandler('devtools-focused')
     }
-    var lastColor = "";
-    setInterval(function() {
-      if (lastColor != instance.actualColor) {
-         $(t).triggerHandler('got-color', {color: instance.actualColor})
-         lastColor = instance.actualColor
-      }
-      
-    }, 1)
-    function removeHandlers() {
-      tab.instance.webView.removeEventListener('did-frame-finish-load', frameFinishLoadRaise)
-      tab.instance.webView.removeEventListener('did-start-loading', startLoadRaise)
-      tab.instance.webView.removeEventListener('page-title-updated', titleUpdatedRaise)
-      tab.instance.webView.removeEventListener('page-favicon-updated', faviconUpdatedRaise)
-      tab.instance.webView.removeEventListener('load-commit', loadCommitRaise)
-      tab.instance.webView.removeEventListener('did-fail-load', loadFailRaise)
-      tab.instance.webView.removeEventListener('did-stop-loading', loadStopRaise)
-      tab.instance.webView.removeEventListener('did-get-response-details', gotResponseDetailsRaise)
-      tab.instance.webView.removeEventListener('did-get-redirect-request', gotRedirectRequestRaise)
-      tab.instance.webView.removeEventListener('dom-ready', domReadyRaise)
-      tab.instance.webView.removeEventListener('enter-html-full-screen', enterHTMLFullscreenRaise)
-      tab.instance.webView.removeEventListener('leave-html-full-screen', leaveHTMLFullscreenRaise)
-      tab.instance.webView.removeEventListener('console-message', consoleMessageRaise)
-      tab.instance.webView.removeEventListener('found-in-page', foundInPageRaise)
-      tab.instance.webView.removeEventListener('new-window', newWindowRaise)
-      tab.instance.webView.removeEventListener('will-navigate', willNavigateRaise)
-      tab.instance.webView.removeEventListener('did-navigate', navigatedRaise)
-      tab.instance.webView.removeEventListener('did-navigate-in-page', navigatedInPageRaise)
-      tab.instance.webView.removeEventListener('close', closedRaise)
-      tab.instance.webView.removeEventListener('crashed', crashedRaise)
-      tab.instance.webView.removeEventListener('gpu-crashed', gpuCrashedRaise)
-      tab.instance.webView.removeEventListener('plugin-crashed', pluginCrashedRaise)
-      tab.instance.webView.removeEventListener('destroyed', destroyedRaise)
-      tab.instance.webView.removeEventListener('media-started-playing', mediaStartedPlayingRaise)
-      tab.instance.webView.removeEventListener('media-paused', mediaPausedRaise)
-      tab.instance.webView.removeEventListener('update-target-url', updateTargetUrlRaise)
-      tab.instance.webView.removeEventListener('devtools-opened', devtoolsOpenedRaise)
-      tab.instance.webView.removeEventListener('devtools-closed', devtoolsClosedRaise)
-      tab.instance.webView.removeEventListener('devtools-focused', devtoolsFocusedRaise)
+  }
+}
+class Instance {
+  constructor(instance, api) {
+    var t = this;
+    var webview = new WebView(instance.webView, api)
+    t.getBarColor = function () {
+      return tab.tabWindow.find('.bar').css('background-color')
     }
-    tab.instance.webView.addEventListener('did-frame-finish-load', frameFinishLoadRaise)
-    tab.instance.webView.addEventListener('did-start-loading', startLoadRaise)
-    tab.instance.webView.addEventListener('page-title-updated', titleUpdatedRaise)
-    tab.instance.webView.addEventListener('page-favicon-updated', faviconUpdatedRaise)
-    tab.instance.webView.addEventListener('load-commit', loadCommitRaise)
-    tab.instance.webView.addEventListener('did-fail-load', loadFailRaise)
-    tab.instance.webView.addEventListener('did-stop-loading', loadStopRaise)
-    tab.instance.webView.addEventListener('did-get-response-details', gotResponseDetailsRaise)
-    tab.instance.webView.addEventListener('did-get-redirect-request', gotRedirectRequestRaise)
-    tab.instance.webView.addEventListener('dom-ready', domReadyRaise)
-    tab.instance.webView.addEventListener('enter-html-full-screen', enterHTMLFullscreenRaise)
-    tab.instance.webView.addEventListener('leave-html-full-screen', leaveHTMLFullscreenRaise)
-    tab.instance.webView.addEventListener('console-message', consoleMessageRaise)
-    tab.instance.webView.addEventListener('found-in-page', foundInPageRaise)
-    tab.instance.webView.addEventListener('new-window', newWindowRaise)
-    tab.instance.webView.addEventListener('will-navigate', willNavigateRaise)
-    tab.instance.webView.addEventListener('did-navigate', navigatedRaise)
-    tab.instance.webView.addEventListener('did-navigate-in-page', navigatedInPageRaise)
-    tab.instance.webView.addEventListener('close', closedRaise)
-    tab.instance.webView.addEventListener('crashed', crashedRaise)
-    tab.instance.webView.addEventListener('gpu-crashed', gpuCrashedRaise)
-    tab.instance.webView.addEventListener('plugin-crashed', pluginCrashedRaise)
-    tab.instance.webView.addEventListener('destroyed', destroyedRaise)
-    tab.instance.webView.addEventListener('media-started-playing', mediaStartedPlayingRaise)
-    tab.instance.webView.addEventListener('media-paused', mediaPausedRaise)
-    tab.instance.webView.addEventListener('update-target-url', updateTargetUrlRaise)
-    tab.instance.webView.addEventListener('devtools-opened', devtoolsOpenedRaise)
-    tab.instance.webView.addEventListener('devtools-closed', devtoolsClosedRaise)
-    tab.instance.webView.addEventListener('devtools-focused', devtoolsFocusedRaise)
-
-
-    function getColor(callback) {
-      webview.executeJavaScript("function s() {var markup = document.documentElement.innerHTML; return markup} s();", false, function (result) {
-        var regexp = /<meta name='?.theme-color'?.*>/;
-        if (regexp.test(result)) {
-          //getting color from <meta name="theme-color" content="...">
-          var regex = result.match(regexp).toString();
-          var color = regex.match(/content="(.*?)"/)[1];
-          callback(color, true)
-        } else {
-          //getting color from top of a website
-          if (webview != null && webview.getWebContents() != null) {
-            try {
-              webview.capturePage({ x: 0, y: 0, width: 2, height: 2 }, function (image) {
-                var canvas = document.createElement('canvas');
-                var context = canvas.getContext('2d');
-                var img = new Image();
-                img.onload = function () {
-                  context.drawImage(img, 0, 0);
-                  var myData = context.getImageData(1, 1, 2, 2);
-                  if (myData != null) {
-                    callback(rgbToHex(myData.data[0], myData.data[1], myData.data[2]), false)
-                  }
-                };
-
-                img.src = image.toDataURL();
-                canvas.width = 0;
-                canvas.height = 0;
-              });
-            } catch (e) {
-
-            }
-
-          }
-        }
-      });
+    t.getWebView = function () {
+      return webview
     }
-
-    //dispose API
-    t.dispose = function () {
-      removeHandlers();
-
-      $(t).trigger('api-dispose')
-      $(t).off();
+  }
+}
+class Tab {
+  constructor(tab, api) {
+    var t = this
+    t.getTabColor = function () {
+      return $(tab.Tab).css('background-color')
     }
+    t.setTabColor = function (color) {
+
+    }
+    t.getTabForegroundColor = function () {
+      return tab.Foreground
+    }
+    t.instance = new Instance(tab.instance, api)
   }
 }
