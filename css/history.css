@@ -16,7 +16,7 @@ body {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
-.toolbar .default-toolbar > h3 {
+.toolbar .default-toolbar>h3 {
     font-family: 'Roboto-Light', sans-serif;
     color: #fff;
     margin-top: (50% - auto);
@@ -40,7 +40,6 @@ body {
 
 .card p {
     font-size: 14px;
-
 }
 
 .card a {
@@ -55,12 +54,12 @@ body {
 }
 
 .card-header {
-  position: relative;
+    position: relative;
     font-size: 22px;
     padding-left: 32px;
     padding-right: 32px;
     padding-top: 16px;
-    background-color:#F5F5F5;
+    background-color: #F5F5F5;
     margin-left: -32px;
     margin-right: -32px;
     margin-top: -32px;
@@ -94,15 +93,17 @@ a {
     border-radius: 1px;
     background-color: rgba(0, 0, 0, 0.2);
 }
+
 .flat-button {
     -webkit-user-select: none;
     border-radius: 4px;
-    padding-left: 24px; 
-    padding-right: 24px; 
-    padding-top: 12px; 
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 12px;
     padding-bottom: 10px;
     cursor: default;
 }
+
 .icon-button-content {
     background-size: cover;
     width: 20px;

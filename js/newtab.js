@@ -29,7 +29,7 @@ $(document).ready(function () {
                     if ($('.text').val().startsWith("http://") || $('.text').val().startsWith("https://") || $('.text').val().startsWith("file://")) {
                         window.location.href = $('.text').val();
                     } else {
-                        window.location.href = "http://" + $('.text').val() 
+                        window.location.href = "http://" + $('.text').val()
                     }
                 } else {
                     //TODO: search engines
@@ -49,7 +49,7 @@ $(document).ready(function () {
         Ripple.makeRipple($(menuItem), relX, relY, $(menuItem).width(), $(menuItem).height(), 500, 0);
     }
 
-    $('.bookmarks a').mousedown(function(e) {
+    $('.bookmarks a').mousedown(function (e) {
         makeRippleMenuItem($(this), e);
     });
     var marginRight = 8;

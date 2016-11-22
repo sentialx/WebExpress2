@@ -1,6 +1,6 @@
 class MainCharacter {
     static Move(way) {
-        switch(way) {
+        switch (way) {
             case "left":
                 var left = MainCharacter.GetLeft();
                 if (left - 60 > 0) {
@@ -9,7 +9,7 @@ class MainCharacter {
                     left = 0;
                 }
                 MainCharacter.SetLeft(left);
-            break;            
+                break;
             case "right":
                 var left = MainCharacter.GetLeft();
                 if (left + 60 < parseInt($('.container').css("width")) - parseInt($('.mcharacter').css('width'))) {
@@ -18,7 +18,7 @@ class MainCharacter {
                     left = parseInt($('.container').css("width")) - parseInt($('.mcharacter').css('width'));
                 }
                 MainCharacter.SetLeft(left);
-            break;
+                break;
         }
     }
     static GetLeft() {
@@ -65,30 +65,31 @@ class Other {
 
 var pause = false;
 
-$(document).ready(function() {
-    $(document).keydown(function(e) {
+$(document).ready(function () {
+    $(document).keydown(function (e) {
         if (!pause) {
-            switch(e.which) {
+            switch (e.which) {
                 case 37: // left
                     MainCharacter.Move("left");
-                break;
+                    break;
                 case 39: // right
                     MainCharacter.Move("right");
-                break;
+                    break;
                 case 32: //space 
                     MainCharacter.Shot();
-                break;
+                    break;
 
-                default: return;
+                default:
+                    return;
             }
             e.preventDefault();
         }
     });
 
     //bullets
-    setInterval(function() {
+    setInterval(function () {
         if (!pause) {
-            $('.bullets li').each(function() {
+            $('.bullets li').each(function () {
                 var bullet = $(this);
                 var bottom = parseInt($(this).css("bottom"));
                 if (bottom + 10 > parseInt($('.container').css('height'))) {
@@ -97,7 +98,7 @@ $(document).ready(function() {
                     bottom += 10;
                     $(this).css("bottom", bottom);
                 }
-                $('.enemies li').each(function() {
+                $('.enemies li').each(function () {
                     var collision = Other.Collision($(this), $(bullet));
                     if (collision) {
                         $(this).remove();
@@ -109,21 +110,23 @@ $(document).ready(function() {
     }, 20);
 
     //enemies
-    setInterval(function() {
-        $('.enemies li').each(function() {
+    setInterval(function () {
+        $('.enemies li').each(function () {
             if (!pause) {
                 var _top = parseInt($(this).css("top"));
                 if (_top + 100 < parseInt($('.container').css('height'))) {
-                    $(this).animate({top: _top + 25}, 200);
+                    $(this).animate({
+                        top: _top + 25
+                    }, 200);
                 } else {
-                pause = true;
+                    pause = true;
                 }
             }
-        });   
+        });
     }, 200);
 
     //spawn enemies
-    setInterval(function() {
+    setInterval(function () {
         if (!pause) {
             var left = Other.GetRandomInt(0, (parseInt($('.container').css('width')) - 56));
             var en = $('<li style="top: 0; left: ' + left + 'px;"></li>')

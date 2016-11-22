@@ -1,5 +1,7 @@
 const remote = require('electron').remote;
-const {app} = require('electron').remote;
+const {
+    app
+} = require('electron').remote;
 var os = require('os');
 var fileToStart = remote.getGlobal("startArgs").data[2]
 var historyPath = app.getPath('userData') + '/userdata/history.json';

@@ -20,17 +20,29 @@ var Ripple = class Ripple {
                 width: animateSize,
                 height: animateSize,
             }, time, 'linear', function () {
-               
+
             });
-            $(element).mouseup(function() {
-                $rippleElement.animate({opacity: fadeoutopacity}, {duration: time, queue: false, complete: function() {
-                     $(this).remove();
-                }})
+        $(element).mouseup(function () {
+            $rippleElement.animate({
+                opacity: fadeoutopacity
+            }, {
+                duration: time,
+                queue: false,
+                complete: function () {
+                    $(this).remove();
+                }
             })
-            $(element).on('mouseout', function() {
-                $rippleElement.animate({opacity: fadeoutopacity}, {duration: time, queue: false, complete: function() {
-                     $(this).remove();
-                }})
+        })
+        $(element).on('mouseout', function () {
+            $rippleElement.animate({
+                opacity: fadeoutopacity
+            }, {
+                duration: time,
+                queue: false,
+                complete: function () {
+                    $(this).remove();
+                }
             })
+        })
     }
 };

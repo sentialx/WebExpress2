@@ -48,9 +48,11 @@ function isInArray(value, array) {
 function decode_utf8(s) {
     return unescape(encodeURIComponent(s));
 }
+
 function endsWith(str, suffix) {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
+
 function colorBrightness(color) {
     var r, g, b, brightness,
         colour = color;
@@ -73,6 +75,7 @@ function colorBrightness(color) {
 
     return brightness;
 };
+
 function autocomplete(input, text) {
     var text1 = input.val();
     if (text != null || text != "") {
@@ -82,6 +85,7 @@ function autocomplete(input, text) {
         }
     }
 }
+
 function getSelectionText() {
     var text = "";
     if (window.getSelection) {
@@ -104,7 +108,7 @@ function makeRippleIconButton(item) {
 
 function hexToRgb(hex) {
     var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-    hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+    hex = hex.replace(shorthandRegex, function (m, r, g, b) {
         return r + r + g + g + b + b;
     });
 
@@ -116,12 +120,11 @@ function hexToRgb(hex) {
     } : null;
 }
 
-function getRGB(str){
-  var match = str.match(/rgba?\((\d{1,3}), ?(\d{1,3}), ?(\d{1,3})\)?(?:, ?(\d(?:\.\d?))\))?/);
-  return match ? {
-    red: match[1],
-    green: match[2],
-    blue: match[3]
-  } : {};
+function getRGB(str) {
+    var match = str.match(/rgba?\((\d{1,3}), ?(\d{1,3}), ?(\d{1,3})\)?(?:, ?(\d(?:\.\d?))\))?/);
+    return match ? {
+        red: match[1],
+        green: match[2],
+        blue: match[3]
+    } : {};
 }
-

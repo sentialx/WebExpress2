@@ -1,10 +1,10 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
     //Switch
     class Switch {
         constructor(where) {
             where.switched = false;
-            var instance = $("<div>").load("./html/controls/switch.html", function() {
+            var instance = $("<div>").load("./html/controls/switch.html", function () {
                 var mdSwitch = instance.find(".md-switch");
                 var ellipseRipple = instance.find('.ellipse-ripple');
                 ellipseRipple.hide("scale", {
@@ -12,13 +12,13 @@ $(document).ready(function() {
                 }, 1);
 
                 //events
-                mdSwitch.click(function() {
+                mdSwitch.click(function () {
                     var switchContainer = $(this).find('.switch-container');
                     var lever = $(this).find('.lever');
                     ellipseRipple = $(this).find('.ellipse-ripple');
                     var ellipse = $(this).find('.ellipse');
                     if (!where.switched) {
-                        
+
                         ellipse.animate({
                             backgroundColor: mdSwitch.attr('ellipse-color')
                         }, {
@@ -59,8 +59,7 @@ $(document).ready(function() {
                         }, {
                             queue: false,
                             duration: 200
-                        });
-                        ;
+                        });;
 
                         where.switched = false;
                     }
@@ -73,7 +72,7 @@ $(document).ready(function() {
     class Checkbox {
         constructor(where) {
             where.checked = false;
-            var instance = $("<div>").load("./html/controls/checkbox.html", function() {
+            var instance = $("<div>").load("./html/controls/checkbox.html", function () {
                 var mdSwitch = instance.find(".md-checkbox");
                 var fill = instance.find(".fill");
                 var fill2 = instance.find(".fill2");
@@ -82,7 +81,7 @@ $(document).ready(function() {
                 fill2.css('opacity', '0');
                 fill2.css('margin-left', '0px');
                 //checked changed listener
-                setInterval(function() {
+                setInterval(function () {
                     if (lastState != where.checked) {
                         lastState = where.checked;
                         if (where.checked) {
@@ -92,6 +91,7 @@ $(document).ready(function() {
                         }
                     }
                 }, 1);
+
                 function check() {
                     fill.animate({
                         opacity: 1
@@ -113,6 +113,7 @@ $(document).ready(function() {
                     });
                     doRippleIcon($(where), 9, 8);
                 }
+
                 function uncheck() {
                     doRippleIcon($(where), 9, 8);
                     fill.animate({
@@ -134,7 +135,7 @@ $(document).ready(function() {
                         queue: false
                     });
                 }
-                mdSwitch.mousedown(function(e) {
+                mdSwitch.mousedown(function (e) {
                     if (!where.checked) {
                         where.checked = true;
                     } else {
@@ -146,18 +147,19 @@ $(document).ready(function() {
 
         }
     }
+
     function doRippleIcon(item, x, y) {
-         Ripple.makeRipple(item, x, y, 17, 17, 300, 0);
+        Ripple.makeRipple(item, x, y, 17, 17, 300, 0);
     }
     //Preloader
     class Preloader {
         constructor(where) {
-            var instance = $("<div>").load("./html/controls/preloader.html", function() {
+            var instance = $("<div>").load("./html/controls/preloader.html", function () {
                 var lastColor = $(where).attr('color');
                 instance.find(".path").css('stroke', $(where).attr('color'));
                 instance.find(".path").attr('stroke-width', $(where).attr('thickness'));
-                 //checked changed listener
-                setInterval(function() {
+                //checked changed listener
+                setInterval(function () {
                     if (lastColor != $(where).attr('color')) {
                         lastColor = $(where).attr('color');
                         instance.find(".path").css('stroke', $(where).attr('color'));
@@ -167,17 +169,18 @@ $(document).ready(function() {
 
         }
     }
+
     function initializeComponent() {
-        $('.switch').each(function(index) {
+        $('.switch').each(function (index) {
             $(this).empty();
             var s = new Switch(this);
         });
-        $('.checkbox').each(function(index) {
+        $('.checkbox').each(function (index) {
             $(this).empty();
             var s = new Checkbox(this);
         });
-        setInterval(function() {
-            $('.preloader').each(function(index) {
+        setInterval(function () {
+            $('.preloader').each(function (index) {
                 if ($(this).html() == null || $(this).html() == "") {
                     $(this).empty();
                     var s = new Preloader(this);
@@ -189,5 +192,3 @@ $(document).ready(function() {
     initializeComponent();
 
 });
-
-

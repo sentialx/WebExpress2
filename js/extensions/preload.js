@@ -1,7 +1,11 @@
 var fs = require('fs');
 var os = require('os');
-const {ipcRenderer} = require('electron')
-const {app} = require('electron').remote;
+const {
+    ipcRenderer
+} = require('electron')
+const {
+    app
+} = require('electron').remote;
 var historyPath = app.getPath('userData') + '/userdata/history.json';
 var extensionsPath = app.getPath('userData') + '/userdata/extensions';
 var userdataPath = app.getPath('userData') + '/userdata';
@@ -35,4 +39,3 @@ ipcRenderer.on('getDocument', function (e) {
     }
 
 })
-

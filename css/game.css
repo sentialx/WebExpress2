@@ -14,7 +14,7 @@
 }
 
 .noselectable {
-    -webkit-user-select: none;       
+    -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     -o-user-select: none;
@@ -24,15 +24,16 @@
     -ms-user-select: none;
 }
 
-html, body {
-  height: 100%;
-  font-size: 16px;
-  margin: 0 !important;
-  padding: 0 !important;
-  background-color: #FaFaFa;
-  font-family: 'Roboto', sans-serif;
-  color: #444;
-  overflow: auto !important;
+html,
+body {
+    height: 100%;
+    font-size: 16px;
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #FaFaFa;
+    font-family: 'Roboto', sans-serif;
+    color: #444;
+    overflow: auto !important;
 }
 
 .container {
@@ -45,7 +46,7 @@ html, body {
     top: 50%;
     transform: translateY(-50%);
     border-radius: 2px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
 .mcharacter {

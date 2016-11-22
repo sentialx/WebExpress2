@@ -1,4 +1,3 @@
-
 class TabWindow {
 
     constructor(tab, url) {
@@ -66,14 +65,21 @@ class TabWindow {
             var imageToSave = '';
             var linkToOpen = '';
 
-            var {remote, ipcMain, clipboard} = require('electron')
+            var {
+                remote,
+                ipcMain,
+                clipboard
+            } = require('electron')
             var bw = remote.getCurrentWindow()
-            var {Menu, MenuItem} = remote
+            var {
+                Menu,
+                MenuItem
+            } = remote
             checkFiles();
             bw.on('closed', function () {
-                canGetColor = false;
-            })
-            //check if background color of bar is dark or light and then set icons foreground to black or white
+                    canGetColor = false;
+                })
+                //check if background color of bar is dark or light and then set icons foreground to black or white
             function changeContrast(changeTabs) {
                 var brightness = colorBrightness(tab.Color);
                 if (brightness < 125) {
@@ -132,12 +138,12 @@ class TabWindow {
                     }, 200).css('top', 8).animate({
                         top: -32
                     }, {
-                            queue: false,
-                            complete: function () {
-                                menu.css('visibility', 'hidden');
-                            },
-                            duration: 200
-                        });
+                        queue: false,
+                        complete: function () {
+                            menu.css('visibility', 'hidden');
+                        },
+                        duration: 200
+                    });
                     menuToggled = false;
                 }
                 suggestions.css('display', 'none');
@@ -155,22 +161,26 @@ class TabWindow {
 
             //create and add context menu items
             var backMenuItem = new MenuItem({
-                label: 'Back', click() {
+                label: 'Back',
+                click() {
                     webview.goBack();
                 }
             });
             var forwardMenuItem = new MenuItem({
-                label: 'Forward', click() {
+                label: 'Forward',
+                click() {
                     webview.goForward();
                 }
             });
             var refreshMenuItem = new MenuItem({
-                label: 'Reload', click() {
+                label: 'Reload',
+                click() {
                     webview.reload();
                 }
             });
             var openLinkInNewTabMenuItem = new MenuItem({
-                label: 'Open link in new tab', click() {
+                label: 'Open link in new tab',
+                click() {
                     if (linkToOpen != "") {
                         var tab = new Tab();
                         var tw = new TabWindow(tab, linkToOpen);
@@ -179,7 +189,8 @@ class TabWindow {
                 }
             });
             var openImageInNewTabMenuItem = new MenuItem({
-                label: 'Open image in new tab', click() {
+                label: 'Open image in new tab',
+                click() {
                     if (linkToOpen != "") {
                         var tab = new Tab();
                         var tw = new TabWindow(tab, linkToOpen);
@@ -188,34 +199,43 @@ class TabWindow {
                 }
             });
             var copyLinkMenuItem = new MenuItem({
-                label: 'Copy link address', click() {
+                label: 'Copy link address',
+                click() {
                     if (linkToOpen != "") {
                         clipboard.writeText(linkToOpen);
                     }
                 }
             });
             var saveImageAsMenuItem = new MenuItem({
-                label: 'Save image as', click() {
+                label: 'Save image as',
+                click() {
                     //saves image as
                 }
             });
             var printMenuItem = new MenuItem({
-                label: 'Print', click() {
+                label: 'Print',
+                click() {
                     //prints webpage
                 }
             });
             var inspectElementMenuItem = new MenuItem({
-                label: 'Inspect element', click() {
+                label: 'Inspect element',
+                click() {
                     webview.inspectElement(xToInspect, yToInspect);
                 }
             });
             var viewSourceMenuItem = new MenuItem({
-                label: 'View source', click() {
+                label: 'View source',
+                click() {
                     //views source
                 }
             });
-            var separator1 = new MenuItem({ type: 'separator' });
-            var separator2 = new MenuItem({ type: 'separator' });
+            var separator1 = new MenuItem({
+                type: 'separator'
+            });
+            var separator2 = new MenuItem({
+                type: 'separator'
+            });
 
             var menu1 = new Menu();
 
@@ -420,15 +440,20 @@ class TabWindow {
                 }
             }, 200)
             setInterval(function () {
-                if (tab.selected) {
-                    tryGetColor();
-                }
-            }, 200)
-            //get color from top of website
+                    if (tab.selected) {
+                        tryGetColor();
+                    }
+                }, 200)
+                //get color from top of website
             function getColor() {
                 if (typeof (webview) !== "undefined" && webview != null && webview.getWebContents() != null) {
 
-                    webview.capturePage({ x: 1, y: 1, width: 2, height: 2 }, function (image) {
+                    webview.capturePage({
+                        x: 1,
+                        y: 1,
+                        width: 2,
+                        height: 2
+                    }, function (image) {
                         var canvas = document.createElement('canvas');
                         var context = canvas.getContext('2d');
                         var img = new Image();
@@ -474,6 +499,7 @@ class TabWindow {
 
                 }
             }
+
             function tryGetColor() {
                 if (webview != null && webview.getWebContents() != null) {
                     //check if <meta name="theme-color" content="..."> tag exists. When it exists then tab gets the color from content="...", otherwise it getting color from top of a website
@@ -564,7 +590,9 @@ class TabWindow {
                 makeRippleMenuItem(this, e);
             });
             devtools.mousedown(function (e) {
-                webview.openDevTools({ mode: 'right' });
+                webview.openDevTools({
+                    mode: 'right'
+                });
                 makeRippleMenuItem(this, e);
             });
             screenshot.mousedown(function (e) {
@@ -582,6 +610,7 @@ class TabWindow {
                 resetExtMenu();
                 loadExtensions();
             }
+
             function loadExtensions() {
                 //get all .JSON files in folder to an array
                 var listOfExtensions = [];
@@ -784,7 +813,7 @@ class TabWindow {
             function addExtensionDev(count) {
                 var items = 0;
                 while (items != count) {
-                    addExtension("./img/logo.png", function () { });
+                    addExtension("./img/logo.png", function () {});
                     items += 1;
                 }
             }
@@ -804,9 +833,9 @@ class TabWindow {
                     }).css('top', -32).animate({
                         top: 8
                     }, {
-                            queue: false,
-                            duration: 200
-                        });
+                        queue: false,
+                        duration: 200
+                    });
 
                 } else {
                     //menu fade out animation
@@ -815,12 +844,12 @@ class TabWindow {
                     }, 200).css('top', 8).animate({
                         top: -32
                     }, {
-                            queue: false,
-                            complete: function () {
-                                extMenu.css('visibility', 'hidden');
-                            },
-                            duration: 200
-                        });
+                        queue: false,
+                        complete: function () {
+                            extMenu.css('visibility', 'hidden');
+                        },
+                        duration: 200
+                    });
                     extMenuToggled = false;
                 }
             });
@@ -858,9 +887,9 @@ class TabWindow {
                     }).css('top', -32).animate({
                         top: 8
                     }, {
-                            queue: false,
-                            duration: 200
-                        });
+                        queue: false,
+                        duration: 200
+                    });
 
                 } else {
                     //menu fade out animation
@@ -869,12 +898,12 @@ class TabWindow {
                     }, 200).css('top', 8).animate({
                         top: -32
                     }, {
-                            queue: false,
-                            complete: function () {
-                                menu.css('visibility', 'hidden');
-                            },
-                            duration: 200
-                        });
+                        queue: false,
+                        complete: function () {
+                            menu.css('visibility', 'hidden');
+                        },
+                        duration: 200
+                    });
                     menuToggled = false;
                 }
             });
@@ -937,8 +966,12 @@ class TabWindow {
                                     if (links.length > 0) {
 
                                         //get shortest link from array links
-                                        var oldLink = links.sort(function (a, b) { return a.length - b.length; })[0];
-                                        var newLink = links.sort(function (a, b) { return a.length - b.length; })[0];
+                                        var oldLink = links.sort(function (a, b) {
+                                            return a.length - b.length;
+                                        })[0];
+                                        var newLink = links.sort(function (a, b) {
+                                            return a.length - b.length;
+                                        })[0];
                                         //get important part of link ex. webexpress.tk for better suggestions
                                         newLink = newLink.substr(0, newLink.indexOf('/'));
                                         if (oldLink != newLink) {

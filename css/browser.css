@@ -5,10 +5,11 @@
     z-index: 1;
     padding-top: 6px;
     -webkit-transition: background-color 0.2s;
-    box-shadow: 0 1px 0px rgba(0,0,0,0.1);
-     position: absolute;
-     top: 0;
+    box-shadow: 0 1px 0px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 0;
 }
+
 .tabWindow {
     background-color: #fff;
     height: 100%;
@@ -65,7 +66,7 @@
     height: inherit;
 }
 
-.suggestions-ul> li {
+.suggestions-ul>li {
     max-width: 100%;
     white-space: nowrap;
     overflow: hidden;
@@ -79,9 +80,7 @@
     border-radius: 3px;
 }
 
-.suggestions-ul> li:hover {
-
-}
+.suggestions-ul>li:hover {}
 
 .selected {
     background-color: #3F51B5;
@@ -103,7 +102,6 @@
     margin: 8px;
     background-image: url('../img/back.png');
     background-size: cover;
-    
 }
 
 .backBtn:hover {

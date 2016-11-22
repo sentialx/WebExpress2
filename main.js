@@ -4,7 +4,9 @@ const app = electron.app
 const path = require('path')
 const BrowserWindow = electron.BrowserWindow
 var remote = require('electron').remote
-global.startArgs = { data: process.argv }
+global.startArgs = {
+    data: process.argv
+}
 
 let mainWindow
 
@@ -59,28 +61,23 @@ app.on('activate', function () {
         createWindow()
     }
 })
-app.setJumpList([
-    {
-        name: 'Bookmarks',
-        items: [
-            {
-                type: 'task',
-                title: 'Facebook',
-                program: process.execPath,
-                args: '--run-tool-a',
-                icon: process.execPath,
-                iconIndex: 0,
-                description: 'Runs Tool A'
-            },
-            {
-                type: 'task',
-                title: 'YouTube',
-                program: process.execPath,
-                args: '--run-tool-b',
-                icon: process.execPath,
-                iconIndex: 0,
-                description: 'Runs Tool B'
-            }
-        ]
-    }
-])
+app.setJumpList([{
+    name: 'Bookmarks',
+    items: [{
+        type: 'task',
+        title: 'Facebook',
+        program: process.execPath,
+        args: '--run-tool-a',
+        icon: process.execPath,
+        iconIndex: 0,
+        description: 'Runs Tool A'
+    }, {
+        type: 'task',
+        title: 'YouTube',
+        program: process.execPath,
+        args: '--run-tool-b',
+        icon: process.execPath,
+        iconIndex: 0,
+        description: 'Runs Tool B'
+    }]
+}])

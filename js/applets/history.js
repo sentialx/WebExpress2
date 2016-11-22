@@ -21,8 +21,8 @@ today = mm + '-' + dd + '-' + yyyy;
 var checkboxes = [];
 obj.history = obj.history.reverse();
 var checkedCount = 0;
-$('#unselect-btn').click(function() {
-    $('.checkbox').each(function(i) {
+$('#unselect-btn').click(function () {
+    $('.checkbox').each(function (i) {
         if (this.checked) {
             this.checked = false;
             checkedCount -= 1;
@@ -30,15 +30,15 @@ $('#unselect-btn').click(function() {
         }
     });
 });
-$('.icon-button').mousedown(function() {
-     Ripple.makeRipple($(this), 10, 10, 15, 15, 300, 0);
+$('.icon-button').mousedown(function () {
+    Ripple.makeRipple($(this), 10, 10, 15, 15, 300, 0);
 });
-$('#delete-btn').click(function() {
-   
-    $('.checkbox').each(function(i) {
+$('#delete-btn').click(function () {
+
+    $('.checkbox').each(function (i) {
         if (this.checked) {
             console.log(obj.history[this.id]);
-            
+
             for (var i = 0; i < obj.history.length; i++) {
                 if (obj.history[i].id == this.id) {
                     obj.history.splice(i, 1);
@@ -47,7 +47,7 @@ $('#delete-btn').click(function() {
             this.item.remove();
             if (this.item.length <= 0) {
                 checkedCount = 0;
-                verifyCheckboxes(); 
+                verifyCheckboxes();
             }
             checkedCount = 0;
             this.group.items -= 1;
@@ -59,28 +59,55 @@ $('#delete-btn').click(function() {
             verifyCheckboxes();
         }
     });
-    obj.history.sort(function(a, b) {
+    obj.history.sort(function (a, b) {
         return parseFloat(a.id) - parseFloat(b.id);
     });
     saveHistory("");
     saveHistory(JSON.stringify(obj));
 });
-$('.flat-button').mousedown(function(e) {
+$('.flat-button').mousedown(function (e) {
     var relX = e.pageX - $(this).offset().left;
     var relY = e.pageY - $(this).offset().top;
     Ripple.makeRipple($(this), relX, relY, $(this).width() + 16, $(this).height() + 16, 300, 0);
 });
+
 function verifyCheckboxes() {
     $('#selected-items').html('Selected items: ' + checkedCount);
     if (checkedCount >= 1) {
-        $(".toolbar").animate({backgroundColor: '#283593'}, {duration: 200, queue: false});
+        $(".toolbar").animate({
+            backgroundColor: '#283593'
+        }, {
+            duration: 200,
+            queue: false
+        });
         $('.default-toolbar').css('visibility', 'hidden');
-        $('.selecteditems-toolbar').css({visibility: 'visible', opacity: 0});
-        $('.selecteditems-toolbar').animate({opacity: 1}, {duration: 200, queue: false});
+        $('.selecteditems-toolbar').css({
+            visibility: 'visible',
+            opacity: 0
+        });
+        $('.selecteditems-toolbar').animate({
+            opacity: 1
+        }, {
+            duration: 200,
+            queue: false
+        });
     } else {
-        $(".toolbar").animate({backgroundColor: '#3F51B5'}, {duration: 200, queue: false});
-        $('.default-toolbar').css({visibility: 'visible', opacity: 0});
-         $('.default-toolbar').animate({opacity: 1}, {duration: 200, queue: false})
+        $(".toolbar").animate({
+            backgroundColor: '#3F51B5'
+        }, {
+            duration: 200,
+            queue: false
+        });
+        $('.default-toolbar').css({
+            visibility: 'visible',
+            opacity: 0
+        });
+        $('.default-toolbar').animate({
+            opacity: 1
+        }, {
+            duration: 200,
+            queue: false
+        })
         $('.selecteditems-toolbar').css('visibility', 'hidden');
     }
 }
@@ -92,9 +119,9 @@ for (var i = 0; i < obj.history.length; i++) {
         var checkbox = $('<div class="checkbox ripple-icon" data-ripple-color="#444" style="display: inline-block;"></div>').appendTo(item);
         checkbox[0].item = item;
         if (header != null)
-        checkbox[0].group = header;
+            checkbox[0].group = header;
         checkbox[0].id = jsonItem.id;
-        checkbox.click(function(e) {
+        checkbox.click(function (e) {
             if (this.checked) {
                 checkedCount += 1;
             } else {
@@ -130,6 +157,6 @@ for (var i = 0; i < obj.history.length; i++) {
     } else {
         currentHeader.items += 1;
         additem(currentHeader);
-        
+
     }
 }

@@ -4,7 +4,7 @@ class API {
     var instance = tab.instance;
     var webview = tab.instance.webView;
     t.webviews = []
-    //global variables
+      //global variables
     t.tab = new Tab(tab, t)
     t.instance = new Instance(tab.instance, t)
     t.webview = new WebView(webview, t)
@@ -39,13 +39,13 @@ class API {
           parent.tabCollection[i].Tab.css('border-left', '1px solid rgba(255,255,255,0.1)')
           parent.tabCollection[i].Tab.css('border-right', '1px solid rgba(255,255,255,0.1)')
           parent.tabCollection[i].Tab.css('border-bottom', '1px solid rgba(255,255,255,0.1)')
-          //parent.find('.border5').css('background-color', 'rgba(255,255,255,0.1)');
+            //parent.find('.border5').css('background-color', 'rgba(255,255,255,0.1)');
         } else {
           parent.borderColor = "rgba(0,0,0,0.2)";
           parent.tabCollection[i].Tab.css('border-left', '1px solid rgba(0,0,0,0.1)')
           parent.tabCollection[i].Tab.css('border-right', '1px solid rgba(0,0,0,0.1)')
           parent.tabCollection[i].Tab.css('border-bottom', '1px solid rgba(0,0,0,0.1)')
-          //parent.find('.border5').css('background-color', 'rgba(0,0,0,0.1)');
+            //parent.find('.border5').css('background-color', 'rgba(0,0,0,0.1)');
         }
 
         if (!parent.tabCollection[i].selected) {
@@ -63,17 +63,17 @@ class API {
 
     //tabs object
     t.tabs = {
-      getSelectedTab: function () {
-        for (var i = 0; i < parent.tabCollection.length; i++) {
-          if (parent.tabCollection[i].selected) {
-            var itab = parent.tabCollection[i]
-            var tab = new Tab(itab, t)
-            return tab
+        getSelectedTab: function () {
+          for (var i = 0; i < parent.tabCollection.length; i++) {
+            if (parent.tabCollection[i].selected) {
+              var itab = parent.tabCollection[i]
+              var tab = new Tab(itab, t)
+              return tab
+            }
           }
-        }
-      },
-    }
-    //history
+        },
+      }
+      //history
     t.history = {
       getHistory: function () {
         return JSON.parse(parent.fs.readFileSync(parent.historyPath))
@@ -83,7 +83,9 @@ class API {
     var lastColor = "";
     setInterval(function () {
       if (lastColor != instance.actualColor) {
-        $(t).triggerHandler('got-color', { color: instance.actualColor })
+        $(t).triggerHandler('got-color', {
+          color: instance.actualColor
+        })
         lastColor = instance.actualColor
       }
     }, 1)
@@ -100,7 +102,12 @@ class API {
           //getting color from top of a website
           if (webview != null && webview.getWebContents() != null) {
             try {
-              webview.capturePage({ x: 0, y: 0, width: 2, height: 2 }, function (image) {
+              webview.capturePage({
+                x: 0,
+                y: 0,
+                width: 2,
+                height: 2
+              }, function (image) {
                 var canvas = document.createElement('canvas');
                 var context = canvas.getContext('2d');
                 var img = new Image();
@@ -149,172 +156,172 @@ class WebView {
     t.loadURL = function (url) {
       webview.loadURL(url)
     }
-    t.getURL = function() {
+    t.getURL = function () {
       return webview.getURL()
     }
-    t.getTitle = function() {
+    t.getTitle = function () {
       return webview.getTitle()
     }
-    t.isLoading = function() {
+    t.isLoading = function () {
       return webview.isLoading()
     }
-    t.isWaitingForResponse = function() {
+    t.isWaitingForResponse = function () {
       return webview.isWaitingForResponse()
     }
-    t.stop = function() {
+    t.stop = function () {
       webview.stop()
     }
-    t.reload = function() {
+    t.reload = function () {
       webview.reload()
     }
-    t.reloadIgnoringCache = function() {
+    t.reloadIgnoringCache = function () {
       webview.reloadIgnoringCache()
     }
-    t.canGoBack = function() {
+    t.canGoBack = function () {
       return webview.canGoBack()
     }
-    t.canGoForward = function() {
+    t.canGoForward = function () {
       return webview.canGoForward()
     }
-    t.canGoToOffset = function(offset) {
+    t.canGoToOffset = function (offset) {
       return webview.canGoToOffset(offset)
     }
-    t.clearHistory = function() {
+    t.clearHistory = function () {
       webview.clearHistory()
     }
-    t.goBack = function() {
+    t.goBack = function () {
       webview.goBack()
     }
-    t.canGoForward = function() {
+    t.canGoForward = function () {
       webview.canGoForward()
     }
-    t.goToIndex = function(index) {
+    t.goToIndex = function (index) {
       webview.goToIndex(index)
     }
-    t.goToOffset = function(offset) {
+    t.goToOffset = function (offset) {
       webview.goToOffset(offset)
     }
-    t.isCrashed = function() {
+    t.isCrashed = function () {
       return webview.isCrashed()
     }
-    t.setUserAgent = function(userAgent) {
+    t.setUserAgent = function (userAgent) {
       webview.setUserAgent(userAgent)
     }
-    t.getUserAgent = function() {
+    t.getUserAgent = function () {
       return webview.getUserAgent()
     }
-    t.insertCSS = function(css) {
+    t.insertCSS = function (css) {
       webview.insertCSS(css)
     }
-    t.executeJavaScript = function(code, userGesture, callback) {
+    t.executeJavaScript = function (code, userGesture, callback) {
       webview.executeJavaScript(code, userGesture, callback)
     }
-    t.executeJavaScript = function(code, userGesture) {
+    t.executeJavaScript = function (code, userGesture) {
       webview.executeJavaScript(code, userGesture)
     }
-    t.executeJavaScript = function(code, callback) {
+    t.executeJavaScript = function (code, callback) {
       webview.executeJavaScript(code, false, callback)
     }
-    t.openDevTools = function() {
+    t.openDevTools = function () {
       webview.openDevTools()
     }
-    t.closeDevTools = function() {
+    t.closeDevTools = function () {
       webview.closeDevTools()
     }
-    t.isDevToolsOpened = function() {
+    t.isDevToolsOpened = function () {
       return webview.isDevToolsOpened()
     }
-    t.isDevToolsFocused = function() {
+    t.isDevToolsFocused = function () {
       return webview.isDevToolsFocused()
     }
-    t.inspectElement = function(x, y) {
+    t.inspectElement = function (x, y) {
       webview.inspectElement(x, y)
     }
-    t.inspectServiceWorker = function() {
+    t.inspectServiceWorker = function () {
       webview.inspectServiceWorker()
     }
-    t.setAudioMuted = function(muted) {
+    t.setAudioMuted = function (muted) {
       webview.setAudioMuted(muted)
     }
-    t.isAudioMuted = function() {
+    t.isAudioMuted = function () {
       return webview.isAudioMuted()
     }
-    t.undo = function() {
+    t.undo = function () {
       webview.undo()
     }
-    t.redo = function() {
+    t.redo = function () {
       webview.redo()
     }
-    t.cut = function() {
+    t.cut = function () {
       webview.cut()
     }
-    t.copy = function() {
+    t.copy = function () {
       webview.copy()
     }
-    t.paste = function() {
+    t.paste = function () {
       webview.paste()
     }
-    t.pasteAndMatchStyle = function() {
+    t.pasteAndMatchStyle = function () {
       webview.pasteAndMatchStyle()
     }
-    t.delete = function() {
+    t.delete = function () {
       webview.delete()
     }
-    t.selectAll = function() {
+    t.selectAll = function () {
       webview.selectAll()
     }
-    t.unselect = function() {
+    t.unselect = function () {
       webview.unselect()
     }
-    t.replace = function(text) {
+    t.replace = function (text) {
       webview.replace(text)
     }
-    t.replaceMisspelling = function(text) {
+    t.replaceMisspelling = function (text) {
       webview.replaceMisspelling(text)
     }
-    t.insertText = function(text) {
+    t.insertText = function (text) {
       webview.insertText(text)
     }
-    t.findInPage = function(text, options) {
+    t.findInPage = function (text, options) {
       return webview.findInPage(text, options)
-    } 
-    t.findInPage = function(text) {
+    }
+    t.findInPage = function (text) {
       return webview.findInPage(text)
     }
-    t.stopFindInPage = function(action) {
+    t.stopFindInPage = function (action) {
       webview.stopFindInPage(action)
     }
-    t.print = function(options) {
+    t.print = function (options) {
       webview.print(options)
     }
-    t.printToPDF = function(options, callback) {
+    t.printToPDF = function (options, callback) {
       webview.printToPDF(options, callback)
     }
-    t.printToPDF = function(options) {
+    t.printToPDF = function (options) {
       webview.printToPDF(options)
     }
-    t.capturePage = function(rect, callback) {
+    t.capturePage = function (rect, callback) {
       webview.capturePage(rect, callback)
     }
-    t.capturePage = function(callback) {
+    t.capturePage = function (callback) {
       webview.capturePage(callback)
     }
-    t.sendInputEvent = function(event) {
+    t.sendInputEvent = function (event) {
       webview.sendInputEvent(event)
     }
-    t.setZoomFactor = function(factor) {
+    t.setZoomFactor = function (factor) {
       webview.setZoomFactor(factor)
     }
-    t.setZoomLevel = function(level) {
+    t.setZoomLevel = function (level) {
       webview.setZoomLevel(level)
     }
-    t.showDefinitionForSelection = function() {
+    t.showDefinitionForSelection = function () {
       webview.showDefinitionForSelection()
     }
-    t.getWebContents = function() {
-      return webview.getWebContents()
-    }
-    //events
+    t.getWebContents = function () {
+        return webview.getWebContents()
+      }
+      //events
     t.removeHandlers = function () {
       webview.removeEventListener('did-frame-finish-load', frameFinishLoadRaise)
       webview.removeEventListener('did-start-loading', startLoadRaise)
@@ -377,89 +384,161 @@ class WebView {
     webview.addEventListener('devtools-focused', devtoolsFocusedRaise)
 
     function frameFinishLoadRaise(isMain) {
-      $(t).triggerHandler('load-finish', { url: webview.getURL(), title: webview.getTitle(), isFrameMain: isMain })
+      $(t).triggerHandler('load-finish', {
+        url: webview.getURL(),
+        title: webview.getTitle(),
+        isFrameMain: isMain
+      })
     }
+
     function startLoadRaise() {
-      $(t).triggerHandler('load-start', { url: webview.getURL(), title: webview.getTitle() })
+      $(t).triggerHandler('load-start', {
+        url: webview.getURL(),
+        title: webview.getTitle()
+      })
     }
+
     function titleUpdatedRaise(s) {
-      $(t).triggerHandler('title-updated', { title: s.title })
+      $(t).triggerHandler('title-updated', {
+        title: s.title
+      })
     }
+
     function faviconUpdatedRaise(s) {
-      $(t).triggerHandler('favicon-updated', { favicons: s.favicons })
+      $(t).triggerHandler('favicon-updated', {
+        favicons: s.favicons
+      })
     }
+
     function loadCommitRaise(u, isMain) {
-      $(t).triggerHandler('load-commit', { url: u, isFrameMain: isMain })
+      $(t).triggerHandler('load-commit', {
+        url: u,
+        isFrameMain: isMain
+      })
     }
+
     function loadFailRaise(ec, ed, vu, isMain) {
-      $(t).triggerHandler('load-fail', { errorCode: ec, errorDescription: ed, validatedURL: vu, isFrameMain: isMain })
+      $(t).triggerHandler('load-fail', {
+        errorCode: ec,
+        errorDescription: ed,
+        validatedURL: vu,
+        isFrameMain: isMain
+      })
     }
+
     function loadStopRaise() {
       $(t).triggerHandler('load-stop')
     }
+
     function gotResponseDetailsRaise(s) {
       $(t).triggerHandler('got-response-details', s)
     }
+
     function gotRedirectRequestRaise(ou, nu, isMain) {
-      $(t).triggerHandler('got-redirect-request', { oldURL: ou, newURL: nu, isFrameMain: isMain })
+      $(t).triggerHandler('got-redirect-request', {
+        oldURL: ou,
+        newURL: nu,
+        isFrameMain: isMain
+      })
     }
+
     function domReadyRaise() {
       $(t).triggerHandler('dom-ready')
     }
+
     function enterHTMLFullscreenRaise() {
       $(t).triggerHandler('enter-html-fullscreen')
     }
+
     function leaveHTMLFullscreenRaise() {
       $(t).triggerHandler('leave-html-fullscreen')
     }
+
     function consoleMessageRaise(le, m, li, si) {
-      $(t).triggerHandler('console-message', { level: le, message: m, line: li, sourceId: si })
+      $(t).triggerHandler('console-message', {
+        level: le,
+        message: m,
+        line: li,
+        sourceId: si
+      })
     }
+
     function foundInPageRaise(r) {
-      $(t).triggerHandler('found-in-page', { result: result })
+      $(t).triggerHandler('found-in-page', {
+        result: result
+      })
     }
+
     function newWindowRaise(u, fn, d, o) {
-      $(t).triggerHandler('new-window', { url: u, frameName: fn, disposition: d, options: o })
+      $(t).triggerHandler('new-window', {
+        url: u,
+        frameName: fn,
+        disposition: d,
+        options: o
+      })
     }
+
     function willNavigateRaise(u) {
-      $(t).triggerHandler('will-navigate', { url: u })
+      $(t).triggerHandler('will-navigate', {
+        url: u
+      })
     }
+
     function navigatedRaise(u) {
-      $(t).triggerHandler('navigated', { url: u })
+      $(t).triggerHandler('navigated', {
+        url: u
+      })
     }
+
     function navigatedInPageRaise(isMain, u) {
-      $(t).triggerHandler('navigated-in-page', { isFrameMain: isMain, url: u })
+      $(t).triggerHandler('navigated-in-page', {
+        isFrameMain: isMain,
+        url: u
+      })
     }
+
     function closedRaise() {
       $(t).triggerHandler('closed')
     }
+
     function crashedRaise() {
       $(t).triggerHandler('crashed')
     }
+
     function gpuCrashedRaise() {
       $(t).triggerHandler('gpu-crashed')
     }
+
     function pluginCrashedRaise() {
       $(t).triggerHandler('plugin-crashed')
     }
+
     function destroyedRaise() {
       $(t).triggerHandler('destroyed')
     }
+
     function mediaStartedPlayingRaise() {
       $(t).triggerHandler('media-started-playing')
     }
+
     function mediaPausedRaise() {
       $(t).triggerHandler('media-paused')
     }
+
     function updateTargetUrlRaise(u) {
-      $(t).triggerHandler('update-target-url', { url: u })
+      $(t).triggerHandler('update-target-url', {
+        url: u
+      })
     }
+
     function devtoolsOpenedRaise() {
       $(t).triggerHandler('devtools-opened')
     }
+
     function devtoolsClosedRaise() {
       $(t).triggerHandler('devtools-closed')
     }
+
     function devtoolsFocusedRaise() {
       $(t).triggerHandler('devtools-focused')
     }

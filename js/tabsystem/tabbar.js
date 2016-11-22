@@ -67,8 +67,8 @@ function addTab(instance, tab) {
     tab.Tab.animate({
         top: 0
     }, {
-            duration: 200
-        });
+        duration: 200
+    });
     setInterval(function () {
         if (tabCollection.indexOf(tab) == 0) {
             tab.Tab.css('border-left', 'none');
@@ -85,19 +85,34 @@ function addTab(instance, tab) {
             var g = color.g;
             var b = color.b;
             if (!tab.selected)
-            tab.Tab.animate({ backgroundColor: `rgba(${r}, ${g}, ${b}, 0.5)` }, { duration: 25, queue: false })
+                tab.Tab.animate({
+                    backgroundColor: `rgba(${r}, ${g}, ${b}, 0.5)`
+                }, {
+                    duration: 25,
+                    queue: false
+                })
         } else {
             var rgb = getRGB(color)
             var r = rgb.r
             var g = rgb.g
             var b = rgb.b
             if (!tab.selected)
-            tab.Tab.animate({ backgroundColor: `rgba(${r}, ${g}, ${b}, 0.5)` }, { duration: 25, queue: false })
+                tab.Tab.animate({
+                    backgroundColor: `rgba(${r}, ${g}, ${b}, 0.5)`
+                }, {
+                    duration: 25,
+                    queue: false
+                })
         }
     })
     tab.Tab.mouseleave(function () {
         if (!tab.selected)
-            tab.Tab.animate({ backgroundColor: normalColor }, { duration: 25, queue: false })
+            tab.Tab.animate({
+                backgroundColor: normalColor
+            }, {
+                duration: 25,
+                queue: false
+            })
     })
 }
 
@@ -112,8 +127,11 @@ function removeTab(tab) {
     }
 
     tabCollection.splice(tabCollection.indexOf(tab), 1);
-    tab.Tab.animate({ top: 50 }, {
-        duration: 200, complete: function () {
+    tab.Tab.animate({
+        top: 50
+    }, {
+        duration: 200,
+        complete: function () {
             tab.Tab.remove();
         }
     })
@@ -142,18 +160,19 @@ function changePos(callingTab) {
         left: tabCollection.indexOf(callingTab) * tabCollection[0].Tab.width(),
         easing: 'easeOutQuint'
     }, {
-            duration: 200,
-            complete: function () {
-                callingTab.locked = false;
-            }, queue: false
-        });
+        duration: 200,
+        complete: function () {
+            callingTab.locked = false;
+        },
+        queue: false
+    });
 }
 
 document.onmousemove = function (e) {
-    cursorX = e.pageX;
-    cursorY = e.pageY;
-}
-//check if bounds of another tab contains mouse point
+        cursorX = e.pageX;
+        cursorY = e.pageY;
+    }
+    //check if bounds of another tab contains mouse point
 function contains(tabToCheck) {
     var rect = tabToCheck.getBoundingClientRect();
     if (cursorX >= rect.left && cursorX <= rect.right) {
@@ -178,15 +197,17 @@ function calcSizes(animation, addButtonAnimation) {
             tabCollection[i].Tab.animate({
                 left: tabCountTemp * tabCollection[0].Tab.width()
             }, {
-                    duration: 200, queue: false
-                });
+                duration: 200,
+                queue: false
+            });
 
         } else {
             tabCollection[i].Tab.animate({
                 left: tabCountTemp * tabCollection[0].Tab.width()
             }, {
-                    duration: 1, queue: false
-                });
+                duration: 1,
+                queue: false
+            });
         }
         tabCountTemp += 1;
     }
@@ -195,8 +216,9 @@ function calcSizes(animation, addButtonAnimation) {
             $('#addTab').animate({
                 left: tabCollection.length * tabCollection[0].Tab.width()
             }, {
-                    duration: 200, queue: false
-                });
+                duration: 200,
+                queue: false
+            });
         } else {
             $('#addTab').css({
                 left: tabCollection.length * tabCollection[0].Tab.width()
@@ -209,6 +231,7 @@ $('#addTab').click(function () {
     var tab = new Tab();
     addTab(new TabWindow(tab, ""), tab);
 });
+
 function selectTab(tab) {
     for (var i = 0; i < tabCollection.length; i++) {
         if (tabCollection[i].Tab != tab) {
@@ -241,4 +264,5 @@ function selectTab(tab) {
         }
     }
 }
-function Tab() { }
+
+function Tab() {}

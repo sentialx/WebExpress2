@@ -17,13 +17,15 @@
     -webkit-app-region: drag;
     z-index: 999;
 }
+
 .border5 {
     height: 1px;
     position: relative;
     bottom: 1px;
     width: 100%;
-    background-color: rgba(0,0,0,0.1);
+    background-color: rgba(0, 0, 0, 0.1);
 }
+
 .favicon {
     background-size: cover;
     width: 16px;
@@ -51,9 +53,9 @@
     height: 31px;
     background-color: #fff;
     position: absolute;
-     border-right: 1px solid rgba(0,0,0,0.1);
-     border-left: 1px solid rgba(0,0,0,0.1);
-      border-bottom: 1px solid rgba(0,0,0,0.1);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     -webkit-app-region: no-drag;
     -webkit-transition: background-color 0.2s;
 }
