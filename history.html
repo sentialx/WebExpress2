@@ -6,7 +6,7 @@
     <title>History</title>
     <link rel="stylesheet" href="css/history.css" />
     <link href="css/ripple.css" rel="stylesheet" type="text/css" />
-    <link href="css/controls/materialdesign.css" rel="stylesheet" type="text/css" />
+    <link href="js/materialdesign/css/materialdesign.css" rel="stylesheet" type="text/css" />
     <style>
         @font-face {
             font-family: "Roboto";
@@ -27,13 +27,13 @@
 
 <body>
     <div class="toolbar">
-        <div class="default-toolbar">
+        <div class="default-toolbar" style="opacity: 1">
             <h3 style="float: left;">History</h3>
             <div style="float:left;" class="searchBox">
                 <div style="margin-top: 1px; font-size: 15px; opacity: 0.8;">Search</div>
             </div>
         </div>
-        <div class="selecteditems-toolbar" style="position: absolute; top: -2px; visibility: hidden; color: #fff;">
+        <div class="selecteditems-toolbar" style="position: absolute; top: -2px; visibility: hidden; color: #fff;opacity: 0;">
             <div id="unselect-btn" data-ripple-color="#fff" style="float: left;margin-top: 24px;margin-right: 32px;" class="icon-button ripple-icon">
                 <div class="icon-button-content" style="background-image: url('img/close-white.png');"></div>
             </div>
@@ -47,6 +47,8 @@
         <div class="card">
         </div>
     </div>
+    <div style="height: 20px; width: 20px;" class="test"></div>
+    <div class="test"></div>
     <script src="js/jquery/jquery-3.1.0.min.js"></script>
     <script src="js/jquery/jquery-ui.min.js"></script>
     <script src="js/materialdesign/ripple.js"></script>

@@ -18,7 +18,8 @@ function addTab(instance, tab) {
     tab.Foreground = 'black';
     tab.Color = selectedTabColor;
     tab.instance = instance;
-    tab.Preloader = $('<div class="preloader" style="width: 16px;position:absolute; top: 8px; left:6px;" thickness="5" color="#3F51B5"></div>').appendTo(tab.Tab);
+    tab.Preloader = $('<div class="preloader" style="height: 16px;width: 16px;position:absolute; top: 6px; left:6px;" thickness="10" color="#3F51B5"></div>').appendTo(tab.Tab);
+    tab.Preloader.preloader()
     tab.selected = false;
     tab.getColor = function () {
         return tab.Tab.css('background-color')
@@ -244,7 +245,7 @@ function selectTab(tab) {
                 tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
             }
             tabCollection[i].Tab.css('height', tabHeight - 1)
-
+            tabCollection[i].Preloader.attr('color', '#3F51B5')
             tabCollection[i].selected = false;
         } else {
             tabCollection[i].Tab.css('background-color', tabCollection[i].Color);
@@ -253,10 +254,12 @@ function selectTab(tab) {
                 tabCollection[i].instance.searchInput.focus();
             }
             if (tabCollection[i].Foreground == 'black') {
+                tabCollection[i].Preloader.attr('color', '#3F51B5')
                 tabCollection[i].Title.css('color', '#444')
                 tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
             } else if (tabCollection[i].Foreground == 'white') {
                 tabCollection[i].Title.css('color', '#fff')
+                tabCollection[i].Preloader.attr('color', '#fff')
                 tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close-white.png")');
             }
             tabCollection[i].Tab.css('height', tabHeight)

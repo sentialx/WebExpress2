@@ -23,8 +23,8 @@ obj.history = obj.history.reverse();
 var checkedCount = 0;
 $('#unselect-btn').click(function () {
     $('.checkbox').each(function (i) {
-        if (this.checked) {
-            this.checked = false;
+        if (this.t.checked) {
+            this.t.checked = false;
             checkedCount -= 1;
             verifyCheckboxes();
         }
@@ -36,7 +36,7 @@ $('.icon-button').mousedown(function () {
 $('#delete-btn').click(function () {
 
     $('.checkbox').each(function (i) {
-        if (this.checked) {
+        if (this.t.checked) {
             console.log(obj.history[this.id]);
 
             for (var i = 0; i < obj.history.length; i++) {
@@ -80,10 +80,9 @@ function verifyCheckboxes() {
             duration: 200,
             queue: false
         });
-        $('.default-toolbar').css('visibility', 'hidden');
+        $('.default-toolbar').css({visibility: 'hidden', opacity: 0});
         $('.selecteditems-toolbar').css({
-            visibility: 'visible',
-            opacity: 0
+            visibility: 'visible'
         });
         $('.selecteditems-toolbar').animate({
             opacity: 1
@@ -99,8 +98,7 @@ function verifyCheckboxes() {
             queue: false
         });
         $('.default-toolbar').css({
-            visibility: 'visible',
-            opacity: 0
+            visibility: 'visible'
         });
         $('.default-toolbar').animate({
             opacity: 1
@@ -108,27 +106,32 @@ function verifyCheckboxes() {
             duration: 200,
             queue: false
         })
-        $('.selecteditems-toolbar').css('visibility', 'hidden');
+        $('.selecteditems-toolbar').css({visibility: 'hidden', opacity: 0});
     }
 }
+
 for (var i = 0; i < obj.history.length; i++) {
     var jsonItem = obj.history[i];
 
     function additem(header) {
         var item = $('<div class="item" style="margin-bottom: -8px; ">').appendTo('.card');
         var checkbox = $('<div class="checkbox ripple-icon" data-ripple-color="#444" style="display: inline-block;"></div>').appendTo(item);
+        var t = $(checkbox).checkbox({rippleTime: 300})
         checkbox[0].item = item;
+        checkbox[0].t = t
         if (header != null)
             checkbox[0].group = header;
         checkbox[0].id = jsonItem.id;
-        checkbox.click(function (e) {
-            if (this.checked) {
-                checkedCount += 1;
-            } else {
-                checkedCount -= 1;
+        checkbox.on('checked-changed', function (e, data) {
+            if (data.userInteraction) {
+                if (data.checked) {
+                    checkedCount += 1;
+                } else {
+                    checkedCount -= 1;
+                }
             }
             verifyCheckboxes();
-        });
+        })
         checkboxes.push(checkbox[0])
         var hour = $('<p style="display: inline-block;margin-left: 16px; width: 50px;color: #9E9E9E;position: relative; top: -4px;">' + jsonItem.time + '</p>').appendTo(item);
         var title = $('<p style="margin-left: 52px;display: inline-block;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;max-width: 40%;max-height: 16px; position: relative; top: 14px; margin-top: -4px;">' + jsonItem.title + '</p>').appendTo(item);

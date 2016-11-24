@@ -5,20 +5,23 @@
   <meta charset="utf-8">
   <title>Material Design Controls</title>
   <link href="../css/ripple.css" rel="stylesheet" type="text/css" />
-  <link href="../css/controls/materialdesign.css" rel="stylesheet" />
+  <link href="../js/materialdesign/css/materialdesign.css" rel="stylesheet" />
 </head>
 
 <body>
-  <div class="switch ripple-icon" data-ripple-color="#444" style="margin-left: 32px;margin-top: 32px;">
+  <div class="switch ripple-icon" style="margin-top: 32px; margin-left: 32px;" data-ripple-color="#444" bg-color-on="#3949AB" bg-color-off="#818181" lever-color-off="#F1F1F1" lever-color-on="#3F51B5">
   </div>
-  <div class="switch" style="margin-left: 32px;margin-top: 32px;">
-  </div>
-  <div class="preloader" style="width: 64px;" thickness="6" color="#3F51B5"></div>
+  <div class="preloader" style="width: 32px;height: 32px;margin-top: 16px;" thickness="10" color="#3F51B5"></div>
   <div class="checkbox ripple-icon" data-ripple-color="#444" style="margin: 32px;"></div>
   <script src="../js/jquery/jquery-3.1.0.min.js" type="text/javascript"></script>
   <script src="../js/jquery/jquery-ui.min.js" type="text/javascript"></script>
-  <script src="../js/material design/ripple.js"></script>
-  <script src="../js/material design/materialdesign.js" type="text/javascript"></script>
+  <script src="../js/materialdesign/ripple.js"></script>
+  <script src="../js/materialdesign/materialdesign.js" type="text/javascript"></script>
+  <script>
+    $('.switch').switch()
+    $('.preloader').preloader()
+    $('.checkbox').checkbox()
+  </script>
 </body>
 
 </html>

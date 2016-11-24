@@ -29,7 +29,7 @@ var Ripple = class Ripple {
                 duration: time,
                 queue: false,
                 complete: function () {
-                    $(this).remove();
+                    
                 }
             })
         })
@@ -40,9 +40,10 @@ var Ripple = class Ripple {
                 duration: time,
                 queue: false,
                 complete: function () {
-                    $(this).remove();
+                   
                 }
             })
         })
+        return $rippleElement
     }
 };
