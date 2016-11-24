@@ -24,7 +24,9 @@
   "homepage": "https://github.com/Sential/WebExpress#readme",
   "devDependencies": {
     "electron": "^1.4.7",
+    "electron-connect": "^0.6.1",
     "electron-packager": "^7.7.0",
+    "gulp": "^3.9.1",
     "is-there": "^4.3.3",
     "node-dir": "^0.1.16"
   },

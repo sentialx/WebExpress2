@@ -293,10 +293,10 @@ class TabWindow {
                 });
                 tab.Favicon.css('opacity', "0");
                 tab.Preloader.css('opacity', "0");
-                if (fileToStart != null) {
+                /*if (fileToStart != null) {
                     url = fileToStart;
                     fileToStart = null;
-                }
+                }*/
                 if (url != null || url != "")
                     webview.loadURL(url);
 

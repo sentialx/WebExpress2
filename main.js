@@ -81,3 +81,6 @@ app.setJumpList([{
         description: 'Runs Tool B'
     }]
 }])
+
+var client = require('electron-connect').client;
+client.create(mainWindow);
