@@ -21,7 +21,15 @@ global.saveHistory = function (json) {
         }
     });
 }
-
+global.addressBarFocus = function () {
+    for (var i = 0; i < parent.tabCollection.length; i++) {
+        if (parent.tabCollection[i].selected) {
+            var itab = parent.tabCollection[i]
+            $(itab.tabWindow.find('.searchInput')).focus()
+        }
+    }
+    
+}
 ipcRenderer.on('getDocument', function (e) {
     var children = document.body.getElementsByTagName("*");
     var colors = []

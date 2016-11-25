@@ -853,6 +853,10 @@ class TabWindow {
                     extMenuToggled = false;
                 }
             });
+            extMenu.focusout(function () {
+
+            })
+
             backBtn.click(function () {
                 if (webview.canGoBack()) {
                     webview.goBack();

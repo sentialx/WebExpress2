@@ -3,9 +3,12 @@ $(document).ready(function () {
         $('.md-input .hint').addClass("md-input-animate-hint");
     }
     $('.md-input .text').focus(function () {
+
         var textLength = $('.md-input .text').val().length;
         if (textLength <= 0) {
             $('.md-input .hint').addClass("md-input-animate-hint");
+            $('.md-input .hint').css('color', '#3F51B5')
+            $('.md-input .hint').css('opacity', '1')
         }
         $('.md-input .divider2').addClass("md-input-animate-divider");
     });
@@ -13,6 +16,8 @@ $(document).ready(function () {
         var textLength = $('.md-input .text').val().length;
         if (textLength <= 0) {
             $('.md-input .hint').removeClass("md-input-animate-hint");
+            $('.md-input .hint').css('color', '#444')
+            $('.md-input .hint').css('opacity', '0.6')
         }
         $('.md-input .divider2').removeClass("md-input-animate-divider");
     });
