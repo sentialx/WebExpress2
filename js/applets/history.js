@@ -35,7 +35,7 @@ $('#delete-btn').click(function () {
             jsonObj.history.sort(function (a, b) {
                 return parseFloat(a.id) - parseFloat(b.id)
             });
-            removeHistory(function() {
+            removeHistory(function () {
                 saveHistory(JSON.stringify(jsonObj))
             })
         }
@@ -115,6 +115,30 @@ function loadHistory(search = "") {
 
         if (month == "Jan") {
             month = "January"
+        }
+        if (month == "Feb") {
+            month = "February"
+        }
+        if (month == "Mar") {
+            month = "March"
+        }
+        if (month == "Apr") {
+            month = "April"
+        }
+        if (month == "Jun") {
+            month = "June"
+        }
+        if (month == "Jul") {
+            month = "July"
+        }
+        if (month == "Aug") {
+            month = "August"
+        }
+        if (month == "Sep") {
+            month = "September"
+        }
+        if (month == "Oct") {
+            month = "October"
         }
         if (month == "Nov") {
             month = "November"
@@ -224,17 +248,23 @@ loadHistory()
 
 setInterval(function () {
     if ($(window).width() < 1024) {
-        $('.content').css({
-            width: 'calc(100% - 48px)'
+        $('.center').css({
+            width: 'calc(100% - 64px)',
+            marginLeft: 32,
+            marginRight: 32
         })
         $('.content').css({
+            width: 'calc(100% - 48px)',
             marginLeft: 24,
             marginRight: 24,
             marginBottom: 24
         })
     } else {
-        $('.content').css({
-
+        $('.center').css({
+            width: '85%',
+            maxWidth: 1024 - 64,
+            marginLeft: 'auto',
+            marginRight: 'auto'
         })
         $('.content').css({
             marginLeft: 'auto',
