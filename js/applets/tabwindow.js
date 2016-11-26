@@ -128,8 +128,6 @@ class TabWindow {
                 }
             }
 
-
-
             //global events
             $(window).click(function () {
                 if (menuToggled) {
@@ -365,80 +363,73 @@ class TabWindow {
                     addTab(new TabWindow(tab, e.url), tab);
                 }
             })
-            var lasturl = "";
-            var lastColor = "";
-            setInterval(function () {
+
+            function saveHistory() {
                 if (webview.getWebContents() != null) {
                     if (webview.getURL() != null) {
-                        if (lasturl != webview.getURL()) {
-                            if (!webview.getURL().startsWith("webexpress://newtab") && webview.getURL() != "about:blank") {
-                                searchInput.val(webview.getURL());
+                        if (lastUrl != webview.getURL()) {
+                            var array;
+                            //get today's date
+                            var today = new Date();
+                            var dd = today.getDate();
+                            var mm = today.getMonth() + 1;
+                            var yyyy = today.getFullYear();
+                            if (dd < 10) {
+                                dd = '0' + dd
                             }
 
-                            //prevent duplicates in history
-                            if (lastUrl != webview.getURL()) {
-                                var array;
-                                //get today's date
-                                var today = new Date();
-                                var dd = today.getDate();
-                                var mm = today.getMonth() + 1;
-                                var yyyy = today.getFullYear();
-                                if (dd < 10) {
-                                    dd = '0' + dd
-                                }
+                            if (mm < 10) {
+                                mm = '0' + mm
+                            }
+                            today = mm + '-' + dd + '-' + yyyy;
 
-                                if (mm < 10) {
-                                    mm = '0' + mm
-                                }
-                                today = mm + '-' + dd + '-' + yyyy;
-
-                                //read history.json file and append new history items
-                                fs.readFile(historyPath, function (err, data) {
-                                    if (err) throw err;
-                                    var json = data.toString();
-                                    //replace weird characters in utf-8
-                                    json = json.replace("\ufeff", "");
-                                    var obj = JSON.parse(json);
-                                    if (!webview.getURL().startsWith("webexpress://") && !webview.getURL().startsWith("about:blank")) {
-                                        var date = new Date();
-                                        var current_hour = date.getHours();
-                                        var current_minute = date.getMinutes();
-                                        var time = `${current_hour}:${current_minute}`;
-                                        if (obj['history'][obj['history'].length - 1] == null) {
-                                            obj['history'].push({
-                                                "link": webview.getURL(),
-                                                "title": webview.getTitle(),
-                                                "date": today,
-                                                "time": time,
-                                                "id": 0
-                                            });
-                                        } else {
-                                            obj['history'].push({
-                                                "link": webview.getURL(),
-                                                "title": webview.getTitle(),
-                                                "date": today,
-                                                "time": time,
-                                                "id": obj['history'][obj['history'].length - 1].id + 1
-                                            });
-                                        }
-                                        var jsonStr = JSON.stringify(obj);
-                                        json = jsonStr;
-                                        //append new history item to history.json
-                                        fs.writeFile(historyPath, json, function (err) {
-                                            if (err) {
-                                                return console.log(err);
-                                            }
+                            //read history.json file and append new history items
+                            fs.readFile(historyPath, function (err, data) {
+                                if (err) throw err;
+                                var json = data.toString();
+                                //replace weird characters in utf-8
+                                json = json.replace("\ufeff", "");
+                                var obj = JSON.parse(json);
+                                if (!webview.getURL().startsWith("webexpress://") && !webview.getURL().startsWith("about:blank")) {
+                                    var date = new Date();
+                                    var current_hour = date.getHours();
+                                    var current_minute = date.getMinutes();
+                                    var time = `${current_hour}:${current_minute}`;
+                                    if (obj['history'][obj['history'].length - 1] == null) {
+                                        obj['history'].push({
+                                            "link": webview.getURL(),
+                                            "title": webview.getTitle(),
+                                            "date": today,
+                                            "time": time,
+                                            "id": 0
                                         });
-                                        lastUrl = webview.getURL();
+                                    } else {
+                                        obj['history'].push({
+                                            "link": webview.getURL(),
+                                            "title": webview.getTitle(),
+                                            "date": today,
+                                            "time": time,
+                                            "id": obj['history'][obj['history'].length - 1].id + 1
+                                        });
                                     }
-                                });
-
-                            }
-                            lasturl = webview.getURL()
+                                    var jsonStr = JSON.stringify(obj);
+                                    json = jsonStr;
+                                    //append new history item to history.json
+                                    fs.writeFile(historyPath, json, function (err) {
+                                        if (err) {
+                                            return console.log(err);
+                                        }
+                                    });
+                                }
+                            });
+                            lastUrl = webview.getURL()
                         }
                     }
                 }
-            }, 200)
+            }
+
+            var lasturl = "";
+            var lastColor = "";
             setInterval(function () {
                     if (tab.selected) {
                         tryGetColor();
@@ -480,23 +471,6 @@ class TabWindow {
                         canvas.width = 2;
                         canvas.height = 2;
                     });
-
-
-
-                    /*webview.send("getDocument", []);
-                    webview.addEventListener('ipc-message', function (e) {
-                        if (e.channel === 'document') {
-                            if (tab.selected) {
-                                tab.Color = e.args[0]
-                                tab.Tab.css('background-color', tab.Color);
-                                changeContrast(true);
-                            }
-                            changeContrast(false);
-                            bar.css('background-color', tab.Color);
-                        }
-                    })*/
-
-
                 }
             }
 
@@ -534,6 +508,10 @@ class TabWindow {
                 tab.Favicon.css('opacity', "1");
                 tab.Preloader.css('opacity', "0");
                 lastColor = "";
+                saveHistory()
+                if (!webview.getURL().startsWith("webexpress://newtab") && webview.getURL() != "about:blank") {
+                    searchInput.val(webview.getURL());
+                }
             });
             //webview start loading event
             webview.addEventListener('did-start-loading', function () {
@@ -546,6 +524,10 @@ class TabWindow {
             //webview page title changed event
             webview.addEventListener('page-title-updated', function (title) {
                 tab.Title.html("<p style='display: inline; width:50%;'>" + webview.getTitle() + "</p>");
+                saveHistory()
+                if (!webview.getURL().startsWith("webexpress://newtab") && webview.getURL() != "about:blank") {
+                    searchInput.val(webview.getURL());
+                }
             });
             //webview load commit event
             webview.addEventListener('load-commit', function (url, isMain) {
@@ -853,9 +835,6 @@ class TabWindow {
                     extMenuToggled = false;
                 }
             });
-            extMenu.focusout(function () {
-
-            })
 
             backBtn.click(function () {
                 if (webview.canGoBack()) {

@@ -21,6 +21,9 @@ global.saveHistory = function (json) {
         }
     });
 }
+global.removeHistory = function(callback = function() {}) {
+    fs.unlink(historyPath, callback)
+}
 global.addressBarFocus = function () {
     for (var i = 0; i < parent.tabCollection.length; i++) {
         if (parent.tabCollection[i].selected) {

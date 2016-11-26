@@ -1,165 +1,245 @@
 function isInArray(value, array) {
-    return array.indexOf(value) > -1;
+    return array.indexOf(value) > -1
 }
 
-var obj = getHistoryData();
-var groups = [];
-var today = new Date();
-var dd = today.getDate();
-var mm = today.getMonth() + 1;
-var yyyy = today.getFullYear();
-var count = 0;
-var headers = [];
-if (dd < 10) {
-    dd = '0' + dd;
-}
+var jsonObj = getHistoryData()
+var dates = []
+var cards = []
+var items = []
 
-if (mm < 10) {
-    mm = '0' + mm;
-}
-today = mm + '-' + dd + '-' + yyyy;
-var checkboxes = [];
-obj.history = obj.history.reverse();
-var checkedCount = 0;
-$('#unselect-btn').click(function () {
+var checkedCount = 0
+
+$('#unselect-btn').click(unSelectAll)
+$('#cancel-btn').click(unSelectAll)
+
+function unSelectAll() {
     $('.checkbox').each(function (i) {
-        if (this.t.checked) {
-            this.t.checked = false;
-            checkedCount -= 1;
-            verifyCheckboxes();
-        }
-    });
-});
+        this.instance.checked = false
+    })
+}
+
 $('.icon-button').mousedown(function () {
-    Ripple.makeRipple($(this), 10, 10, 15, 15, 300, 0);
-});
+    Ripple.makeRipple($(this), 10, 10, 15, 15, 300, 0)
+})
+
 $('#delete-btn').click(function () {
-
-    $('.checkbox').each(function (i) {
-        if (this.t.checked) {
-            console.log(obj.history[this.id]);
-
-            for (var i = 0; i < obj.history.length; i++) {
-                if (obj.history[i].id == this.id) {
-                    obj.history.splice(i, 1);
-                }
-            }
-            this.item.remove();
-            if (this.item.length <= 0) {
-                checkedCount = 0;
-                verifyCheckboxes();
-            }
-            checkedCount = 0;
-            this.group.items -= 1;
-            if (this.group.items <= 0) {
-                this.group.remove();
-                headers.splice(headers.indexOf(this.group), 1);
-                headers[0].css('margin-top', '-32px');
-            }
-            verifyCheckboxes();
+    $('.item').each(function () {
+        if (this.list.checkbox[0].instance.checked) {
+            var i = $('.item').index($(this))
+            $(this).remove()
+            checkedCount = 0
+            verifyCheckboxes()
+            console.log(i)
+            jsonObj.history.reverse()
+            jsonObj.history.splice(i, 1)
+            jsonObj.history.sort(function (a, b) {
+                return parseFloat(a.id) - parseFloat(b.id)
+            });
+            removeHistory(function() {
+                saveHistory(JSON.stringify(jsonObj))
+            })
         }
-    });
-    obj.history.sort(function (a, b) {
-        return parseFloat(a.id) - parseFloat(b.id);
-    });
-    saveHistory("");
-    saveHistory(JSON.stringify(obj));
-});
+
+        if (this.list.card.find('.item').length == 0) {
+            this.list.card.remove()
+        }
+    })
+
+
+})
+
 $('.flat-button').mousedown(function (e) {
-    var relX = e.pageX - $(this).offset().left;
-    var relY = e.pageY - $(this).offset().top;
-    Ripple.makeRipple($(this), relX, relY, $(this).width() + 16, $(this).height() + 16, 300, 0);
+    var relX = e.pageX - $(this).offset().left
+    var relY = e.pageY - $(this).offset().top
+    Ripple.makeRipple($(this), relX, relY, $(this).width() + 16, $(this).height() + 16, 300, 0)
 });
 
 function verifyCheckboxes() {
-    $('#selected-items').html('Selected items: ' + checkedCount);
-    if (checkedCount >= 1) {
-        $(".toolbar").animate({
-            backgroundColor: '#283593'
-        }, {
-            duration: 200,
-            queue: false
-        });
-        $('.default-toolbar').css({visibility: 'hidden', opacity: 0});
-        $('.selecteditems-toolbar').css({
-            visibility: 'visible'
-        });
-        $('.selecteditems-toolbar').animate({
+    if (checkedCount > 0) {
+        $('.selected-items-text').html('Selected items: ' + checkedCount)
+        $('.selected').css({
+            display: 'block'
+        }).animate({
             opacity: 1
         }, {
-            duration: 200,
-            queue: false
-        });
-    } else {
-        $(".toolbar").animate({
-            backgroundColor: '#3F51B5'
-        }, {
-            duration: 200,
-            queue: false
-        });
-        $('.default-toolbar').css({
-            visibility: 'visible'
-        });
-        $('.default-toolbar').animate({
-            opacity: 1
-        }, {
-            duration: 200,
+            duration: 150,
             queue: false
         })
-        $('.selecteditems-toolbar').css({visibility: 'hidden', opacity: 0});
+    } else {
+        $('.selected').animate({
+            opacity: 0
+        }, {
+            duration: 150,
+            queue: false,
+            complete: function () {
+                $(this).css({
+                    display: 'none'
+                })
+            }
+        })
     }
 }
 
-for (var i = 0; i < obj.history.length; i++) {
-    var jsonItem = obj.history[i];
+$('.search-input').on('input', function () {
+    if ($(this).val() == "") {
+        $('.hint').css('visibility', 'visible')
+    } else {
+        $('.hint').css('visibility', 'hidden')
+    }
+    $('.card').remove()
+    loadHistory($(this).val())
+    checkedCount = 0
+})
 
-    function additem(header) {
-        var item = $('<div class="item" style="margin-bottom: -8px; ">').appendTo('.card');
-        var checkbox = $('<div class="checkbox ripple-icon" data-ripple-color="#444" style="display: inline-block;"></div>').appendTo(item);
-        var t = $(checkbox).checkbox({rippleTime: 300})
-        checkbox[0].item = item;
-        checkbox[0].t = t
-        if (header != null)
-            checkbox[0].group = header;
-        checkbox[0].id = jsonItem.id;
-        checkbox.on('checked-changed', function (e, data) {
-            if (data.userInteraction) {
-                if (data.checked) {
-                    checkedCount += 1;
+function loadHistory(search = "") {
+
+    $.each(jsonObj.history, function (i, el) {
+        if (!isInArray(jsonObj.history[i].date, dates)) {
+            dates.push(jsonObj.history[i].date)
+        }
+    })
+    dates.reverse()
+    for (var i2 = 0; i2 < dates.length; i2++) {
+        var d = new Date(dates[i2])
+        var date = d.toString()
+        var dayOfWeek = date.split(" ")[0]
+        var month = date.split(" ")[1]
+        var dayOfMonth = date.split(" ")[2]
+        var year = date.split(" ")[3]
+
+        var card = $('<div class="card">').appendTo($('.content'))
+        var header = $('<div class="header">').appendTo(card)
+        var line = $('<div class="line">').appendTo(card)
+        var body = $('<div class="body">').appendTo(card)
+        var items = $('<div class="items">').appendTo(body)
+
+        if (month == "Jan") {
+            month = "January"
+        }
+        if (month == "Nov") {
+            month = "November"
+        }
+        if (month == "Dec") {
+            month = "December"
+        }
+
+        if (dayOfMonth.slice(-1) == "1") {
+            dayOfMonth += "st"
+        }
+        if (dayOfMonth.slice(-1) == "2") {
+            dayOfMonth += "nd"
+        }
+        if (dayOfMonth.slice(-1) == "3") {
+            dayOfMonth += "rd"
+        }
+
+        var d1 = Date()
+        var todayDate = d1.toString()
+
+        if (todayDate.split(" ")[1] == date.split(" ")[1] && todayDate.split(" ")[2] == date.split(" ")[2]) {
+            header.html("Today - " + dayOfMonth + "th of " + month)
+        } else {
+            header.html(dayOfMonth + " of " + month)
+        }
+        card[0].list = {
+            card: card,
+            header: header,
+            line: line,
+            body: body,
+            items: items,
+            date: date
+        }
+        cards.push(card)
+
+
+        for (var i = jsonObj.history.length - 1; i >= 0; i--) {
+            var d2 = new Date(jsonObj.history[i].date)
+            var date1 = d2.toString()
+            if (date.split(" ")[1] == date1.split(" ")[1] && date.split(" ")[2] == date1.split(" ")[2]) {
+                if (search == "") {
+                    addItem(card, i)
                 } else {
-                    checkedCount -= 1;
+                    if (jsonObj.history[i].title.toLowerCase().startsWith(search.toLowerCase()) || jsonObj.history[i].link.toLowerCase().indexOf(search.toLowerCase()) !== -1) {
+                        addItem(card, i)
+                    }
                 }
             }
-            verifyCheckboxes();
-        })
-        checkboxes.push(checkbox[0])
-        var hour = $('<p style="display: inline-block;margin-left: 16px; width: 50px;color: #9E9E9E;position: relative; top: -4px;">' + jsonItem.time + '</p>').appendTo(item);
-        var title = $('<p style="margin-left: 52px;display: inline-block;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;max-width: 40%;max-height: 16px; position: relative; top: 14px; margin-top: -4px;">' + jsonItem.title + '</p>').appendTo(item);
-        var link = $('<a href="' + jsonItem.link + '" style="margin-left: 16px; display: inline-block;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;max-width: 30%; max-height: 16px; margin-top: -4px;">' + jsonItem.link + '</a>').appendTo(item);
-        count += 1;
-    }
-    var currentHeader;
-    if (!isInArray(jsonItem.date, groups)) {
-        var cardHeader;
-        if (groups.length == 0) {
-            if (jsonItem.date == today) {
-                cardHeader = $('<div class="card-header" style="margin-bottom:32px;"><div style="padding-bottom: 16px;">Today</div></div>').appendTo('.card');
-            } else {
-                cardHeader = $('<div class="card-header" style="margin-bottom:32px;"><div style="padding-bottom: 16px;">' + jsonItem.date + '</div></div>').appendTo('.card');
-            }
-        } else {
-            cardHeader = $('<div class="card-header" style="margin-top: 32px; margin-bottom:32px;"><div style="padding-bottom: 16px;">' + jsonItem.date + '</div></div>').appendTo('.card');
         }
-        var hr = $('<hr style="position: absolute; top: 0; left:0;right:0; margin-top: 0; padding-top: 0;" />').appendTo(cardHeader);
-        var hr = $('<hr style="position: absolute; bottom: 0; left:0;right:0; margin-bottom: 0; padding-bottom: 0;" />').appendTo(cardHeader);
-        cardHeader.items = 1;
-        additem(cardHeader);
-        currentHeader = cardHeader;
-        groups.push(jsonItem.date);
-        headers.push(cardHeader);
-    } else {
-        currentHeader.items += 1;
-        additem(currentHeader);
 
     }
 }
+
+function addItem(card, i) {
+    var item = $('<div class="item">').appendTo(card.find('.items'))
+    item.append('\
+                <div class="checkbox ripple-icon" data-ripple-color="#757575"></div>\
+                <div class="details">\
+                    <div class="time"></div>\
+                    <div class="page-title"></div>\
+                    <a class="link" href=""></a>\
+                </div>\
+                ')
+    var checkbox = item.find('.checkbox')
+    var details = item.find('.details')
+    var time = item.find('.time')
+    var pageTitle = item.find('.page-title')
+    var link = item.find('.link')
+    link.attr('href', jsonObj.history[i].link)
+
+    checkbox[0].instance = checkbox.checkbox()
+
+    checkbox.on('checked-changed', function (e, data) {
+        if (data.checked) {
+            checkedCount += 1
+        } else {
+            checkedCount -= 1
+        }
+        verifyCheckboxes()
+    })
+
+    var timeObj = new Date()
+    timeObj.setHours(jsonObj.history[i].time.split(":")[0], jsonObj.history[i].time.split(":")[1], 0, 0)
+    var time1 = timeObj.toString()
+
+    var timeString = time1.split(" ")[4].split(":")[0] + ":" + time1.split(" ")[4].split(":")[1]
+
+    link.html(jsonObj.history[i].link)
+    pageTitle.html(jsonObj.history[i].title)
+    time.html(timeString)
+
+    item[0].list = {
+        item: item,
+        checkbox: checkbox,
+        details: details,
+        time: time,
+        pageTitle: pageTitle,
+        link: link,
+        card: card,
+        id: jsonObj.history[i].id
+    }
+
+    items.push(item)
+}
+loadHistory()
+
+setInterval(function () {
+    if ($(window).width() < 1024) {
+        $('.content').css({
+            width: 'calc(100% - 48px)'
+        })
+        $('.content').css({
+            marginLeft: 24,
+            marginRight: 24,
+            marginBottom: 24
+        })
+    } else {
+        $('.content').css({
+
+        })
+        $('.content').css({
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            marginBottom: 24
+        })
+    }
+}, 1)

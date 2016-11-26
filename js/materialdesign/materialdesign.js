@@ -55,7 +55,7 @@ function doRippleIcon(item, x, y, width, height, rippleTime) {
             fill.animate({
                 opacity: 1
             }, {
-                duration: 100,
+                duration: 200,
                 queue: false
             });
             path.animate({
@@ -67,7 +67,7 @@ function doRippleIcon(item, x, y, width, height, rippleTime) {
             path.animate({
                 marginLeft: 24
             }, {
-                duration: 200,
+                duration: 350,
                 queue: true
             });
             t.checked = true
@@ -79,7 +79,7 @@ function doRippleIcon(item, x, y, width, height, rippleTime) {
             fill.animate({
                 opacity: 0
             }, {
-                duration: 100,
+                duration: 200,
                 queue: false
             });
             path.animate({
