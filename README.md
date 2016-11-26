@@ -37,8 +37,8 @@ npm run build
 Tutorials are on wiki page: https://github.com/Sential/WebExpress/wiki
 
 ## `TODO`
+* Extensions popups
 * Bookmarks
-* New tab page
 * keyboard shortcuts
 * Other features like screenshots etc.
 * Downloads
