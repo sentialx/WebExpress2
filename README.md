@@ -1,5 +1,5 @@
 # WebExpress
-(readme work in progress)
+WebExpress is a browser with Material Design implementation.
 * authors: Eryk Rakowski (Sential) and Mikołaj Palkiewicz (xNerhu22)
 
 ## Features
