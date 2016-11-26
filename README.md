@@ -16,6 +16,10 @@
 * Extensions (work in progress)
 * Beautiful UI (material design)
 
+## Screenshots
+![WebExpress screenshot1](/img/screenshot1.png)
+![WebExpress screenshot2](/img/screenshot2.png)
+
 ## Getting source code
 You need to install node.js
 ### Starting
