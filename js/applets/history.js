@@ -149,19 +149,23 @@ function loadHistory(search = "") {
 
         if (dayOfMonth.slice(-1) == "1") {
             dayOfMonth += "st"
-        }
-        if (dayOfMonth.slice(-1) == "2") {
-            dayOfMonth += "nd"
-        }
-        if (dayOfMonth.slice(-1) == "3") {
-            dayOfMonth += "rd"
+        } else {
+            if (dayOfMonth.slice(-1) == "2") {
+                dayOfMonth += "nd"
+            } else {
+                if (dayOfMonth.slice(-1) == "3") {
+                    dayOfMonth += "rd"
+                } else {
+                    dayOfMonth += "th"
+                }
+            }
         }
 
         var d1 = Date()
         var todayDate = d1.toString()
 
         if (todayDate.split(" ")[1] == date.split(" ")[1] && todayDate.split(" ")[2] == date.split(" ")[2]) {
-            header.html("Today - " + dayOfMonth + "th of " + month)
+            header.html("Today - " + dayOfMonth + " of " + month)
         } else {
             header.html(dayOfMonth + " of " + month)
         }

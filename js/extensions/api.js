@@ -14,7 +14,7 @@ class API {
       return $('#titlebar').css('background-color')
     }
     t.setTitlebarColor = function (color) {
-      $(parent.document.body).find('#titlebar').css('background-color', color)
+      $(parent.document.body).css('background-color', color)
       if (colorBrightness(color) < 125) {
         //white
         parent.Foreground = "#fff";

@@ -6,6 +6,7 @@ body {
     color: #444;
     font-family: Roboto;
     overflow: hidden;
+    background-color: #eee;
 }
 
 .instances {
