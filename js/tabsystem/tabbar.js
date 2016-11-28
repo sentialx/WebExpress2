@@ -12,7 +12,7 @@ var borderColor = 'rgba(0,0,0,0.1)';
 function addTab(instance, tab) {
     //declarations in Tab class
     tab.Tab = $('<div class="tab" id="#tab"></div>').appendTo('#tabbar');
-    tab.closeBtn = $("<div class='closeBtn'><div class='closeBtnImg'></div></div>").appendTo(tab.Tab);
+    tab.closeBtn = $("<div class='closeBtn'><i class='material-icons' style='font-size: 18px;'>close</i></div>").appendTo(tab.Tab);
     tab.Title = $("<div class='tabTitle'>New tab</div>").appendTo(tab.Tab);
     tab.Favicon = $("<div></div>").appendTo(tab.Tab);
     tab.Foreground = 'black';
@@ -233,37 +233,45 @@ $('#addTab').click(function () {
     addTab(new TabWindow(tab, ""), tab);
 });
 
+function deselect(tab) {
+    tab.Tab.css('background-color', normalColor)
+    tab.tabWindow.css({height: 0, position: 'absolute', opacity: 0, visibility: 'hidden'})
+    tab.Title.css('color', Foreground)
+    if (Foreground == "#fff") {
+        tab.closeBtn.css('color', '#fff')
+    } else {
+        tab.closeBtn.css('color', '#000')
+    }
+    tab.Tab.css('height', tabHeight - 1)
+    tab.Preloader.attr('color', '#3F51B5')
+    tab.selected = false;
+}
+
+function select(tab) {
+    tab.Tab.css('background-color', tab.Color);
+    tab.tabWindow.css({height: $(window).height(), position: 'relative', opacity: 1, visibility: 'visible'});
+    if (tab.instance.searchInput != null && (tab.instance.searchInput.val() == "" || tab.instance.searchInput.val() == null)) {
+        tab.instance.searchInput.focus();
+    }
+    if (tab.Foreground == 'black') {
+        tab.Preloader.attr('color', '#3F51B5')
+        tab.Title.css('color', '#444')
+        tab.closeBtn.css('color', '#000')
+    } else if (tab.Foreground == 'white') {
+        tab.Title.css('color', '#fff')
+        tab.Preloader.attr('color', '#fff')
+        tab.closeBtn.css('color', '#fff')
+    }
+    tab.Tab.css('height', tabHeight)
+    tab.selected = true;
+}
+
 function selectTab(tab) {
     for (var i = 0; i < tabCollection.length; i++) {
         if (tabCollection[i].Tab != tab) {
-            tabCollection[i].Tab.css('background-color', normalColor);
-            tabCollection[i].tabWindow.css('display', 'none');
-            tabCollection[i].Title.css('color', Foreground)
-            if (Foreground == "#fff") {
-                tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close-white.png")');
-            } else {
-                tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
-            }
-            tabCollection[i].Tab.css('height', tabHeight - 1)
-            tabCollection[i].Preloader.attr('color', '#3F51B5')
-            tabCollection[i].selected = false;
+            deselect(tabCollection[i])
         } else {
-            tabCollection[i].Tab.css('background-color', tabCollection[i].Color);
-            tabCollection[i].tabWindow.css('display', 'block');
-            if (tabCollection[i].instance.searchInput != null && (tabCollection[i].instance.searchInput.val() == "" || tabCollection[i].instance.searchInput.val() == null)) {
-                tabCollection[i].instance.searchInput.focus();
-            }
-            if (tabCollection[i].Foreground == 'black') {
-                tabCollection[i].Preloader.attr('color', '#3F51B5')
-                tabCollection[i].Title.css('color', '#444')
-                tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
-            } else if (tabCollection[i].Foreground == 'white') {
-                tabCollection[i].Title.css('color', '#fff')
-                tabCollection[i].Preloader.attr('color', '#fff')
-                tabCollection[i].closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close-white.png")');
-            }
-            tabCollection[i].Tab.css('height', tabHeight)
-            tabCollection[i].selected = true;
+            select(tabCollection[i])
         }
     }
 }

@@ -1,135 +1,124 @@
 class TabWindow {
 
     constructor(tab, url) {
-
-        var s = this;
-        this.searchInput = null;
-        this.webView = null;
-        this.loadedExts = [];
-        this.apis = [];
+        var s = this
+        this.searchInput = null
+        this.webView = null
+        this.loadedExts = []
+        this.apis = []
         this.actualColor = ""
         this.deleteExtensions = function () {
             for (var i3 = 0; i3 < s.loadedExts.length; i3++) {
-                $(s.loadedExts[i3]).remove();
+                $(s.loadedExts[i3]).remove()
             }
             for (var i = 0; i < s.apis.length; i++) {
                 s.apis[i].dispose()
-                s.apis[i] = null;
+                s.apis[i] = null
             }
-            s.apis = [];
-            s.loadedExts = [];
+            s.apis = []
+            s.loadedExts = []
         }
         tab.tabWindow = $("<div style='height: 100%;'>").load("browser.html", function () {
             //main section
-            var webview = tab.tabWindow.find('.webview')[0];
-            var searchInput = $(tab.tabWindow.find('.searchInput')[0]);
-            var bar = $(tab.tabWindow.find('.bar')[0]);
-            var searchBox = $(tab.tabWindow.find('.searchBox')[0]);
-            var refreshBtn = $(tab.tabWindow.find('.refreshBtn')[0]);
-            var backBtn = $(tab.tabWindow.find('.backBtn')[0]);
-            var forwardBtn = $(tab.tabWindow.find('.forwardBtn')[0]);
-            var menuBtn = $(tab.tabWindow.find('.menuBtn')[0]);
-            var refreshBtnIcon = $(tab.tabWindow.find('.refreshBtnIcon')[0]);
-            var backBtnIcon = $(tab.tabWindow.find('.backBtnIcon')[0]);
-            var forwardBtnIcon = $(tab.tabWindow.find('.forwardBtnIcon')[0]);
-            var menuBtnIcon = $(tab.tabWindow.find('.menuBtnIcon')[0]);
-            var extBtn = $(tab.tabWindow.find('.extBtn')[0]);
-            var extBtnIcon = $(tab.tabWindow.find('.extBtnIcon')[0]);
-            //suggestions
-            var suggestions_ul = $(tab.tabWindow.find('.suggestions-ul')[0]);
-            var suggestions = $(tab.tabWindow.find('.suggestions')[0]);
-            //menu
-            var menu = $(tab.tabWindow.find('.menu')[0]);
-            var menuToggled = false;
-            var menuItems = $(tab.tabWindow.find('.menu-items')[0]);
-            var extMenu = $(tab.tabWindow.find('.ext-menu')[0]);
-            var extMenuToggled = false;
-            //menu actions
-            var settings = $(tab.tabWindow.find('.menu-item')[0]);
-            var history = $(tab.tabWindow.find('.menu-item')[1]);
-            var bookmarks = $(tab.tabWindow.find('.menu-item')[2]);
-            var downloads = $(tab.tabWindow.find('.menu-item')[3]);
-            var extensions = $(tab.tabWindow.find('.menu-item')[4]);
-            var newWindow = $(tab.tabWindow.find('.menu-item')[5]);
-            var fullscreen = $(tab.tabWindow.find('.menu-item')[6]);
-            var devtools = $(tab.tabWindow.find('.menu-item')[7]);
-            var screenshot = $(tab.tabWindow.find('.menu-item')[8]);
-            var privacy = $(tab.tabWindow.find('.menu-item')[9]);
+            var webview = tab.tabWindow.find('.webview')[0]
+            var searchInput = tab.tabWindow.find('.searchInput')
+            var bar = tab.tabWindow.find('.bar')
+            var searchBox = tab.tabWindow.find('.searchBox')
+            var refreshBtn = tab.tabWindow.find('.refreshBtn')
+            var backBtn = tab.tabWindow.find('.backBtn')
+            var forwardBtn = tab.tabWindow.find('.forwardBtn')
+            var menuBtn = tab.tabWindow.find('.menuBtn')
+            var extBtn = tab.tabWindow.find('.extBtn')
+                //suggestions
+            var suggestions_ul = tab.tabWindow.find('.suggestions-ul')
+            var suggestions = tab.tabWindow.find('.suggestions')
+                //menu
+            var menu = tab.tabWindow.find('.menu')
+            var menuToggled = false
+            var menuItems = tab.tabWindow.find('.menu-items')
+            var extMenu = tab.tabWindow.find('.ext-menu')
+            var extMenuToggled = false
+                //menu actions
+            var settings = $(tab.tabWindow.find('.menu-item')[0])
+            var history = $(tab.tabWindow.find('.menu-item')[1])
+            var bookmarks = $(tab.tabWindow.find('.menu-item')[2])
+            var downloads = $(tab.tabWindow.find('.menu-item')[3])
+            var extensions = $(tab.tabWindow.find('.menu-item')[4])
+            var newWindow = $(tab.tabWindow.find('.menu-item')[5])
+            var fullscreen = $(tab.tabWindow.find('.menu-item')[6])
+            var devtools = $(tab.tabWindow.find('.menu-item')[7])
+            var screenshot = $(tab.tabWindow.find('.menu-item')[8])
+            var privacy = $(tab.tabWindow.find('.menu-item')[9])
 
             //global properties
-            var firstUrl = url;
-            var lastUrl = '';
-            s.searchInput = searchInput;
-            s.webView = webview;
-            var xToInspect, yToInspect;
-            var imageToSave = '';
-            var linkToOpen = '';
+            var firstUrl = url
+            var lastUrl = ''
+            s.searchInput = searchInput
+            s.webView = webview
+            var xToInspect, yToInspect
+            var imageToSave = ''
+            var linkToOpen = ''
 
             var {
                 remote,
                 ipcMain,
                 clipboard
             } = require('electron')
-            var bw = remote.getCurrentWindow()
             var {
                 Menu,
                 MenuItem
             } = remote
+
             checkFiles();
-            bw.on('closed', function () {
-                    canGetColor = false;
-                })
-                //check if background color of bar is dark or light and then set icons foreground to black or white
+
+            //check if background color of bar is dark or light and then set icons foreground to black or white
             function changeContrast(changeTabs) {
-                var brightness = colorBrightness(tab.Color);
+                var brightness = colorBrightness(tab.Color)
                 if (brightness < 125) {
                     //white icons and text
                     if (changeTabs) {
-                        tab.Title.css('color', 'white');
-                        tab.closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close-white.png")');
-                        tab.Preloader.attr('color', '#fff');
+                        tab.Title.css('color', 'white')
+                        tab.closeBtn.css('color', '#fff')
+                        tab.Preloader.attr('color', '#fff')
                     }
-                    tab.Foreground = 'white';
-                    searchBox.css('background-color', 'rgba(255,255,255,0.2) ');
-                    searchInput.css('color', '#fff');
-                    forwardBtnIcon.css('background-image', 'url("img/forward-white.png")');
-                    backBtnIcon.css('background-image', 'url("img/back-white.png")');
-                    refreshBtnIcon.css('background-image', 'url("img/refresh-white.png")');
-                    menuBtnIcon.css('background-image', 'url("img/menu-white.png")');
-                    refreshBtn.attr('data-ripple-color', '#fff');
-                    backBtn.attr('data-ripple-color', '#fff');
-                    forwardBtn.attr('data-ripple-color', '#fff');
-                    menuBtn.attr('data-ripple-color', '#fff');
-                    extBtn.attr('data-ripple-color', '#fff');
-                    extBtnIcon.css('background-image', 'url("img/more-vert-white.png")');
-
+                    tab.Foreground = 'white'
+                    searchBox.css({
+                        backgroundColor: 'rgba(255,255,255,0.2)',
+                        color: '#fff'
+                    })
+                    searchInput.css('color', '#fff')
+                    refreshBtn.attr('data-ripple-color', '#fff').css('color', '#fff')
+                    backBtn.attr('data-ripple-color', '#fff').css('color', '#fff')
+                    forwardBtn.attr('data-ripple-color', '#fff').css('color', '#fff')
+                    menuBtn.attr('data-ripple-color', '#fff').css('color', '#fff')
+                    extBtn.attr('data-ripple-color', '#fff').css('color', '#fff')
                 } else {
                     //black icons and text
                     if (changeTabs) {
-                        tab.Title.css('color', '#444');
-                        tab.closeBtn.find('.closeBtnImg').css('background-image', 'url("img/close.png")');
-                        tab.Preloader.attr('color', '#3F51B5');
+                        tab.Title.css('color', '#444')
+                        tab.closeBtn.css('color', '#000')
+                        tab.Preloader.attr('color', '#3F51B5')
                     }
 
-                    tab.Foreground = 'black';
-                    searchInput.css('color', '#444');
-                    searchBox.css('background-color', '#fff');
-                    forwardBtnIcon.css('background-image', 'url("img/forward.png")');
-                    backBtnIcon.css('background-image', 'url("img/back.png")');
-                    refreshBtnIcon.css('background-image', 'url("img/refresh.png")');
-                    menuBtnIcon.css('background-image', 'url("img/menu.png")');
-                    refreshBtn.attr('data-ripple-color', '#444');
-                    backBtn.attr('data-ripple-color', '#444');
-                    forwardBtn.attr('data-ripple-color', '#444');
-                    menuBtn.attr('data-ripple-color', '#444');
-                    extBtn.attr('data-ripple-color', '#444');
-                    extBtnIcon.css('background-image', 'url("img/more-vert.png")');
-
+                    tab.Foreground = 'black'
+                    searchBox.css({
+                        backgroundColor: 'white',
+                        color: '#212121'
+                    })
+                    searchInput.css('color', '#212121')
+                    refreshBtn.attr('data-ripple-color', '#444').css('color', '#000')
+                    backBtn.attr('data-ripple-color', '#444').css('color', '#000')
+                    forwardBtn.attr('data-ripple-color', '#444').css('color', '#000')
+                    menuBtn.attr('data-ripple-color', '#444').css('color', '#000')
+                    extBtn.attr('data-ripple-color', '#444').css('color', '#000')
                 }
             }
-
-            //global events
-            $(window).click(function () {
+            $(webview).css({
+                    width: window.innerWidth,
+                    height: window.innerHeight - 79
+                })
+                //global events
+            $(window).on('click', function () {
                 if (menuToggled) {
                     menu.css('opacity', 1).animate({
                         opacity: 0
@@ -138,51 +127,60 @@ class TabWindow {
                     }, {
                         queue: false,
                         complete: function () {
-                            menu.css('visibility', 'hidden');
+                            menu.css('visibility', 'hidden')
                         },
                         duration: 200
                     });
-                    menuToggled = false;
+                    menuToggled = false
                 }
-                suggestions.css('display', 'none');
+                suggestions.css('display', 'none')
             });
 
             //global timer
             setInterval(function () {
                 if (searchInput.val() == "" || searchInput.val() == null) {
-                    suggestions.css('display', 'none');
+                    suggestions.css('display', 'none')
                     tab.tabWindow.find('.suggestions-li').each(function (i) {
-                        $(this).remove();
+                        $(this).remove()
                     });
+
                 }
+
             }, 1);
+
+            $(window).resize(function () {
+                $(webview).css({
+                    width: window.innerWidth,
+                    height: window.innerHeight - 79
+                })
+            })
 
             //create and add context menu items
             var backMenuItem = new MenuItem({
                 label: 'Back',
                 click() {
-                    webview.goBack();
+                    webview.goBack()
                 }
             });
             var forwardMenuItem = new MenuItem({
                 label: 'Forward',
                 click() {
-                    webview.goForward();
+                    webview.goForward()
                 }
             });
             var refreshMenuItem = new MenuItem({
                 label: 'Reload',
                 click() {
-                    webview.reload();
+                    webview.reload()
                 }
             });
             var openLinkInNewTabMenuItem = new MenuItem({
                 label: 'Open link in new tab',
                 click() {
                     if (linkToOpen != "") {
-                        var tab = new Tab();
-                        var tw = new TabWindow(tab, linkToOpen);
-                        addTab(tw, tab);
+                        var tab = new Tab()
+                        var tw = new TabWindow(tab, linkToOpen)
+                        addTab(tw, tab)
                     }
                 }
             });
@@ -190,9 +188,9 @@ class TabWindow {
                 label: 'Open image in new tab',
                 click() {
                     if (linkToOpen != "") {
-                        var tab = new Tab();
-                        var tw = new TabWindow(tab, linkToOpen);
-                        addTab(tw, tab);
+                        var tab = new Tab()
+                        var tw = new TabWindow(tab, linkToOpen)
+                        addTab(tw, tab)
                     }
                 }
             });
@@ -200,7 +198,7 @@ class TabWindow {
                 label: 'Copy link address',
                 click() {
                     if (linkToOpen != "") {
-                        clipboard.writeText(linkToOpen);
+                        clipboard.writeText(linkToOpen)
                     }
                 }
             });
@@ -219,7 +217,7 @@ class TabWindow {
             var inspectElementMenuItem = new MenuItem({
                 label: 'Inspect element',
                 click() {
-                    webview.inspectElement(xToInspect, yToInspect);
+                    webview.inspectElement(xToInspect, yToInspect)
                 }
             });
             var viewSourceMenuItem = new MenuItem({
@@ -284,73 +282,75 @@ class TabWindow {
 
                     }
                 });
-                var ses = webview.getWebContents().session;
-                searchInput.focus();
+                var ses = webview.getWebContents().session
+                searchInput.focus()
+
                 ses.on('will-download', (event, item, webContents) => {
-                    console.log("handled download"); //TODO make download
-                });
-                tab.Favicon.css('opacity', "0");
-                tab.Preloader.css('opacity', "0");
-                /*if (fileToStart != null) {
-                    url = fileToStart;
-                    fileToStart = null;
-                }*/
+                    console.log("handled download") //TODO make download
+                })
+
+                tab.Favicon.css('opacity', "0")
+                tab.Preloader.css('opacity', "0")
+                    /*if (fileToStart != null) {
+                        url = fileToStart;
+                        fileToStart = null;
+                    }*/
                 if (url != null || url != "")
-                    webview.loadURL(url);
+                    webview.loadURL(url)
 
                 //configure and open context menu
                 webview.getWebContents().on('context-menu', (e, params) => {
                     e.preventDefault()
-                    imageToSave = '';
-                    linkToOpen = '';
+                    imageToSave = ''
+                    linkToOpen = ''
                     if (params.mediaType == 'image') {
-                        imageToSave = params.srcURL;
+                        imageToSave = params.srcURL
                     } else {
-                        imageToSave = '';
+                        imageToSave = ''
                     }
-                    linkToOpen = params.linkURL;
+                    linkToOpen = params.linkURL
 
                     if (linkToOpen == "") {
-                        openLinkInNewTabMenuItem.visible = false;
-                        copyLinkMenuItem.visible = false;
+                        openLinkInNewTabMenuItem.visible = false
+                        copyLinkMenuItem.visible = false
                     } else {
-                        openLinkInNewTabMenuItem.visible = true;
-                        copyLinkMenuItem.visible = true;
+                        openLinkInNewTabMenuItem.visible = true
+                        copyLinkMenuItem.visible = true
                     }
 
                     if (imageToSave == "") {
-                        saveImageAsMenuItem.visible = false;
-                        openImageInNewTabMenuItem.visible = false;
+                        saveImageAsMenuItem.visible = false
+                        openImageInNewTabMenuItem.visible = false
                     } else {
-                        saveImageAsMenuItem.visible = true;
-                        openImageInNewTabMenuItem.visible = true;
+                        saveImageAsMenuItem.visible = true
+                        openImageInNewTabMenuItem.visible = true
                     }
 
                     if (imageToSave == "" && linkToOpen == "") {
-                        backMenuItem.visible = true;
-                        forwardMenuItem.visible = true;
-                        refreshMenuItem.visible = true;
-                        printMenuItem.visible = true;
+                        backMenuItem.visible = true
+                        forwardMenuItem.visible = true
+                        refreshMenuItem.visible = true
+                        printMenuItem.visible = true
                     } else {
-                        backMenuItem.visible = false;
-                        forwardMenuItem.visible = false;
-                        refreshMenuItem.visible = false;
-                        printMenuItem.visible = false;
+                        backMenuItem.visible = false
+                        forwardMenuItem.visible = false
+                        refreshMenuItem.visible = false
+                        printMenuItem.visible = false
                     }
 
                     if (webview.canGoBack()) {
-                        backMenuItem.enabled = true;
+                        backMenuItem.enabled = true
                     } else {
-                        backMenuItem.enabled = false;
+                        backMenuItem.enabled = false
                     }
                     if (webview.canGoForward()) {
-                        forwardMenuItem.enabled = true;
+                        forwardMenuItem.enabled = true
                     } else {
-                        forwardMenuItem.enabled = false;
+                        forwardMenuItem.enabled = false
                     }
 
-                    xToInspect = params.x;
-                    yToInspect = params.y;
+                    xToInspect = params.x
+                    yToInspect = params.y
                     menu1.popup(remote.getCurrentWindow())
 
                 }, false)

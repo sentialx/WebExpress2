@@ -6,13 +6,17 @@
     padding-top: 6px;
     -webkit-transition: background-color 0.2s;
     box-shadow: 0 1px 0px rgba(0, 0, 0, 0.1);
-    position: absolute;
-    top: 0;
+    position: relative;
+    top: 0px;
 }
 
 .tabWindow {
     background-color: #fff;
-    height: 100%;
+    position: relative;
+}
+
+.content {
+    margin-top: 48px;
 }
 
 .searchBox {
@@ -40,8 +44,10 @@
     border: none;
     color: #444;
     margin-left: 8px;
-    width: calc(100% - 16px);
+    margin-top: 4px;
+    width: calc(100% - 64px);
     height: calc(100% - 10px);
+    font-size: 14px;
     outline: none;
 }
 
@@ -96,14 +102,6 @@
     transition: 0.2s all;
 }
 
-.backBtnIcon {
-    width: calc(100% - 16px);
-    height: calc(100% - 16px);
-    margin: 8px;
-    background-image: url('../img/back.png');
-    background-size: cover;
-}
-
 .backBtn:hover {
     opacity: 1;
     transition: 0.2s all;
@@ -116,14 +114,6 @@
     margin-left: 4px;
     float: left;
     transition: 0.2s all;
-}
-
-.forwardBtnIcon {
-    width: calc(100% - 16px);
-    height: calc(100% - 16px);
-    margin: 8px;
-    background-image: url('../img/forward.png');
-    background-size: cover;
 }
 
 .forwardBtn:hover {
@@ -140,14 +130,6 @@
     transition: 0.2s all;
 }
 
-.refreshBtnIcon {
-    width: calc(100% - 16px);
-    height: calc(100% - 16px);
-    margin: 8px;
-    background-image: url('../img/refresh.png');
-    background-size: cover;
-}
-
 .refreshBtn:hover {
     opacity: 1;
     transition: 0.2s all;
@@ -160,14 +142,6 @@
     margin-left: 12px;
     float: left;
     transition: 0.2s all;
-}
-
-.menuBtnIcon {
-    width: calc(100% - 16px);
-    height: calc(100% - 16px);
-    margin: 8px;
-    background-image: url('../img/menu.png');
-    background-size: cover;
 }
 
 .menuBtn:hover {
@@ -189,12 +163,4 @@
 .extBtn:hover {
     opacity: 1;
     transition: 0.2s all;
-}
-
-.extBtnIcon {
-    width: calc(100% - 16px);
-    height: calc(100% - 16px);
-    margin: 8px;
-    background-image: url('../img/more-vert.png');
-    background-size: cover;
 }
