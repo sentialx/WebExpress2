@@ -1,55 +1,38 @@
 .menu {
-    background-color: #fff;
-    width: 216px;
-    z-index: 9999;
-    -webkit-user-select: none;
-    cursor: default;
-    margin-left: 16px;
-    margin-top: 56px;
-    opacity: 0;
+    width: 230px;
+    height: auto;
     position: absolute;
-    visibility: hidden;
+    margin-top: 48px;
+    margin-left: 8px;
     border-radius: 3px;
+    background-color: white;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
-.menu-items {
-    position: relative;
-    padding-top: 0px;
-    padding-left: 0px;
-    left: 0;
-    margin: 0;
-    margin-left: 0;
-    list-style-type: none;
-    border-radius: 3px;
-}
-
 .menu-item {
-    background-color: transparent;
+    padding-top: 2px;
+}
+
+.menu-text {
+    font-size: 14px;
+    display: inline-block;
+    margin-left: 18px;
+    opacity: 0.8;
+}
+
+.menu-items {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.menu-item > i {
     position: relative;
-    margin-left: 0;
-    padding-left: 16px;
-    padding-top: 16px;
-    padding-bottom: 12px;
-    color: #444;
-    -webkit-transition: all 0.2s;
-    font-family: Roboto;
-    font-size: 13px;
-}
-
-.menu-item:hover {
-    background-color: #E0E0E0;
-}
-
-.menu-icon {
-    opacity: 0.6;
-    height: 22px;
-    width: 22px;
-    float: left;
-    margin-top: -4px;
-    margin-right: 24px;
-    background-size: cover;
-    -webkit-transition: all 0.2s;
+    top: 4px;
+    display: inline-block;
+    font-size: 20px;
+    margin-left: 18px;
+    opacity: 0.8;
 }
 
 .ext-menu {
