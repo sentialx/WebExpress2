@@ -18,6 +18,8 @@
     display: inline-block;
     margin-left: 18px;
     opacity: 0.8;
+    -webkit-user-select: none;
+    cursor: default;
 }
 
 .menu-items {
@@ -26,13 +28,23 @@
     list-style: none;
 }
 
-.menu-item > i {
+.menu-item>i {
     position: relative;
     top: 4px;
     display: inline-block;
     font-size: 20px;
     margin-left: 18px;
     opacity: 0.8;
+}
+
+.menu-item {
+    background-color: #fff;
+    transition: 0.3s all;
+}
+
+.menu-item:hover {
+    background-color: #E0E0E0;
+    transition: 0.3s all;
 }
 
 .ext-menu {
