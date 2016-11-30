@@ -21,7 +21,7 @@ global.saveHistory = function (json) {
         }
     });
 }
-global.removeHistory = function(callback = function() {}) {
+global.removeHistory = function (callback = function () {}) {
     fs.unlink(historyPath, callback)
 }
 global.addressBarFocus = function () {
@@ -31,7 +31,7 @@ global.addressBarFocus = function () {
             $(itab.tabWindow.find('.searchInput')).focus()
         }
     }
-    
+
 }
 ipcRenderer.on('getDocument', function (e) {
     var children = document.body.getElementsByTagName("*");
@@ -49,4 +49,8 @@ ipcRenderer.on('getDocument', function (e) {
         }
     }
 
+})
+
+ipcRenderer.on('document', (event, message) => {
+    ipcRenderer.sendToHost('document', document.body)
 })

@@ -119,22 +119,10 @@ class TabWindow {
                 })
                 //global events
             $(window).on('click', function () {
-                if (menuToggled) {
-                    menu.css('opacity', 1).animate({
-                        opacity: 0
-                    }, 200).css('top', 8).animate({
-                        top: -32
-                    }, {
-                        queue: false,
-                        complete: function () {
-                            menu.css('visibility', 'hidden')
-                        },
-                        duration: 200
-                    });
-                    menuToggled = false
-                }
                 suggestions.css('display', 'none')
-            });
+                hideExtMenu()
+                hideMenu()
+            })
 
             //global timer
             setInterval(function () {
@@ -297,6 +285,7 @@ class TabWindow {
                     }*/
                 if (url != null || url != "")
                     webview.loadURL(url)
+
 
                 //configure and open context menu
                 webview.getWebContents().on('context-menu', (e, params) => {
@@ -540,6 +529,23 @@ class TabWindow {
                 tab.Favicon.css('opacity', "1");
                 tab.Preloader.css('opacity', "0");
             });
+            webview.addEventListener('ipc-message', function (event) {
+                    if (event.channel == 'document') {
+                        console.log(event.args[0])
+                    }
+                })
+                //webview dom ready event
+            webview.addEventListener('dom-ready', function () {
+
+                webview.getWebContents().send('document', 'please')
+                webview.getWebContents().executeJavaScript('function a() {return document} a()', true, function (result) {
+                    console.log(result)
+                    $(result).click(function () {
+                        hideMenu()
+                        hideExtMenu()
+                    })
+                })
+            })
 
             //menu section
             menu.css('opacity', 0);
@@ -804,7 +810,12 @@ class TabWindow {
             extBtn.mousedown(function () {
                 makeRippleIconButton($(this));
             });
-            extBtn.click(function () {
+
+            extMenu.on('click', function (e) {
+                e.stopPropagation()
+            })
+            extBtn.click(function (e) {
+                e.stopPropagation()
                 if (!extMenuToggled) {
                     //menu fade in animation
                     extMenu.css('visibility', 'visible');
@@ -818,23 +829,27 @@ class TabWindow {
                         queue: false,
                         duration: 200
                     });
-
+                    extMenu.focus()
                 } else {
-                    //menu fade out animation
-                    extMenu.css('opacity', 1).animate({
-                        opacity: 0
-                    }, 200).css('top', 8).animate({
-                        top: -32
-                    }, {
-                        queue: false,
-                        complete: function () {
-                            extMenu.css('visibility', 'hidden');
-                        },
-                        duration: 200
-                    });
-                    extMenuToggled = false;
+                    hideExtMenu()
                 }
             });
+
+            function hideExtMenu() {
+                //menu fade out animation
+                extMenu.css('opacity', 1).animate({
+                    opacity: 0
+                }, 200).css('top', 8).animate({
+                    top: -32
+                }, {
+                    queue: false,
+                    complete: function () {
+                        extMenu.css('visibility', 'hidden');
+                    },
+                    duration: 200
+                });
+                extMenuToggled = false;
+            }
 
             backBtn.click(function () {
                 if (webview.canGoBack()) {
@@ -859,10 +874,11 @@ class TabWindow {
             refreshBtn.mousedown(function () {
                 makeRippleIconButton($(this));
             });
-            menuBtn.click(function () {
+            menuBtn.click(function (e) {
+                e.stopPropagation()
                 if (!menuToggled) {
                     //menu fade in animation
-                    menu.css('visibility', 'visible');
+                    menu.css('display', 'block');
                     menu.css('opacity', 0).animate({
                         opacity: 1
                     }, 200, function () {
@@ -875,24 +891,28 @@ class TabWindow {
                     });
 
                 } else {
-                    //menu fade out animation
-                    menu.css('opacity', 1).animate({
-                        opacity: 0
-                    }, 200).css('top', 8).animate({
-                        top: -32
-                    }, {
-                        queue: false,
-                        complete: function () {
-                            menu.css('visibility', 'hidden');
-                        },
-                        duration: 200
-                    });
-                    menuToggled = false;
+                    hideMenu()
                 }
             });
             menuBtn.mousedown(function () {
                 makeRippleIconButton($(this));
             });
+
+            function hideMenu() {
+                //menu fade out animation
+                menu.css('opacity', 1).animate({
+                    opacity: 0
+                }, 200).css('top', 8).animate({
+                    top: -32
+                }, {
+                    queue: false,
+                    complete: function () {
+                        menu.css('display', 'none');
+                    },
+                    duration: 200
+                });
+                menuToggled = false;
+            }
 
             //searchInput section
             //searchInput events
