@@ -18,6 +18,7 @@ function addTab(instance, tab) {
     tab.Foreground = 'black';
     tab.Color = selectedTabColor;
     tab.instance = instance;
+
     tab.Preloader = $('<div class="preloader" style="height: 16px;width: 16px;position:absolute; top: 6px; left:6px;" thickness="10" color="#3F51B5"></div>').appendTo(tab.Tab);
     tab.Preloader.preloader()
     tab.selected = false;
@@ -115,11 +116,12 @@ function addTab(instance, tab) {
                 queue: false
             })
     })
+    $(tab).triggerHandler('ready', tab)
 }
 
 function removeTab(tab) {
     tab.tabWindow.remove();
-    tab.instance.deleteExtensions();
+    tab.instance.extensions.deleteExtensions();
     if (tabCollection.indexOf(tab) - 1 != -1) {
         selectTab(tabCollection[tabCollection.indexOf(tab) - 1].Tab);
     } else {
@@ -229,13 +231,23 @@ function calcSizes(animation, addButtonAnimation) {
 }
 
 $('#addTab').click(function () {
-    var tab = new Tab();
-    addTab(new TabWindow(tab, ""), tab);
+    var tab = new Tab(),
+        instance = $('#instances').browser({
+            tab: tab,
+            url: 'webexpress://newtab'
+        })
+
+    addTab(instance, tab);
 });
 
 function deselect(tab) {
     tab.Tab.css('background-color', normalColor)
-    tab.tabWindow.css({height: 0, position: 'absolute', opacity: 0, visibility: 'hidden'})
+    tab.tabWindow.css({
+        height: 0,
+        position: 'absolute',
+        opacity: 0,
+        visibility: 'hidden'
+    })
     tab.Title.css('color', Foreground)
     if (Foreground == "#fff") {
         tab.closeBtn.css('color', '#fff')
@@ -249,9 +261,15 @@ function deselect(tab) {
 
 function select(tab) {
     tab.Tab.css('background-color', tab.Color);
-    tab.tabWindow.css({height: $(window).height(), position: 'relative', opacity: 1, visibility: 'visible'});
-    if (tab.instance.searchInput != null && (tab.instance.searchInput.val() == "" || tab.instance.searchInput.val() == null)) {
-        tab.instance.searchInput.focus();
+    var searchInput = tab.instance.bar.searchInput
+    tab.tabWindow.css({
+        height: $(window).height(),
+        position: 'relative',
+        opacity: 1,
+        visibility: 'visible'
+    });
+    if (searchInput != null && (searchInput.val() == "" || searchInput.val() == null)) {
+        searchInput.focus();
     }
     if (tab.Foreground == 'black') {
         tab.Preloader.attr('color', '#3F51B5')

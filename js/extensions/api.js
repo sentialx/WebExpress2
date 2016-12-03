@@ -2,7 +2,8 @@ class API {
   constructor(tab, parent) {
     var t = this
     var instance = tab.instance;
-    var webview = tab.instance.webView;
+    var webview = tab.instance.webview.webview;
+    
     t.webviews = []
       //global variables
     t.tab = new Tab(tab, t)
@@ -26,12 +27,12 @@ class API {
         $(parent.document.body).find(".windowbutton-close").css('background-image', 'url(img/WindowButtons/close-white.png)')
         $(parent.document.body).find(".windowbutton-minimize").css('background-image', 'url(img/WindowButtons/minimize-white.png)')
         $(parent.document.body).find(".windowbutton-maximize").css('background-image', 'url(img/WindowButtons/maximize-white.png)')
-        $(parent.document.body).find(".addTabImg").css('background-image', 'url(img/add-white.png)')
+        $(parent.document.body).find(".addTabBtn").css('color', '#fff')
       } else {
         $(parent.document.body).find(".windowbutton-close").css('background-image', 'url(img/WindowButtons/close.png)')
         $(parent.document.body).find(".windowbutton-minimize").css('background-image', 'url(img/WindowButtons/minimize.png)')
         $(parent.document.body).find(".windowbutton-maximize").css('background-image', 'url(img/WindowButtons/maximize.png)')
-        $(parent.document.body).find(".addTabImg").css('background-image', 'url(img/add.png)')
+        $(parent.document.body).find(".addTabBtn").css('color', '#444')
       }
       for (var i = 0; i < parent.tabCollection.length; i++) {
         if (parent.Foreground == "#fff") {
@@ -547,7 +548,7 @@ class WebView {
 class Instance {
   constructor(instance, api) {
     var t = this;
-    var webview = new WebView(instance.webView, api)
+    var webview = new WebView(instance.webview.webview, api)
     t.getBarColor = function () {
       return tab.tabWindow.find('.bar').css('background-color')
     }

@@ -33,24 +33,8 @@ global.addressBarFocus = function () {
     }
 
 }
-ipcRenderer.on('getDocument', function (e) {
-    var children = document.body.getElementsByTagName("*");
-    var colors = []
-    for (var i = 0; i < children.length; i++) {
-        colors.push(children[i].style.backgroundColor)
-    }
-    colors.reverse();
-    var s = 0;
-    for (var i = 0; i < colors.length; i++) {
-        if (colors[i].startsWith('rgb') || colors[i].startsWith('#')) {
-            color = colors[i];
-            ipcRenderer.sendToHost('document', color)
-            break;
-        }
-    }
 
-})
-
-ipcRenderer.on('document', (event, message) => {
-    ipcRenderer.sendToHost('document', document.body)
+document.addEventListener("click", function() {
+    ipcRenderer.sendToHost("clicked")
+    console.log("siema")
 })

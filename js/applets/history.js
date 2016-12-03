@@ -86,7 +86,10 @@ $('.search-input').on('input', function () {
     } else {
         $('.hint').css('visibility', 'hidden')
     }
-    $('.card').remove()
+    $('.content').empty()
+    dates = []
+    cards = []
+    items = []
     loadHistory($(this).val())
     checkedCount = 0
 })
@@ -195,6 +198,13 @@ function loadHistory(search = "") {
         }
 
     }
+    console.log($('.card .item').length)
+    $('.card').each(function (i) {
+        if ($(this).find('.item').length <= 1) {
+            $(this).remove()
+        }
+    })
+
 }
 
 function addItem(card, i) {

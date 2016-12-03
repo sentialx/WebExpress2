@@ -39,12 +39,12 @@
 
 .menu-item {
     background-color: #fff;
-    transition: 0.3s all;
+    transition: 0.1s all;
 }
 
 .menu-item:hover {
     background-color: #E0E0E0;
-    transition: 0.3s all;
+    transition: 0.1s all;
 }
 
 .ext-menu {

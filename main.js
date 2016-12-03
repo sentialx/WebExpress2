@@ -4,6 +4,7 @@ const app = electron.app
 const path = require('path')
 const BrowserWindow = electron.BrowserWindow
 var remote = require('electron').remote
+const windowStateKeeper = require('electron-window-state')
 global.startArgs = {
     data: process.argv
 }
@@ -11,9 +12,15 @@ global.startArgs = {
 let mainWindow
 
 function createWindow() {
+    let mainWindowState = windowStateKeeper({
+        defaultWidth: 1000,
+        defaultHeight: 800
+    })
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        'x': mainWindowState.x,
+        'y': mainWindowState.y,
+        'width': mainWindowState.width,
+        'height': mainWindowState.height,
         frame: false
     })
     mainWindow.loadURL(`file://${__dirname}/index.html`)
@@ -25,6 +32,7 @@ function createWindow() {
     mainWindow.webContents.session.on('will-download', (event, item, webContents) => {
         item.setSavePath(item.getFilename()) //TODO set path to downloads folder
     })
+    mainWindowState.manage(mainWindow)
 }
 process.on('uncaughtException', function (error) {
 
