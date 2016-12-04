@@ -23,9 +23,10 @@
   },
   "homepage": "https://github.com/Sential/WebExpress#readme",
   "devDependencies": {
-    "electron": "^1.4.7",
+    "electron": "^1.4.10",
     "electron-connect": "^0.6.1",
     "electron-packager": "^7.7.0",
+    "electron-prebuilt": "^1.4.10",
     "get-pixels": "^3.3.0",
     "gulp": "^3.9.1",
     "is-there": "^4.3.3",
@@ -33,7 +34,7 @@
   },
   "dependencies": {
     "asar": "^0.12.2",
-    "electron": "^1.4.7",
+    "electron": "^1.4.10",
     "electron-packager": "^7.7.0",
     "electron-window-state": "^4.0.0"
   },

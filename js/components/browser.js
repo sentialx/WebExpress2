@@ -49,14 +49,16 @@
             }
             t.loadExtensions()
             setInterval(function () {
-                t.colors.getColor(function (data) {
-                    if (settings.tab.selected) {
-                        settings.tab.Color = data.background
-                        settings.tab.Tab.css('background-color', data.background)
-                        t.bar.css('background-color', data.background)
-                        changeForeground(data.foreground, data.foreground == 'white' ? '#fff' : '#444')
-                    }
-                })
+                if (settings.tab.selected) {
+                    t.colors.getColor(function (data) {
+                        if (settings.tab.selected) {
+                            settings.tab.Color = data.background
+                            settings.tab.Tab.css('background-color', data.background)
+                            t.bar.css('background-color', data.background)
+                            changeForeground(data.foreground, data.foreground == 'white' ? '#fff' : '#444')
+                        }
+                    })
+                }
 
             }, 200)
 
