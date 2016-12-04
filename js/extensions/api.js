@@ -81,56 +81,6 @@ class API {
       }
     }
 
-    var lastColor = "";
-    setInterval(function () {
-      if (lastColor != instance.actualColor) {
-        $(t).triggerHandler('got-color', {
-          color: instance.actualColor
-        })
-        lastColor = instance.actualColor
-      }
-    }, 1)
-
-    function getColor(callback) {
-      webview.executeJavaScript("function s() {var markup = document.documentElement.innerHTML; return markup} s();", false, function (result) {
-        var regexp = /<meta name='?.theme-color'?.*>/;
-        if (regexp.test(result)) {
-          //getting color from <meta name="theme-color" content="...">
-          var regex = result.match(regexp).toString();
-          var color = regex.match(/content="(.*?)"/)[1];
-          callback(color, true)
-        } else {
-          //getting color from top of a website
-          if (webview != null && webview.getWebContents() != null) {
-            try {
-              webview.capturePage({
-                x: 0,
-                y: 0,
-                width: 2,
-                height: 2
-              }, function (image) {
-                var canvas = document.createElement('canvas');
-                var context = canvas.getContext('2d');
-                var img = new Image();
-                img.onload = function () {
-                  context.drawImage(img, 0, 0);
-                  var myData = context.getImageData(1, 1, 2, 2);
-                  if (myData != null) {
-                    callback(rgbToHex(myData.data[0], myData.data[1], myData.data[2]), false)
-                  }
-                };
-
-                img.src = image.toDataURL();
-                canvas.width = 0;
-                canvas.height = 0;
-              });
-            } catch (e) {
-
-            }
-          }
-        }
-      });
-    }
 
     //dispose API
     t.dispose = function () {
