@@ -11,6 +11,7 @@ const {
 const {
     app
 } = require('electron').remote;
+var getPixels = require("get-pixels")
 var fs = require('fs');
 var IsThere = require("is-there");
 var dir = require('node-dir');

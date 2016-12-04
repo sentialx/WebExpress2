@@ -6,6 +6,7 @@ const {
 const {
     app
 } = require('electron').remote;
+const remote = require('electron').remote
 var historyPath = app.getPath('userData') + '/userdata/history.json';
 var extensionsPath = app.getPath('userData') + '/userdata/extensions';
 var userdataPath = app.getPath('userData') + '/userdata';

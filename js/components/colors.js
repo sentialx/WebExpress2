@@ -1,6 +1,5 @@
 class Colors {
-    constructor(tab, webview) {
-        this.color = tab.Color
+    constructor(webview) {
         this.webview = webview
     }
 
@@ -22,25 +21,22 @@ class Colors {
                 width: 2,
                 height: 2
             }, function (image) {
-                var canvas = document.createElement('canvas')
-                var context = canvas.getContext('2d')
-                var img = new Image()
-                img.onload = function () {
-                    context.drawImage(img, 0, 0)
-                    var myData = context.getImageData(1, 1, 1, 1)
-                    if (myData != null) {
-                        var color = rgbToHex(myData.data[0], myData.data[1], myData.data[2])
-                        if (typeof (callback) === 'function') {
-                            callback({
-                                foreground: t.getForegroundColor(color),
-                                background: color
-                            })
-                        }
+                getPixels(image.toDataURL(), function (err, pixels) {
+                    if (err) {
+                        console.log("Bad image path")
+                        return
                     }
-                }
-                img.src = image.toDataURL()
-                canvas.width = 2
-                canvas.height = 2
+                    var color = rgbToHex(pixels.data[0], pixels.data[1], pixels.data[2])
+                    if (pixels.data[3] == 0) {
+                        color = "#fff"
+                    }
+                    if (typeof (callback) === 'function') {
+                        callback({
+                            foreground: t.getForegroundColor(color),
+                            background: color
+                        })
+                    }
+                })
             });
         }
     }

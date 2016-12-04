@@ -12,10 +12,13 @@
             extensionsMenu = $('<div class="ext-menu">').appendTo(bar),
             menu = $('<div class="menu" style="z-index: 9999;">').appendTo(content)
 
-        t.menu = menu.menu({tab: settings.tab})
+        t.menu = menu.menu({
+            tab: settings.tab
+        })
         t.extensionsMenu = extensionsMenu.extensionsMenu({
             tab: settings.tab
         })
+
 
 
         checkFiles()
@@ -31,7 +34,7 @@
             t.bar = bar.bar({
                 tab: settings.tab
             })
-            t.colors = new Colors(settings.tab, t.webview.webview)
+            t.colors = new Colors(t.webview.webview)
 
             t.refreshExtensions = function () {
                 t.extensions.deleteExtensions();
@@ -45,6 +48,17 @@
                 })
             }
             t.loadExtensions()
+            setInterval(function () {
+                t.colors.getColor(function (data) {
+                    if (settings.tab.selected) {
+                        settings.tab.Color = data.background
+                        settings.tab.Tab.css('background-color', data.background)
+                        t.bar.css('background-color', data.background)
+                        changeForeground(data.foreground, data.foreground == 'white' ? '#fff' : '#444')
+                    }
+                })
+
+            }, 200)
 
             function changeForeground(color, ripple) {
                 if (settings.tab.selected) {
@@ -80,17 +94,7 @@
                 t.bar.extBtn.attr('data-ripple-color', ripple).css('color', color)
             }
 
-            setInterval(function () {
-                t.colors.getColor(function (data) {
-                    if (settings.tab.selected) {
-                        settings.tab.Color = data.background
-                        settings.tab.Tab.css('background-color', data.background)
-                        t.bar.css('background-color', data.background)
-                        changeForeground(data.foreground, data.foreground == 'white' ? '#fff' : '#444')
-                    }
-                })
 
-            }, 200)
 
         })
 

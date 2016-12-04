@@ -92,3 +92,4 @@ app.setJumpList([{
 
 var client = require('electron-connect').client;
 client.create(mainWindow);
+global.sharedObj = {prop1: "siema"};

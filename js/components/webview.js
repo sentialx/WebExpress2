@@ -9,6 +9,7 @@
 
         t.webview = $('<webview class="webview" preload="js/extensions/preload.js" autosize="on" src="webexpress://newtab">').appendTo($(this))[0]
         t.storage = new Storage()
+        t.string = "Siema"
         t.contextMenu = new ContextMenu(t.webview)
         t.fitToParent = function () {
             $(t.webview).css({
@@ -76,6 +77,13 @@
             if (!t.webview.getURL().startsWith("webexpress://newtab") && t.webview.getURL() != "about:blank") {
                 settings.tab.instance.bar.searchInput.val(t.webview.getURL());
             }
+            t.webview.executeJavaScript('function a() {return $(document.body).css("background-color")} a()', true, function (result) {
+                if (result.replace(/^.*,(.+)\)/, '$1') == 0) {
+                    t.webview.executeJavaScript('$(document.body).css("background-color", "#fff")', true)
+                }
+
+            })
+           
         });
         //webview start loading event
         t.webview.addEventListener('did-start-loading', function () {
