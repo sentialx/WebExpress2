@@ -1,3 +1,5 @@
+This project is outdated. Please checkout new web browser project for better experience: [Wexond](https://github.com/nersent/wexond)
+
 # WebExpress
 WebExpress is a browser with Material Design implementation.
 * authors: Eryk Rakowski (Sential) and Mikołaj Palkiewicz (xNerhu22)
